@@ -677,7 +677,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: left;
-    gap: 150px;
+    gap: 70px;
     flex-direction: row;
   }
 
@@ -685,7 +685,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: left;
-    gap: 150px;
+    gap: 70px;
     flex-direction: row;
   }
 
