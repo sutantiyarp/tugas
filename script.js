@@ -1,3 +1,11 @@
+// navbar hamburger
+const hamburger = document.getElementById("hamburger");
+const navbarLeft = document.querySelector(".navbar-left");
+
+hamburger.addEventListener("click", () => {
+  navbarLeft.classList.toggle("active");
+});
+
 // Untuk Soundtrack
 const slider = document.getElementById("text-slider");
 const songName = document.getElementById("song-name");
