@@ -545,6 +545,7 @@
 
   .modal-content {
     background-color: #000;
+    margin-left: 20px;
     width: 1100px;
     height: 620px;
     position: relative;
