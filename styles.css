@@ -547,6 +547,7 @@
     width: 1100px;
     height: 620px;
     position: relative;
+    margin-left: 50px;
   }
 
   .modal-content iframe {
