@@ -547,8 +547,6 @@
     width: 1100px;
     height: 620px;
     position: relative;
-    justify-content: center;
-    align-items: center;
   }
 
   .modal-content iframe {
