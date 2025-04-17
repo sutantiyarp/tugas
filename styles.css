@@ -533,8 +533,8 @@
     display: none;
     position: fixed;
     z-index: 9999;
-    padding-top: 0px;
-    padding-left: 50px;
+    padding-top: 10px;
+    padding-left: 80px;
     left: 0;
     top: 0;
     width: 100%;
