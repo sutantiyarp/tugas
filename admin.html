@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Link to Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Link to Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin/admin.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-white shadow-sm">
+        <div class="container-fluid">
+            <div class="logo d-flex align-items-center">
+                <img src="image/ASW.png" alt="Itemku Logo" height="60px">
+            </div>
+            
+        <div class="ml-auto d-flex align-items-center">
+            <a href="index masuk.html" style="text-decoration: none;">
+            <button class="shopping-text d-flex align-items-center btn p-1">
+                <img src="image/admin/iconbelanja.png" alt="Belanja dulu" width="24" height="24"/>
+                <span>Belanja dulu</span>
+            </button>
+            </a>
+            <a href="adminprofil.html" style="text-decoration: none;">
+            <button class="profile-btn d-flex align-items-center btn p-1">
+                <img src="image/fotoprofil/asw.png" alt="Foto Profil" class="profile-photo rounded-circle" width="35" height="35" />
+                <span class="profile-name ms-0">ASW Olshop Game</span>
+            </button>
+            </a>
+        </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+      <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <img src="image/fotoprofil/asw.png" class="img-fluid" alt="Logo">
+          </div>
+
+          <div class="shop-info">
+            <h5>ASW olshop game</h5>
+            <p class="status">Toko tutup</p>
+          </div>
+        </div>
+
+        <div class="sidebar-points">
+        <div class="points-left">
+            <div><strong>Poin Toko:</strong></div>
+            <div><strong>Rating Toko:</strong></div>
+        </div>
+        <div class="points-right">
+            <div>8</div>
+            <div>4.8/5.0</div>
+        </div>
+        </div>
+
+        <div class="sidebar-body">
+          <h6><i class="fas fa-home"></i> Tokoku</h6>
+          <ul class="list-unstyled">
+            <li class="active"><a href="admin.html">Beranda</a></li>
+            <li><a href="adminprofil.html">Profil Toko</a></li>
+          </ul>
+
+          <h6><i class="fas fa-box"></i> Pesanan</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Riwayat Pesanan(DeAct)</a></li>
+            <li class="deactive"><a href="#">Ulasan Pembeli(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-store"></i> Dagangan</h6>
+          <ul class="list-unstyled">
+            <li><a href="admintambahproduk.html">Buat Dagangan</a></li>
+            <li><a href="adminproduk.html">Daganganku</a></li>
+            <li class="deactive"><a href="#">Pengiriman Otomatis(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-trophy"></i> Penghargaan</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Pencapaian Toko(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-gift"></i> Promosi</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Iklan Tokoku(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-address-card"></i> Toko Resmi</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Riwayat Pembelian(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-cogs"></i> Fitur Toko</h6>
+          <ul class="list-unstyled">
+            <li><a href="admintoko.html">Pengaturan Toko</a></li>
+            <li class="deactive"><a href="#">Poin Toko(DeAct)</a></li>
+            <li class="deactive"><a href="#">Performa Toko(DeAct)</a></li>
+            <li class="deactive"><a href="#">Pengaturan Staff(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-piggy-bank"></i> Keuangan Tokoku</h6>
+          <ul class="list-unstyled">
+            <li><a href="adminsaldo.html">Saldo Tokoku</a></li>
+            <li><a href="adminrekening.html">Rekening Tokoku</a></li>
+          </ul>
+
+          <h6><i class="fas fa-question"></i> Bantuan</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Hubungi cs(DeAct)</a></li>
+            <li class="deactive"><a href="#">Tanya Jawab(DeAct)</a></li>
+          </ul>
+        </div>
+      </nav>
+
+    <main id="content" class="content">
+        <div class="container-fluid">
+        <div class="card-title">
+            Aktifitas Penting
+        </div>
+        <p style="font-size: 14px; margin-top: -5px; color: #555; padding: 0px 15px 0px 15px;">Hal-hal yang penting untuk kamu cek terkait tokomu. Data diambil dari 7 hari terakhir.</p>
+                    
+            <div class="row">
+                <!-- Card 1: Perlu Diproses -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">Perlu Diproses</div>
+                        <div class="card-body">
+                            <div class="stat-card">
+                                <div class="icon">
+                                    <div class="custom-icon" style="width: 23px; height: 28px; background-image: url('image/admin/logoproses.png'); background-size: cover;" oncontextmenu="return false;"></div>
+                                </div>
+                                <div>
+                                    <div class="number">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Menunggu Konfirmasi -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">Menunggu Konfirmasi</div>
+                        <div class="card-body">
+                            <div class="stat-card">
+                                <div class="icon">
+                                    <div class="custom-icon" style="width: 28px; height: 28px; background-image: url('image/admin/logomenunggu.png'); background-size: cover;" oncontextmenu="return false;"></div>
+                                </div>
+                                <div>
+                                    <div class="number">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Kendala Pesanan -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">Kendala Pesanan</div>
+                        <div class="card-body">
+                            <div class="stat-card">
+                                <div class="icon">
+                                    <div class="custom-icon" style="width: 28px; height: 21px; background-image: url('image/admin/logokendala.png'); background-size: cover;" oncontextmenu="return false;"></div>
+                                </div>
+                                <div>
+                                    <div class="number">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Card 4: Sedang Dibatalkan -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">Sedang Dibatalkan</div>
+                        <div class="card-body">
+                            <div class="stat-card">
+                                <div class="icon">
+                                    <div class="custom-icon" style="width: 23px; height: 28px; background-image: url('image/admin/logodibatalkan.png'); background-size: cover;" oncontextmenu="return false;"></div>
+                                </div>
+                                <div>
+                                    <div class="number">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Stok Habis -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">Stok Habis</div>
+                        <div class="card-body">
+                            <div class="stat-card">
+                                <div class="icon">
+                                    <div class="custom-icon" style="width: 25px; height: 24px; background-image: url('image/admin/logostokhabis.png'); background-size: cover;" oncontextmenu="return false;"></div>
+                                </div>
+                                <div>
+                                    <div class="number">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="keuangan-title">
+            Keuangan Toko
+        </div>
+            <div class="keuangan-toko">
+            <div class="row">
+                <div class="col-md-6">
+                <h5>Transaksi Berjalan</h5>
+                <p>Rp 0</p>
+                </div>
+                <div class="col-md-6">
+                <h5>Saldo Toko</h5>
+                <p>Rp 30.780</p>
+                </div>
+            </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Include jQuery, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

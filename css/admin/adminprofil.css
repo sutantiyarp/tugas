@@ -1,0 +1,268 @@
+    body {
+    font-family: Arial, sans-serif;
+    }
+
+    .sidebar {
+        position: fixed;          /* menempel di kiri layar */
+        top: 70px;  /* Setelah navbar */
+        left: 0;
+        width: 250px;             /* lebar sidebar */
+        height: 100vh;            /* tinggi penuh viewport */
+        overflow-y: auto;         /* scroll-bar vertikal di dalam sidebar */
+        background-color: #3b82f6;
+        padding: 15px 15px 35px 15px;
+        box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar ul li.active a {
+      background-color: #2f7bf5;
+      color: white;
+      font-weight: bold;
+    }
+
+    .sidebar ul li.deactive a {
+      color: rgb(92, 92, 92);
+      font-weight: bold;
+    }
+    
+    .sidebar-header {
+    margin-bottom: 20px;
+    }
+
+    .sidebar-logo {
+    text-align: center;
+    }
+
+    .sidebar-logo img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    }
+
+    .shop-info {
+    text-align: center;
+    }
+
+    .shop-info h5 {
+    color: #000;
+    font-size: 18px;
+    margin-top: 10px;
+    }
+
+    .shop-info p.status {
+    padding: 2px 2px 2px 2px;
+    background-color: #2f7bf5;
+    color: #dfdfdf;
+    font-size: 14px;
+    }
+
+    /* Separate Poin Toko and Rating Toko */
+    .sidebar-points {
+    display: flex;
+    justify-content: space-between; /* Distribute space between the left and right groups */
+    padding: 6px 4px 6px 4px;
+    border-bottom: 1px solid #383838ad; /* Optional, to add a line separating sections */
+    }
+
+    .points-left {
+    display: flex;
+    flex-direction: column;
+    }
+
+    .points-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    }
+
+    .points-left div, .points-right div {
+    font-size: 14px; /* Adjust font size for readability */
+    color: #F1F1F1;
+    }
+
+    .sidebar-body {
+    margin-top: 15px;
+    margin-bottom: 40px;
+    }
+
+    h6 {
+    color: #000000;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    }
+
+    ul li {
+    margin-left: 20px;
+    font-size: 13px;
+    margin-bottom: 5px;
+    }
+
+    ul li a {
+    color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    }
+
+    ul li a:hover {
+    color: #f0f0f0;
+    text-decoration: none;
+    }
+
+    .content {
+        top: 70px;     /* Memberikan ruang di atas untuk navbar */
+        padding: 100px 0px 0px 250px;
+        min-height: 100vh;
+        overflow-x: hidden;       /* tidak ada scroll horizontal */
+    }
+    
+    .navbar {
+        position: fixed;
+        z-index: 2; /* Ensure it's above the sidebar */
+        margin-left: 0; /* Reset left margin */
+        width: 100%; /* Make the navbar full width */
+        transition: all 0.3s ease;
+        height: 70px; /* Adjust this value as needed */
+        line-height: 80px; /* Ensures text and items are vertically centered */
+    }
+
+    .ml-auto {
+        display: flex;
+        align-items: center;
+    }
+
+    .shopping-text {
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        margin-right: 20px;
+        color: rgb(61, 61, 61);
+        padding: 0px 0px 0px 0px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .shopping-text:hover {
+        color: #1a73e8;
+    }
+
+    .shopping-text img {
+        margin-right: 6px;
+        align-items: center;
+    }
+    
+    /* Profile Button styling */
+    .profile-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        font-size: 14px;
+        color: rgb(61, 61, 61);
+        padding: 5px 8px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .profile-btn:hover {
+        background-color: #f0f0f0; /* Light gray background on hover */
+    }
+
+    .profile-btn .profile-photo {
+        margin-right: 10px;
+    }
+
+    .profile-btn .profile-name {
+        font-weight: 500;
+    }
+
+    .card-title {
+        padding: 8px 15px 0px 15px;
+        font-weight: bold;
+        font-size: 1.125rem;
+        color: #000;
+    }
+
+/* Profile Section */
+.profiles-box {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px 20px 20px 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profiles-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 5px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profiles-name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.edit-icon {
+    font-size: 1rem;
+    color: #333; /* Color for the edit icon */
+    cursor: pointer;
+}
+
+.edit-icon:hover {
+    color: #0056b3; /* Hover color for the icon */
+}
+
+/* Add margin for the profile name */
+.ml-3 {
+    margin-left: 15px;
+}
+
+/* Add margin for edit icon */
+.ml-2 {
+    margin-left: 10px;
+}
+
+/* Shop Stats and Financial Box */
+.stats-box, .financial-box {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.list-group-item {
+    margin-left: 0px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* Buttons Styling */
+button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+button.btn-warning {
+    background-color: #f0ad4e;
+    color: #fff;
+}

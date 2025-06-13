@@ -1,0 +1,786 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #ff0000;
+}
+
+/* Navbar Page */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background-color: #003366;
+    padding: 4px 0px 0px 0px;
+    transition: top 0.3s ease-in-out;
+    overflow: visible;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0px 20px;
+    flex-wrap: wrap;
+}
+
+.logo img {
+    height: 70px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-left: 40px;
+}
+
+.search-bar input {
+    width: 800px;
+    height: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.search-bar button {
+    padding: 7px;
+    background-color: #B0BEC5;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.navbar-links {
+    display: flex;
+    justify-content: left;
+    background-color: #032d57;
+    padding: 0px 0 0 150px;
+}
+
+.navbar-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 15px;
+}
+
+.navbar-link:hover {
+    background-color: #FF7043;
+}
+
+.navbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.navbar-icons span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.navbar-icons i {
+    font-size: 24px;
+    color: white;
+}
+
+.cart-btn {
+    background-color: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0);
+    padding: 5px 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.cart-btn .material-icons {
+    font-size: 18px;
+}
+
+.cart-btn:hover {
+    background-color: #47424193;
+}
+
+.box-string {
+    background-color: #888;
+    width: 2px;
+    height: 30px;
+}
+
+.login-btn {
+    background-color: #ff6334;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0);
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    gap: 8px;
+}
+
+.login-btn:hover {
+    background-color: #FF7043;
+}
+
+/* Banner Section */
+.banner-section {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 0px;
+}
+
+.banner-container {
+    position: relative;
+    width: 100%;
+}
+
+.banner-images {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+}
+
+.prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+.indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.indicator.active {
+    background-color: #E60013;
+}
+
+/* Tipe */
+.tipe-content {
+    background-color: #032d57;
+    padding: 10px 0 10px 50px;
+    text-align: center;
+    position: sticky;
+    top: 78px;
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+
+/* Efek sticky saat aktif */
+.tipe-content.white {
+    border-width: 0px 0px 3px 0px;
+    border-style: solid;
+    border-color: #dddddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.content-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.terbaru-nav {
+    background-color: transparent;
+    color: #ffffff;
+    padding: 10px 50px 10px 50px;
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    border: 2px solid #ffffff;
+    font-weight: 600;
+}
+
+.pulsa-nav {
+    background-color: transparent;
+    color: #ffffff;
+    padding: 10px 50px 10px 50px;
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    border: 2px solid #ffffff;
+    font-weight: 600;
+}
+
+.populer-nav {
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    padding: 10px 50px 10px 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    gap: 8px;
+}
+
+/* Gaya untuk tombol yang sedang aktif */
+.terbaru-nav.active, .populer-nav.active, .pulsa-nav.active {
+    background-color: transparent;
+    color: #FFC107;
+    border: 2px solid #FFC107;
+}
+
+
+.populer-nav i {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+/* Populer Section */
+.populer-section {
+    padding: 20px 100px 25px 100px;
+    background-color: #F4F4F4;
+    text-align: left;
+}
+
+.populer-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.populer-section i {
+    font-size: 27px;
+    margin-right: 10px;
+}
+
+.populer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));
+    gap: 30px;
+    justify-items: center;
+}
+
+.populer-item {
+    background-image: url('image/bg2.jpg'); /* Ganti dengan path gambar yang sesuai */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    border: 1px solid #dedede00;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    height: 170px;
+    object-fit: cover;
+    justify-items: center;
+}
+
+.populer-item:hover {
+    border: 1px solid #dedede;
+}
+
+.populer-image:hover {
+    transform: scale(1.05);
+}
+
+.populer-image {
+    width: 100%;
+    height: auto;
+}
+
+.populer-title {
+    font-size: .85rem;
+    color: #000000;
+    font-weight: 700;
+}
+
+.populer-image-wrapper {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    display: flex;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}
+
+.populer-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Baru Section */
+.terbaru-section {
+    padding: 20px 100px 5px 100px;
+    background-color: #F4F4F4;
+    text-align: left;
+}
+
+.terbaru-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.terbaru-section i {
+    font-size: 27px;
+    margin-right: 10px;
+}
+
+.terbaru-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));
+    gap: 30px;
+    justify-items: center;
+}
+
+.terbaru-item {
+    background-image: url('image/bg2.jpg'); /* Ganti dengan path gambar yang sesuai */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    border: 1px solid #dedede00;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    height: 170px;
+    object-fit: cover;
+    justify-items: center;
+}
+
+.terbaru-item:hover {
+    border: 1px solid #dedede;
+}
+
+.terbaru-image:hover {
+    transform: scale(1.05);
+}
+
+.terbaru-image {
+    width: 100%;
+    height: auto;
+}
+
+.terbaru-title {
+    font-size: .85rem;
+    color: #000000;
+    font-weight: 700;
+}
+
+.load-more-btn {
+    background-color: transparent;
+    color: #003366;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 15px auto;
+    display: block;
+}
+
+.load-more-btn:hover {
+    color: #000000;
+}
+
+/* Pulsa Section */
+.pulsa-section {
+    padding: 10px 80px 5px 80px;
+    background-color: #F4F4F4;
+    text-align: left;
+    padding-bottom: 50px;
+}
+
+.pulsa-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.pulsa-section i {
+    font-size: 27px;
+    margin-right: 10px;
+}
+
+.pulsa-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));
+    gap: 30px;
+    justify-items: center;
+}
+
+.pulsa-item {
+    background-image: url('image/bg2.jpg'); /* Ganti dengan path gambar yang sesuai */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(221, 221, 221, 0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    height: 170px;
+    object-fit: cover;
+    justify-items: center;
+}
+
+.pulsa-item:hover {
+    border: 1px solid #dedede;
+}
+
+.pulsa-image:hover {
+    transform: scale(1.05);
+}
+
+.pulsa-image {
+    width: 100%;
+    height: auto;
+    border-radius: 26px;
+    margin-bottom: 10px;
+}
+
+.pulsa-title {
+    font-size: .85rem;
+    color: #000000;
+    font-weight: 700;
+}
+
+/* image section */
+.image-section {
+    background-color: #F4F4F4;
+    text-align: center;
+    align-items: center;
+    justify-items: center;
+    padding: 0px 0px 10px 0px;
+}
+
+.image-container {
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.image-item {
+    flex: 1;
+    position: relative;
+}
+
+.image-content {
+    width: 100%;
+    height: auto;
+    border-radius: 0px;
+}
+
+/* Category Section */
+.category-section {
+    padding: 20px 70px 0px 70px;
+    background-color: #F4F4F4;
+}
+
+.category-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.category-box {
+    flex: 1;
+    background-color: #fff;
+    padding: 10px 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.category-box h2 {
+    color: #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.category-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0px 0px 20px 0px;
+}
+
+.category-item-wrapper {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    display: flex;
+    border-radius: 30px;
+    margin-bottom: 5px;
+}
+
+.category-item img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.category-item img:hover {
+    transform: scale(1.05);
+}
+
+.category-text {
+    width: 80px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+    text-align: center;
+    margin-top: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.see-all {
+    font-size: 16px;
+    color: #003366;
+    background-color: #ffffff;
+    border: 2px solid #003366;
+    padding: 8px 12px 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.see-all:hover {
+    background-color: #bfe4ff;
+    text-decoration: none;
+}
+
+.see-all .material-icons {
+    font-size: 20px;
+}
+
+/* TopUp section */
+.topup-game-section {
+    background-color: #F4F4F4;
+    margin: 0 auto;
+    padding: 20px 100px 50px 50px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+.game-links a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #1a73e8;
+    text-decoration: underline;
+}
+
+.game-links a:hover {
+    text-decoration: underline;
+}
+
+.info {
+    margin-top: 20px;
+}
+
+.info-item {
+    margin-bottom: 10px;
+}
+
+/* Info Section */
+.info-btn {
+    background-color: #ffffff;
+    border: 1px solid rgb(221, 221, 221);
+    color: rgb(0, 0, 0);
+    padding: 15px;
+    text-align: left;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    position: relative;
+    padding-right: 30px;
+}
+
+.info-btn::before {
+    content: ">";
+    font-size: 20px;
+    position: absolute;
+    right: 15px;
+    transition: transform 0.3s ease;
+    transform: rotate(0deg);
+}
+
+.info-item.active .info-btn::before {
+    transform: rotate(90deg);
+}
+
+.info-btn:hover {
+    background-color: #f1f1f1;
+}
+
+.info-content {
+    padding: 10px;
+    background-color: #fff;
+    display: none;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.info-content p {
+    margin: 0;
+}
+
+.info-item.active .info-content {
+    display: block;
+}
+
+
+/*footer*/
+.footer {
+    background-color: #032d57;
+    color: #fff;
+    padding: 30px 0px 40px 0px;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    width: 1200px;
+    margin: 0 auto;
+    gap: 30px;
+}
+
+.footer-logo {
+    flex: 1;
+    text-align: left;
+    margin-right: 40px;
+}
+
+.footer-logo-img {
+    width: 80px;
+    margin-bottom: 5px;
+}
+
+.footer-links {
+    flex: 2;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-links h3 {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links ul li {
+    margin: 5px 0;
+}
+
+.footer-links ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-links ul li a:hover {
+    color: #FFC107;
+}
+
+.footer-social {
+    margin-top: 20px; /* Adjusted position of social icons */
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+}
+
+.footer-social .social-icon img{
+    width: 30px;
+}
+
+.footer-bottom {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+

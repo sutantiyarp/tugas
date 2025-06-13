@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Link to Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Link to Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin/admintambahproduk.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-white shadow-sm">
+        <div class="container-fluid">
+            <div class="logo d-flex align-items-center">
+                <img src="image/ASW.png" alt="Itemku Logo" height="60px">
+            </div>
+            
+        <div class="ml-auto d-flex align-items-center">
+            <a href="index masuk.html" style="text-decoration: none;">
+            <button class="shopping-text d-flex align-items-center btn p-1">
+                <img src="image/admin/iconbelanja.png" alt="Belanja dulu" width="24" height="24"/>
+                <span>Belanja dulu</span>
+            </button>
+            </a>
+            <button class="profile-btn d-flex align-items-center btn p-1">
+                <img src="image/fotoprofil/asw.png" alt="Foto Profil" class="profile-photo rounded-circle" width="35" height="35" />
+                <span class="profile-name ms-0">ASW Olshop Game</span>
+            </button>
+        </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+      <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <img src="image/fotoprofil/asw.png" class="img-fluid" alt="Logo">
+          </div>
+
+          <div class="shop-info">
+            <h5>ASW olshop game</h5>
+            <p class="status">Toko tutup</p>
+          </div>
+        </div>
+
+        <div class="sidebar-points">
+        <div class="points-left">
+            <div><strong>Poin Toko:</strong></div>
+            <div><strong>Rating Toko:</strong></div>
+        </div>
+        <div class="points-right">
+            <div>8</div>
+            <div>4.8/5.0</div>
+        </div>
+        </div>
+
+        <div class="sidebar-body">
+          <h6><i class="fas fa-home"></i> Tokoku</h6>
+          <ul class="list-unstyled">
+            <li><a href="admin.html">Beranda</a></li>
+            <li><a href="adminprofil.html">Profil Toko</a></li>
+          </ul>
+
+          <h6><i class="fas fa-box"></i> Pesanan</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Riwayat Pesanan(DeAct)</a></li>
+            <li class="deactive"><a href="#">Ulasan Pembeli(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-store"></i> Dagangan</h6>
+          <ul class="list-unstyled">
+            <li class="active"><a href="admintambahproduk.html">Buat Dagangan</a></li>
+            <li><a href="adminproduk.html">Daganganku</a></li>
+            <li class="deactive"><a href="#">Pengiriman Otomatis(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-trophy"></i> Penghargaan</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Pencapaian Toko(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-gift"></i> Promosi</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Iklan Tokoku(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-address-card"></i> Toko Resmi</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Riwayat Pembelian(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-cogs"></i> Fitur Toko</h6>
+          <ul class="list-unstyled">
+            <li><a href="admintoko.html">Pengaturan Toko</a></li>
+            <li class="deactive"><a href="#">Poin Toko(DeAct)</a></li>
+            <li class="deactive"><a href="#">Performa Toko(DeAct)</a></li>
+            <li class="deactive"><a href="#">Pengaturan Staff(DeAct)</a></li>
+          </ul>
+
+          <h6><i class="fas fa-piggy-bank"></i> Keuangan Tokoku</h6>
+          <ul class="list-unstyled">
+            <li><a href="adminsaldo.html">Saldo Tokoku</a></li>
+            <li><a href="adminrekening.html">Rekening Tokoku</a></li>
+          </ul>
+
+          <h6><i class="fas fa-question"></i> Bantuan</h6>
+          <ul class="list-unstyled">
+            <li class="deactive"><a href="#">Hubungi cs(DeAct)</a></li>
+            <li class="deactive"><a href="#">Tanya Jawab(DeAct)</a></li>
+          </ul>
+        </div>
+      </nav>
+
+    <main id="content" class="content">
+        <div class="container-fluid">
+        <div class="card-title">
+            Buat Dagangan
+        </div>
+        <div class="container my-4">
+            <!-- Profile Section (Profile Photo & Name) -->
+            <div class="row">
+            <div class="container mt-1">
+                <form>
+                    <!-- Product Type Section -->
+                    <div class="form-group">
+                        <label for="tipeDagang">Tipe Dagangan</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <select class="form-control" id="tipeDagang">
+                                    <option>Mobile Legends</option>
+                                    <option>PUBG</option>
+                                    <option>Free Fire</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="kategoriDagang">
+                                    <option>Top Up</option>
+                                    <option>Skin</option>
+                                    <option>Akun (Perlu moderasi)</option>
+                                    <option>Gift Item</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Information Section -->
+                    <div class="form-group">
+                        <label for="productName">Nama Produk</label>
+                        <input type="text" class="form-control" id="productName" placeholder="Masukkan nama item yang kamu jual">
+                    </div>
+
+                    <!-- Product Images Section -->
+                    <div class="form-group">
+                        <label>Gambar Produk</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <button type="button" class="btn btn-outline-secondary" style="width: 160px; height: 160px;">
+                                    <i class="fas fa-upload"></i> Gambar Utama
+                                </button>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <button type="button" class="btn btn-outline-secondary" style="width: 160px; height: 160px;">
+                                    <i class="fas fa-upload"></i> Gambar 2
+                                </button>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <button type="button" class="btn btn-outline-secondary" style="width: 160px; height: 160px;">
+                                    <i class="fas fa-upload"></i> Gambar 3
+                                </button>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Pastikan ukuran gambar maksimal 2MB dan berformat JPG / PNG / GIF.</small>
+                    </div>
+
+                    <!-- Product Description Section -->
+                    <div class="form-group">
+                        <label for="productDesc">Deskripsi Produk</label>
+                        <textarea class="form-control" id="productDesc" rows="3" placeholder="Masukkan deskripsi produk"></textarea>
+                    </div>
+
+                    <!-- Informasi Stok dan Harga Section -->
+                    <div class="form-group">
+                        <label for="productPrice">Harga Produk</label>
+                        <input type="number" class="form-control" id="productPrice" placeholder="Harga Produk">
+                        <small class="form-text text-muted">Harga per 1 Diamond</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bulkPrice">Aktifkan harga grosir</label>
+                        <input type="checkbox" id="bulkPrice">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stock">Stok</label>
+                        <input type="number" class="form-control" id="stock" placeholder="Jumlah Stok">
+                        <small class="form-text text-muted">x1 Diamond =</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="minOrder">Minimal Pesanan</label>
+                        <input type="number" class="form-control" id="minOrder" placeholder="Minimal Pesanan">
+                        <small class="form-text text-muted">x1 Diamond =</small>
+                    </div>
+
+                    <!-- Aktifkan Garansi Pengiriman Section -->
+                    <div class="form-group">
+                        <label for="shippingGuarantee">Aktifkan Garansi Pengiriman</label>
+                        <input type="checkbox" id="shippingGuarantee">
+                        <small class="form-text text-muted">Selesaikan pesanan dalam waktu 10 menit atau kurang dari pesanan dibayar oleh pembeli.</small>
+                    </div>
+
+                    <!-- Submit Button -->
+                     <a href="adminproduk.html">
+                    <button type="submit" class="btn btn-primary">Buat Dagangan</button>
+                    </a>
+                </form>
+            </div>
+        </div>
+        </div>
+        </div>
+    </main>
+
+    <!-- Include jQuery, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,266 +1,555 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <title>Landing Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <script src="js/script.js" defer></script>
+    <link rel="stylesheet" href="css/index.css">
+    <title>Game E-Shop</title>
 </head>
 <body>
-
-  <nav class="navbar">
-    <div class="hamburger" id="hamburger">
-      <i class="fas fa-bars"></i>
-    </div>
-    <ul class="navbar-left">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Film</a></li>
-      <li><a href="#">Pesan</a></li>
-      <li><a href="#">Help</a></li>
-    </ul>
-    <div class="navbar-center">
-      <span>AHOLA</span>
-    </div>
-    <div class="navbar-right">
-      <button class="cta-button">Login</button>
-    </div>
-  </nav>
-
-  <div class="box2-container">
-    <div class="box2">
-        <img src="image/Komang2.jpg" alt="">
-    </div>
-  </div>
-
-  <div class="top-image">
-    <div class="top-image-container">
-    <img src="image/3d.png" alt="Top Image">
-    </div>
-  </div>
-
-  <div class="top-image2"></div>
-  <div class="top-image3"></div>
-
-  <section class="coba">
-    <div class="coba-content">
-      <h1>Cobakan sensasi menonton</h1>
-      <p>Film komang ini merupakan film yang bergenre romance, tetapi mereka mempunyai tantangan untuk melewati dinding yang tidak bisa dilewati tanpa persetujuan tuhan mereka.</p>
-      <a href="#" class="cta-button2">PESAN TIKET</a>
-    </div>
-    <div class="background-image">
-      <img src="image/Komang1.jpg" alt="Background Image" />
-    </div>
-  </section>
-  
-  <section class="soundtrack">
-    <div class="soundtrack-content">
-      <h2>Sound Track</h2>
-      <h3 id="song-name">Komang</h3>
-      <p id="creator-name">Pencipta: Raim Laode</p>
-      <p id="singer-name">Penyanyi: Raim Laode</p>
-      
-      <!-- Slider to change text -->
-      <label for="text-slider"></label>
-      <div class="slider-container">
-        <button class="arrow-btn" id="left-arrow">&lt;</button> <!-- Left Arrow -->
-        <input type="range" id="text-slider" min="0" max="3" value="0">
-        <button class="arrow-btn" id="right-arrow">&gt;</button> <!-- Right Arrow -->
-      </div>      
-    </div>
-  </section>
-
-  <section class="trailer">
-    <div class="trailer-content">
-      <h1>FIL</h1>
-      <button class="arrow-btn2" id="right-arrow">M</button> <!-- Right Arrow -->
-    </div>
-  </section>
-
-  <section class="trailer2">
-    <div class="trailer2-container">
-      <div class="left">
-        <div class="box">
-            <img src="image/OIP.jpg" alt="">
-            <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/BpvnEiG9bTE?si=JqX4CNS2xCi5hPAc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
-          </div>
-      </div>
-      <div class="right">
-        <!-- Konten kanan -->
-        <h2>KOMANG</h2>
-        <div class="three-box">
-            <div class="box-item1">XXI
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="image/ASW.png" alt="Itemku Logo">
             </div>
-            <div class="box-item2">CGV
-                <img src="" alt="">
+            <div class="search-bar">
+                <input type="text" placeholder="Coba cari Game">
+                <button class="cari-btn">
+                    <span class="material-icons">search</span>
+                </button>
             </div>
-            <div class="box-item3">Cinépolis
-                <img src="" alt="">
+            <div class="navbar-icons">
+                <button class="cart-btn">
+                <span class="cart">
+                    <!-- Material Icons Cart Icon -->
+                    <span class="material-icons">shopping_cart</span>
+                </span>
+                </button>
+                <div class="box-string"></div>
+                <button class="login-btn" onclick="window.location.href='auth.html'">
+                    <span class="material-icons">person</span> Masuk
+                </button>
             </div>
-          </div>
-        <p>Takdir mempertemukan Ode, pemuda Buton yang punya mimpi besar, dengan Ade, perantau dari Bali. Sebagaimana dua insan yang sedang jatuh cinta, mereka percaya kelak takdir akan mempersatukannya. Namun perjalanan mereka terhambat dengan kehadiran pria lain yang seiman dengan Ade, dan Ode harus ke Jakarta untuk mengejar mimpinya. Akankah Ode dan Ade dipersatukan takdir?.</p>
-        <div class="watch-trailer">
-            <button class="play-button">
-                <div class="box-trailer">
-              <span class="play-icon">&#9654;
-              </span>
-            </div> Watch the Trailer
+        </div>
+    </header>
+
+        <div class="navbar-links">
+            <a href="#" class="navbar-link">
+                <span class="cart"><i class="fas fa-boxes-stacked"></i></span>
+                Kategori</a>
+            <a href="#" class="navbar-link">Top Up ML</a>
+            <a href="#" class="navbar-link">BIGO Live</a>
+            <a href="#" class="navbar-link">Garena Shells</a>
+            <a href="#" class="navbar-link">RBL Universe</a>
+        </div>
+
+    <section class="banner-section">
+        <div class="banner-container">
+            <!-- Banner Images -->
+            <div class="banner-images">
+                <img src="image/banner1.jpg" alt="Banner 1" class="banner-image">
+                <img src="image/banner2.jpg" alt="Banner 2" class="banner-image">
+                <img src="image/banner3.jpg" alt="Banner 3" class="banner-image">
+            </div>
+    
+            <!-- Navigation Buttons -->
+            <button class="prev-btn">
+                <span class="material-icons">chevron_left</span>
             </button>
-            <div class="box-trailer2"></div>
-            <p class="duration">1h 47min</p>
-          </div>
-      </div>
-    </div>
-  </section>
-  
-  <section class="rate">
-    <div class="rate-content">
-        <div class="rating">
-            <div class="stars">
-            <span class="star">&#9733;</span> <!-- Bintang ikon -->
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-          </div>
-          <p class="rating-text">4.86</p> <!-- Teks N/A -->
+            <button class="next-btn">
+                <span class="material-icons">chevron_right</span>
+            </button>
+    
+            <!-- Circular Indicators -->
+            <div class="indicators">
+                <span class="indicator"></span>
+                <span class="indicator"></span>
+                <span class="indicator"></span>
+            </div>
         </div>
-        <div class="box-rate"></div>
-        <div class="buy-btn">
-            <button class="ticket-btn">BUY TICKETS</button>
-        </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="cast">
-    <h2>CAST & CREW</h2>
-    <div class="cast-content">
-      <div class="cast-coloum1">
-      <div class="cast-member">
-        <img src="image/c_komang.jpg" alt="Aurora Ribero">
-        <div class="row-name">
-          <p class="cast-role">Cast</p>
-          <p class="cast-name">Aurora Ribero</p>
+    <!-- Tipe Section -->
+    <div class="tipe-content">
+        <div class="content-container">
+            <button class="populer-nav" id="populerNavBtn">
+                <i class="fas fa-fire"></i> Populer
+            </button>            
+            <button class="terbaru-nav" id="terbaruNavBtn">
+                <span class="content-description">Terbaru</span>
+            </button>
+            <button class="pulsa-nav" id="pulsaNavBtn">
+                <span class="content-description">Pulsa</span>
+            </button>
         </div>
-      </div>
-      <div class="cast-member">
-        <img src="image/c_raim.jpg" alt="Kiesha Alvaro">
-        <div class="row-name">
-          <p class="cast-role">Cast</p>
-          <p class="cast-name">Kiesha Alvaro</p>
-        </div>
-      </div>
-      <div class="cast-member">
-        <img src="image/c_iburaim.jpg" alt="Cut Mini">
-        <div class="row-name">
-          <p class="cast-role">Cast</p>
-          <p class="cast-name">Cut Mini</p>
-        </div>
-      </div>
-      </div>
-      <div class="cast-coloum2">
-      <div class="cast-member">
-        <img src="image/c_kakakraim.jpg" alt="Arie Kriting">
-        <div class="row-name">
-          <p class="cast-role">Cast</p>
-          <p class="cast-name">Arie Kriting</p>
-        </div>
-      </div>
-      <div class="cast-member">
-        <img src="image/c_bapakraim.jpg" alt="Mathias Muchus">
-        <div class="row-name">
-          <p class="cast-role">Cast</p>
-          <p class="cast-name">Mathias Muchus</p>
-        </div>        
-      </div>
-      <div class="cast-member">
-        <img src="image/c_ibukomang.jpg" alt="Ayu Laksmi">
-        <div class="row-name">
-          <p class="cast-role">Cast</p>
-          <p class="cast-name">Ayu Laksmi</p>
-        </div>
-      </div>
     </div>
-    </div>
-  </section>
-  
-  <section class="photo-section">
-    <h2>PHOTOS</h2>
-    <div class="slider2-container">
-      <button class="nav-button" onclick="prevSlide()">&#8592;</button>
-      <div class="slider">
-        <div class="slides" id="slides">
-          <div class="slide"><img src="image/photo1.jpg" alt="Photo 1" /></div>
-          <div class="slide"><img src="image/photo2.jpg" alt="Photo 2" /></div>
-          <div class="slide2"><img src="image/photo3.jpg" alt="Photo 3" /></div>
-          <div class="slide"><img src="image/photo4.jpg" alt="Photo 4" /></div>
-          <div class="slide"><img src="image/photo5.jpg" alt="Photo 4" /></div>
-          <div class="slide"><img src="image/photo6.jpg" alt="Photo 4" /></div>
-          <div class="slide"><img src="image/photo7.jpg" alt="Photo 4" /></div>
-        </div>
-      </div>
-      <button class="nav-button" onclick="nextSlide()">&#8594;</button>
-    </div>
-    <div class="pagination">
-      <span class="dot active"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-    </div>
-  </section>
 
-    <!-- Modal Video Trailer -->
-  <div id="videoModal" class="modal">
-    <span class="close-button">&times;</span>
-    <div class="modal-content">
-      <iframe id="trailerVideo" width="100%" height="400" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <!-- Populer Section -->
+<section class="populer-section">
+    <div class="populer-box">
+        <h2><i class="fas fa-fire"></i> Populer</h2>
     </div>
-  </div>
-
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-left">
-        <h2>AHOLA</h2>
-        <p>Best app for movie lovers in Indonesia! Movie entertainment platform from cinema to online movie streaming selections.</p>
-      </div>
-      <div class="footer-center">
-        <h3>TAYANG</h3>
-        <h3>HOME</h3>
-        <h3>MOVIE</h3>
-        <h3>PESAN</h3>
-        <!-- <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Komang</a></li>
-          <li><a href="#">Pesan</a></li>
-          <li><a href="#">Help</a></li>
-        </ul> -->
-      </div>
-      <div class="footer-center2">
-        <h3>KONTAK KAMI</h3>
-        <h3>PRIVACY POILCY</h3>
-        <h3>SYARAT KETENTUAN</h3>
-        <h3>VIDIO & TRAILERS</h3>
-      </div>
-      <div class="footer-right">
-        <h4>AHOLA SUPPORT</h4>
-        <h4>E-MAIL: ahola-yuk@gmail.com</h4>
-        <h3>Ikuti Kami</h3>
-        <div class="social-icons">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
+    <div class="populer-container">
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/mobilelegend.png" alt="Mobile Legends" class="populer-image">
+            </div>
+            <span class="populer-title">Mobile Legends</span>
         </div>
-      </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/bigolive.webp" alt="Bigo Live" class="populer-image">
+            </div>
+            <span class="populer-title">Bigo Live</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/ff.png" alt="Free Fire" class="populer-image">
+            </div>
+            <span class="populer-title">Free Fire</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/pubg.png" alt="PUBG" class="populer-image">
+            </div>
+            <span class="populer-title">PUBG</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/hok.png" alt="Honor of Kings" class="populer-image">
+            </div>
+            <span class="populer-title">Honor of Kings</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/genshinimpact.png" alt="Genshin Impact" class="populer-image">
+            </div>
+            <span class="populer-title">Genshin Impact</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/honkai.png" alt="Honkai Star Rail" class="populer-image">
+            </div>
+            <span class="populer-title">Honkai Star Rail</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/wutheringwaves.webp" alt="Wuthering Waves" class="populer-image">
+            </div>
+            <span class="populer-title">Wuthering Waves</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/codm.webp" alt="Call of Duty Mobile" class="populer-image">
+            </div>
+            <span class="populer-title">Call of Duty Mobile</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/lolm.png" alt="League of Legends: Wild Rift" class="populer-image">
+            </div>
+            <span class="populer-title">League of Legends: Wild Rift</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/theragnarokicon.png" alt="The Ragnarok - Drop Link" class="populer-image">
+            </div>
+            <span class="populer-title">The Ragnarok</span>
+        </div>
+        <div class="populer-item">
+            <div class="populer-image-wrapper">
+                <img src="image/ffmax.webp" alt="Free Fire MAX" class="populer-image">
+            </div>
+            <span class="populer-title">Free Fire MAX</span>
+        </div>
     </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 AHOLA Film. All rights reserved.</p>
+</section>
+
+    <!-- Terbaru Section -->
+    <section class="terbaru-section">
+        <div class="terbaru-box">
+        <h2>Terbaru</h2>
     </div>
-  </footer>
+        <!-- Content Items -->
+        <div class="terbaru-container"  id="terbaruContainer">
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/modernwarships.webp" alt="Modern Warships" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Modern Warships</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/mcgg.jpg" alt="Magic Chess: Go Go" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Magic Chess: Go Go</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/ragnarokbacktoglory.jpg" alt="Ragnarok Back to Glory" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Ragnarok Back to Glory</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/deltaforcegarena.png" alt="Delta Force - Garena" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Delta Force - Garena</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/fatmeatwukong.png" alt="Fat Meat Wukong" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Fat Meat Wukong</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/draconiasaga.jpg" alt="Draconia Saga" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Draconia Saga</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/machinawaking.webp" alt="Machina Waking" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Machina Waking</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/nightcrows.webp" alt="Night Crows" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Night Crows</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/theants.webp" alt="The Ants" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">The Ants</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/alchemystar.webp" alt="Alchemy Stars" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Alchemy Stars</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/ageofempire.jpg" alt="Age Of Magic" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Age Of Magic</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/racingmaster.jpg" alt="Racing Master" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Racing Master</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/ageofapes.jpg" alt="Age of Apes" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Age of Apes</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/ragnaroklandversegenesis.jpeg" alt="Ragnarok Landverse Genesis" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Ragnarok Landverse Genesis</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/topwar.jpg" alt="Top War: Battle Game" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Top War: Battle Game</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/ageofempire.jpg" alt="Age Of Magic" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Age Of Magic</span>
+        </div>
+        <div class="terbaru-item">
+            <div class="populer-image-wrapper">
+                <img src="image/racingmaster.jpg" alt="Racing Master" class="terbaru-image">
+            </div>
+            <span class="terbaru-title">Age of Apes</span>
+        </div>
+        </div>
+        <button id="loadMoreBtn" class="load-more-btn">Tampilkan lebih banyak</button>
+        <button id="loadLessBtn" class="load-more-btn" style="display: none;">Tampilkan lebih sedikit</button>
+    </section>
 
+        <!-- Pulsa Section -->
+        <section class="pulsa-section">
+            <div class="pulsa-box">
+            <h2>Pulsa</h2>
+        </div>
+            <!-- Content Items -->
+            <div class="pulsa-container">
+                <div class="pulsa-item">
+                    <div class="populer-image-wrapper">
+                        <img src="image/axis.webp" alt="Axis" class="pulsa-image">
+                    </div>
+                    <span class="pulsa-title">Axis</span>
+                </div>
+                <div class="pulsa-item">
+                    <div class="populer-image-wrapper">
+                        <img src="image/smartfren.png" alt="Smartfren" class="pulsa-image">
+                    </div>
+                    <span class="pulsa-title">Smartfren</span>
+                </div>
+                <div class="pulsa-item">
+                    <div class="populer-image-wrapper">
+                        <img src="image/indosat.webp" alt="Indosat" class="pulsa-image">
+                    </div>
+                    <span class="pulsa-title">Indosat</span>
+                </div>
+                <div class="pulsa-item">
+                    <div class="populer-image-wrapper">
+                        <img src="image/tri.webp" alt="Tri" class="pulsa-image">
+                    </div>
+                    <span class="pulsa-title">Tri</span>
+                </div>
+                <div class="pulsa-item">
+                    <div class="populer-image-wrapper">
+                        <img src="image/telkomsel.png" alt="Telkomsel" class="pulsa-image">
+                    </div>
+                    <span class="pulsa-title">Telkomsel</span>
+                </div>
+                <div class="pulsa-item">
+                    <div class="populer-image-wrapper">
+                        <img src="image/xl.webp" alt="Xl" class="pulsa-image">
+                    </div>
+                    <span class="pulsa-title">Xl</span>
+                </div>
+            </div>
+        </section>
 
-  <script src="script.js"></script>
-  
+        <section class="image-section">
+            <div class="image-container">
+                <div class="image-item">
+                    <img src="image/gambar1.jpg" alt="Promo 1" class="image-content">
+                </div>
+                <div class="image-item">
+                    <img src="image/gambar2.jpg" alt="Promo 2" class="image-content">
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <div class="category-container">
+                <!-- Top Up Game Section -->
+                <div class="category-box">
+                    <h2>Top Up Game <a href="index topup.html" class="see-all">Lihat Semua <span class="material-icons">chevron_right</span></a></h2>
+                    <div class="category-items">
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/mobilelegend.png" alt="Mobile Legends">
+                            </div>
+                            <span class="category-text">Mobile Legends</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/ff.png" alt="Garena Free Fire">
+                            </div>
+                            <span class="category-text">Free Fire</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/pubg.png" alt="PUBG Mobile">
+                            </div>
+                            <span class="category-text">PUBG Mobile</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/valorant.webp" alt="Valorant">
+                            </div>
+                            <span class="category-text">Valorant</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/genshinimpact.png" alt="Genshin Impact">
+                            </div>
+                            <span class="category-text">Genshin Impact</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/deltaforcegarena.png" alt="Delta Force">
+                            </div>
+                            <span class="category-text">Delta Force - garena</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/honkai.png" alt="Honkai Star Rail">
+                            </div>
+                            <span class="category-text">Honkai Star Rail</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/hok.png" alt="Honor of Kings">
+                            </div>
+                            <span class="category-text">Honor of Kings</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/zenlesszero.webp" alt="Zenless Zone Zero">
+                            </div>
+                            <span class="category-text">Zenless Zone Zero</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/marvelrivals.webp" alt="Marvel Rivals">
+                            </div>
+                            <span class="category-text">Marvel Rivals</span>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Voucher Section -->
+                <div class="category-box">
+                    <h2>Voucher <a href="index topup.html" class="see-all">Lihat Semua <span class="material-icons">chevron_right</span></a></h2>
+                    <div class="category-items">
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/roblox.webp" alt="RBL">
+                            </div>
+                            <span class="category-text">Roblox Gift Card</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/steam.webp" alt="Steam">
+                            </div>
+                            <span class="category-text">Steam</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/amazon.jpg" alt="Amazon Gift Card">
+                            </div>
+                            <span class="category-text">Amazon Gift Card</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/nintendo.webp" alt="Nintendo">
+                            </div>
+                            <span class="category-text">Voucher Nintendo</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/googleplay.webp" alt="Google Play">
+                            </div>
+                            <span class="category-text">Voucher Google Play</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/garenavoucher.webp" alt="Garena">
+                            </div>
+                            <span class="category-text">Voucher Garena Shells</span>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-item-wrapper">
+                            <img src="image/bigolive.webp" alt="BIGO Live">
+                            </div>
+                            <span class="category-text">BIGO Live</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="topup-game-section">
+            <h2>Top Up Game</h2>
+            <p class="game-links">
+                <a href="#">Top Up HOK</a>, 
+                <a href="#">Top Up PUBG</a>, 
+                <a href="#">UC PUBG</a>, 
+                <a href="#">Top Up FF</a>, 
+                <a href="#">Top Up Free Fire</a>, 
+                <a href="#">Beli Indosat</a>, 
+                <a href="#">Top Up Delta Force</a>, 
+                <a href="#">Beli Pulsa</a>, 
+                <a href="#">Top Up ML</a>, 
+                <a href="#">Top Up Ragnarok M Classic</a>
+            </p>
+    
+            <!-- Accordion Section -->
+            <div class="info">
+                <div class="info-item">
+                    <button class="info-btn">Marketplace Games Terbesar dan Terlengkap</button>
+                    <div class="info-content">
+                        <p>gameeshop.com adalah marketplace destinasi utama bagi para gamers untuk yang mencari kenyamanan dan keandalan dalam bertransaksi digital. Dengan berbagai produk digital yang tersedia, mulai dari top-up game, item, akun hingga voucher digital, Itemku.com menyediakan solusi lengkap untuk kebutuhan hiburan dan gaya hidup digital Anda.</p>
+                    </div>
+                </div>
+    
+                <div class="info-item">
+                    <button class="info-btn">Apa itu Game e-shop?</button>
+                    <div class="info-content">
+                        <p>Game e-shop adalah tempat jual beli gold, item, currency, top-up, akun, dan voucher online game dan virtual product lainnya yang memberikan jaminan keamanan transaksi dan garansi uang kembali 100%. itemku menggunakan teknologi itemku Garansi Keamanan, yang memungkinkan itemku untuk memonitor semua transaksi dan melakukan pengecekan atas setiap pembayaran maupun pengiriman produk dari penjual maupun pembeli.</p>
+                    </div>
+                </div>
+    
+                <div class="info-item">
+                    <button class="info-btn">Top-Up Game Terlengkap</button>
+                    <div class="info-content">
+                        <p>Sebagai salah satu platform top-up game terbesar di Indonesia, gameeshop.com menawarkan berbagai pilihan top-up untuk game populer seperti Mobile Legends atau Top up ml, Free Fire, PUBG Mobile, RBL, Pulsa, Growtopia, Valorant, Honor of Kings dan masih banyak lagi. Kami bekerja sama dengan mitra resmi dan terpercaya untuk memastikan proses top-up Anda berjalan lancar, cepat, dan aman. Itemku tidak berafiliasi, terkait, diberi wewenang, didukung oleh, atau dengan cara apa pun secara resmi terhubung dengan Roblox Corporation, Roblox atau anak perusahaan atau afiliasinya. Situs web resmi Roblox dapat ditemukan di: https://www.roblox.com/ Nama Roblox, Robux serta nama, merek, emblem, dan gambar terkait adalah merek dagang terdaftar dari pemiliknya masing-masing.</p>
+                    </div>
+                </div>
+    
+                <div class="info-item">
+                    <button class="info-btn">Pulsa untuk Berbagai Kebutuhan</button>
+                    <div class="info-content">
+                        <p>Selain top-up game, gameeshop.com juga menyediakan berbagai provider pulsa yang bisa Anda gunakan untuk berbelanja, streaming, dan kebutuhan lainnya, semua bisa Anda dapatkan dengan harga kompetitif di gameeshop.com.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="image/ASW.png" alt="Logo" class="footer-logo-img">
+                    <p>game e-shop adalah tempat top up games yang aman, murah dan terpercaya. Proses cepat 1-3 Detik. Open 24 jam. Payment terlengkap. Jika ada kendala silahkan hubungi cs di website ini.</p>
+                </div>
+                <div class="footer-links">
+                    <div>
+                        <h3>Peta Situs</h3>
+                        <ul>
+                            <li><a href="#">Beranda</a></li>
+                            <li><a href="#">Cek Transaksi</a></li>
+                            <li><a href="#">Hubungi Kami</a></li>
+                            <li><a href="#">Ulasan</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Dukungan</h3>
+                        <ul>
+                            <li><a href="#">Whatsapp</a></li>
+                            <li><a href="#">Instagram</a></li>
+                            <li><a href="#">Email</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Legalitas</h3>
+                        <ul>
+                            <li><a href="#">Kebijakan Pribadi</a></li>
+                            <li><a href="#">Syarat & Ketentuan</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-social">
+                <a href="https://instagram.com" class="social-icon"><img src="image/sosial/Instagram.png" alt="instagram"></a>
+                <a href="https://tiktok.com" class="social-icon"><img src="image/sosial/Tiktok.png" alt="tiktok"></a>
+                <a href="mailto:someone@example.com" class="social-icon"><img src="image/sosial/Gmail.png" alt="gmail"></a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GAME E-SHOP. All rights reserved.</p>
+            </div>
+        </footer>
+
 </body>
 </html>

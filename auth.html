@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <link rel="stylesheet" href="css/auth.css">
+        <script src="js/auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Selamat Datang</h1>
+            <p>Silakan masuk atau daftar untuk melanjutkan</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="toggle-buttons">
+                <button class="toggle-btn active" onclick="showLogin()">Masuk</button>
+                <button class="toggle-btn" onclick="showRegister()">Daftar</button>
+            </div>
+
+            <!-- Form Login -->
+            <div id="loginForm" class="form-section active">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Masuk</button>
+                </form>
+                <div class="forgot-password">
+                    <a href="#" onclick="alert('Fitur lupa password akan segera hadir!')">Lupa password?</a>
+                </div>
+            </div>
+
+            <!-- Form Register -->
+            <div id="registerForm" class="form-section">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="registerName">Nama Lengkap</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Konfirmasi Password</label>
+                        <input type="password" id="confirmPassword" required minlength="6">
+                    </div>
+                    <button type="submit" class="submit-btn">Daftar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
