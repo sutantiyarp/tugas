@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login & Register</title>
     <link rel="stylesheet" href="css/auth.css">
-        <script src="js/auth.js"></script>
+    <script src="js/auth.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -16,8 +16,8 @@
         
         <div class="form-container">
             <div class="toggle-buttons">
-                <button class="toggle-btn active" onclick="showLogin()">Masuk</button>
-                <button class="toggle-btn" onclick="showRegister()">Daftar</button>
+                <button class="toggle-btn active" onclick="showLogin(event)">Masuk</button>
+                <button class="toggle-btn" onclick="showRegister(event)">Daftar</button>
             </div>
 
             <!-- Form Login -->
