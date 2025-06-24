@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
-    <script src="js/script.js" defer></script>
-    <link rel="stylesheet" href="css/index kategori.css" />
+    <script src="js/index keranjang.js" defer></script>
+    <link rel="stylesheet" href="css/index keranjang.css" />
     <title>Game E-Shop</title>
 </head>
 <body>
@@ -87,97 +87,45 @@
         <a href="#" class="navbar-link">RBL Universe</a>
     </div>
 
-    <section class="produk-section">
+    <section class="populer-section">
+    <h2 class="history-title">Keranjang</h2>
+    <div class="produk-section">
+        <a href="index history.html">
+            <button class="history-btn">Riwayat Transaksi</button>
+        </a>
         <div class="produk-container">
-            <div class="judul">
-            <p>
-              <a href="index.html" class="breadcrumb-home">Beranda</a>
-              <span class="breadcrumb-current">Kategori</span>
-            </p>
-            <h2 class="judul-kategori">Eksplor Kategori di Game E-Shop</h2>
-            </div>
-            <div class="kategori-layout">
-                <aside class="sidebar-kategori">
-                    <ul class="sidebar-menu">
-                        <li><a href="index topup.html">Top Up Game</a></li>
-                        <li><a href="index voucher.html" class="active">Voucher</a></li>
-                        <li><a href="index pulsa.html">Pulsa</a></li>
-                    </ul>
-                </aside>
-
-                <div class="kategori-page">
-                    <div class="kategori-search">
-                        <input type="text" class="search-input" placeholder="Cari Nama Kategori" />
+                <div class="cart-container">
+                    <div class="cart-items" id="cartItems">
+                        <!-- Items akan ditambahkan secara dinamis -->
                     </div>
 
-                    <div class="abjad-filter">
-                        <span>👑</span>
-                        <span>#</span>
-                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
-                        <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
-                        <span>K</span><span>L</span><span>M</span><span>N</span><span>O</span>
-                        <span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span>
-                        <span>U</span><span>V</span><span>W</span><span>X</span><span>Y</span><span>Z</span>
+                    <div class="cart-summary">
+                        <h2 class="summary-title">Ringkasan Pesanan</h2>
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">Rp 0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Ongkos Kirim:</span>
+                            <span id="shipping">Rp 15.000</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Pajak (10%):</span>
+                            <span id="tax">Rp 0</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="total">Rp 15.000</span>
+                        </div>
+                        <button class="checkout-btn" onclick="checkout()">
+                            Lanjut ke Pembayaran
+                        </button>
                     </div>
+                </div>
 
-                    <h3 class="subjudul-kategori">Kategori Populer</h3>
-                    <div class="kategori-populer">
-                        <div class="kategori-item">
-                            <img src="image/roblox.webp" alt="Roblox" />
-                            <p>Roblox</p>
-                        </div>
-                        <div class="kategori-item">
-                            <img src="image/steam.webp" alt="Steam" />
-                            <p>Steam</p>
-                        </div>
-                        <div class="kategori-item">
-                            <img src="image/nintendo.webp" alt="Nintendo" />
-                            <p>Nintendo</p>
-                        </div>
-                        <div class="kategori-item">
-                            <img src="image/bigolive.webp" alt="Bigo Live" />
-                            <p>Bigo Live</p>
-                        </div>
-                        <div class="kategori-item">
-                            <img src="image/fortnite.webp" alt="Fortnite" />
-                            <p>Fortnite</p>
-                        </div>
-                        <div class="kategori-item">
-                            <img src="image/binance.jpeg" alt="Binance" />
-                            <p>Binance</p>
-                        </div>
-                    </div>
-
-                    <h3 class="subjudul-kategori">Voucher</h3>
-                    <div class="TopUp-populer">
-                        <div class="TopUp-item">
-                            <img src="image/bigolive.webp" alt="Bigo Live" />
-                            <p>Bigo Live</p>
-                        </div>
-                        <div class="TopUp-item">
-                            <img src="image/binance.jpeg" alt="Binance" />
-                            <p>Binance</p>
-                        </div>
-                        <div class="TopUp-item">
-                            <img src="image/steam.webp" alt="Steam" />
-                            <p>Steam</p>
-                        </div>
-                        <div class="TopUp-item">
-                            <img src="image/fortnite.webp" alt="Fortnite" />
-                            <p>Fortnite</p>
-                        </div>
-                        <div class="TopUp-item">
-                            <img src="image/nintendo.webp" alt="Nintendo" />
-                            <p>Nintendo</p>
-                        </div>
-                        <div class="TopUp-item">
-                            <img src="image/roblox.webp" alt="Roblox" />
-                            <p>Roblox</p>
-                        </div>
-                    </div>
-                </div> <!-- akhir kategori-page -->
-            </div> <!-- akhir kategori-layout -->
+            <div class="notification" id="notification"></div>
         </div> <!-- akhir produk-container -->
+    </div>
     </section>
 
     <footer class="footer">
@@ -239,11 +187,11 @@
       <span class="material-icons-outlined">home</span>
       <span class="bottom-nav-label">Home</span>
     </a>
-    <a href="index topup.html" class="bottom-nav-item active">
+    <a href="index topup.html" class="bottom-nav-item">
       <span class="material-icons-outlined">shopping_bag</span>
       <span class="bottom-nav-label">Beli</span>
     </a>
-    <a href="index keranjang.html" class="bottom-nav-item">
+    <a href="index keranjang.html" class="bottom-nav-item active">
       <span class="material-icons-outlined">compare_arrows</span>
       <span class="bottom-nav-label">Transaksi</span>
     </a>

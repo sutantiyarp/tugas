@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
-    <script src="js/script.js" defer></script>
-    <link rel="stylesheet" href="css/index kategori.css" />
+    <script src="js/detailproduk.js" defer></script>
+    <link rel="stylesheet" href="css/index detailproduk.css" />
     <title>Game E-Shop</title>
 </head>
 <body>
@@ -92,91 +93,136 @@
             <div class="judul">
             <p>
               <a href="index.html" class="breadcrumb-home">Beranda</a>
-              <span class="breadcrumb-current">Kategori</span>
+              <a href="index topup.html" class="breadcrumb-home">Kategori</a>
+              <a href="index tampilanproduk.html" class="breadcrumb-home">Mobile Legends</a>
+              <span class="breadcrumb-current">Top Up</span>
             </p>
-            <h2 class="judul-kategori">Eksplor Kategori di Game E-Shop</h2>
             </div>
-            <div class="kategori-layout">
-                <aside class="sidebar-kategori">
-                    <ul class="sidebar-menu">
-                        <li><a href="index topup.html">Top Up Game</a></li>
-                        <li><a href="index voucher.html" class="active">Voucher</a></li>
-                        <li><a href="index pulsa.html">Pulsa</a></li>
-                    </ul>
-                </aside>
-
-                <div class="kategori-page">
-                    <div class="kategori-search">
-                        <input type="text" class="search-input" placeholder="Cari Nama Kategori" />
-                    </div>
-
-                    <div class="abjad-filter">
-                        <span>👑</span>
-                        <span>#</span>
-                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
-                        <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
-                        <span>K</span><span>L</span><span>M</span><span>N</span><span>O</span>
-                        <span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span>
-                        <span>U</span><span>V</span><span>W</span><span>X</span><span>Y</span><span>Z</span>
-                    </div>
-
-                    <h3 class="subjudul-kategori">Kategori Populer</h3>
-                    <div class="kategori-populer">
-                        <div class="kategori-item">
-                            <img src="image/roblox.webp" alt="Roblox" />
-                            <p>Roblox</p>
+             <!-- Flex Container for Two Columns -->
+            <div class="flex-container">
+                <!-- Left Column -->
+                <div class="left-column">
+                    <div class="product-header">
+                        <div class="product-image-container">
+                            <img src="image/ml/topup1.webp" alt="Product Image" class="product-image">
                         </div>
-                        <div class="kategori-item">
-                            <img src="image/steam.webp" alt="Steam" />
-                            <p>Steam</p>
-                        </div>
-                        <div class="kategori-item">
-                            <img src="image/nintendo.webp" alt="Nintendo" />
-                            <p>Nintendo</p>
-                        </div>
-                        <div class="kategori-item">
-                            <img src="image/bigolive.webp" alt="Bigo Live" />
-                            <p>Bigo Live</p>
-                        </div>
-                        <div class="kategori-item">
-                            <img src="image/fortnite.webp" alt="Fortnite" />
-                            <p>Fortnite</p>
-                        </div>
-                        <div class="kategori-item">
-                            <img src="image/binance.jpeg" alt="Binance" />
-                            <p>Binance</p>
+                        <div class="product-info">
+                            <h2 class="product-title">Mobile Legends • 3 Diamonds</h2>
+                            <div class="product-price">
+                                <span class="discount">66%</span>
+                                <span class="original-price">Rp2.665</span>
+                                <span class="current-price">Rp900</span>
+                            </div>
+                            <p class="availability">Dapat diaktifkan di Indonesia</p>
                         </div>
                     </div>
 
-                    <h3 class="subjudul-kategori">Voucher</h3>
-                    <div class="TopUp-populer">
-                        <div class="TopUp-item">
-                            <img src="image/bigolive.webp" alt="Bigo Live" />
-                            <p>Bigo Live</p>
+                    <div class="product-options">
+                        <div class="option">
+                            <div class="select-wrapper">
+                                <select id="product-type">
+                                    <option value="diamond">Diamond</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i> <!-- Font Awesome Icon for arrow -->
+                            </div>
                         </div>
-                        <div class="TopUp-item">
-                            <img src="image/binance.jpeg" alt="Binance" />
-                            <p>Binance</p>
-                        </div>
-                        <div class="TopUp-item">
-                            <img src="image/steam.webp" alt="Steam" />
-                            <p>Steam</p>
-                        </div>
-                        <div class="TopUp-item">
-                            <img src="image/fortnite.webp" alt="Fortnite" />
-                            <p>Fortnite</p>
-                        </div>
-                        <div class="TopUp-item">
-                            <img src="image/nintendo.webp" alt="Nintendo" />
-                            <p>Nintendo</p>
-                        </div>
-                        <div class="TopUp-item">
-                            <img src="image/roblox.webp" alt="Roblox" />
-                            <p>Roblox</p>
+                        <div class="option">
+                            <div class="select-wrapper">
+                                <select id="quantity">
+                                    <option value="3">3 Diamonds</option>
+                                    <option value="5">5 Diamonds</option>
+                                    <option value="10">10 Diamonds</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i> <!-- Font Awesome Icon for arrow -->
+                            </div>
                         </div>
                     </div>
-                </div> <!-- akhir kategori-page -->
-            </div> <!-- akhir kategori-layout -->
+
+                    <!-- New Section Below Product Options -->
+                    <div class="topup-section">
+                        <div class="topup-logo">
+                            <img src="image/fotoprofil/asw.png" alt="Topup Gampang" />
+                        </div>
+                        <div class="topup-rating">
+                            <!-- First Div for rating-text and p -->
+                            <div class="rating-text-container">
+                                <span class="rating-text">ASW Olshop Game</span>
+                                <p>Terakhir online 5 Jam lalu</p>
+                            </div>
+
+                            <!-- Second Div for rating-stars and rating-value -->
+                            <div class="rating-stars-container">
+                                <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                <span class="rating-value">4.9/5.0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- New Section Below topup-section -->
+                    <div class="stok-info">
+                        <!-- Left side: stock-detail and sold -->
+                        <div class="stok-left">
+                            <div class="stok-detail">
+                                <span class="stok-label">Stok</span>
+                                <span class="stok-quantity">366</span>
+                            </div>
+                            <div class="sold">
+                                <span class="sold-label">Terjual</span>
+                                <span class="sold-value">81</span>
+                            </div>
+                        </div>
+                        <div class="separator">|</div>
+                        <!-- Right side: min-order and shipping-time -->
+                        <div class="stok-right">
+                            <div class="min-order">
+                                <span class="min-order-label">Min. beli</span>
+                                <span class="min-order-value">1</span>
+                            </div>
+                            <div class="shipping-time">
+                                <span class="shipping-time-label">Waktu Kirim</span>
+                                <span class="shipping-time-value">43m</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="right-column">
+                    <!-- Content for the right column goes here -->
+                    <h3>Informasi Pesanan</h3>
+                    <form class="order-form">
+                        <div class="form-group">
+                            <label for="user-id">User ID</label>
+                            <input type="text" id="user-id" placeholder="Contoh: 12345678" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zone-id">Zone ID</label>
+                            <input type="text" id="zone-id" placeholder="Contoh: 2020. Tanpa tanda kurung" />
+                        </div>
+
+                        <div class="stock-container">
+                            <span class="stock-label">Stok: <span class="stock-quantity">999+</span></span>
+                            <div class="quantity-control">
+                                <button class="decrease">-</button>
+                                <input type="text" class="quantity" value="1" />
+                                <button class="increase">+</button>
+                            </div>
+                        </div>
+
+                        <div class="total">
+                            <span class="total-label">Total:</span>
+                            <span class="total-price">Rp900</span>
+                        </div>
+
+                        <a href="index pembayaran.html" class="btn-purchase-link">
+                            Beli Sekarang
+                        </a>
+
+                        <p class="safe-transaction">100% Transaksi Aman Dijamin oleh <strong>Trade Guard</strong> <i class="fas fa-shield-alt"></i></p>
+                    </form>
+                </div>
+            </div>
         </div> <!-- akhir produk-container -->
     </section>
 

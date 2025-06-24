@@ -24,10 +24,13 @@
             </div>
             <div class="navbar-icons">
                 <button class="cart-btn">
-                <span class="cart">
-                    <!-- Material Icons Cart Icon -->
-                    <span class="material-icons">shopping_cart</span>
-                </span>
+                <a href="auth.html">
+                    <button class="cart-btn" title="Keranjang">
+                        <span class="cart">
+                            <span class="material-icons">shopping_cart</span>
+                        </span>
+                    </button>
+                </a>
                 </button>
                 <div class="box-string"></div>
                 <button class="login-btn" onclick="window.location.href='auth.html'">
@@ -35,6 +38,12 @@
                 </button>
             </div>
         </div>
+            <div class="search-bar1">
+                <input type="text" placeholder="Coba cari Game">
+                <button class="cari-btn">
+                    <span class="material-icons">search</span>
+                </button>
+            </div>
     </header>
 
         <div class="navbar-links">
@@ -94,12 +103,14 @@
         <h2><i class="fas fa-fire"></i> Populer</h2>
     </div>
     <div class="populer-container">
-        <div class="populer-item">
-            <div class="populer-image-wrapper">
-                <img src="image/mobilelegend.png" alt="Mobile Legends" class="populer-image">
+        <a href="auth.html" class="populer-item-link">
+            <div class="populer-item">
+                <div class="populer-image-wrapper">
+                    <img src="image/mobilelegend.png" alt="Mobile Legends" class="populer-image">
+                </div>
+                <span class="populer-title">Mobile Legends</span>
             </div>
-            <span class="populer-title">Mobile Legends</span>
-        </div>
+        </a>
         <div class="populer-item">
             <div class="populer-image-wrapper">
                 <img src="image/bigolive.webp" alt="Bigo Live" class="populer-image">
@@ -347,10 +358,12 @@
                     <h2>Top Up Game <a href="index topup.html" class="see-all">Lihat Semua <span class="material-icons">chevron_right</span></a></h2>
                     <div class="category-items">
                         <div class="category-item">
-                            <div class="category-item-wrapper">
-                            <img src="image/mobilelegend.png" alt="Mobile Legends">
-                            </div>
-                            <span class="category-text">Mobile Legends</span>
+                            <a href="#">
+                                <div class="category-item-wrapper">
+                                    <img src="image/mobilelegend.png" alt="Mobile Legends">
+                                </div>
+                                <span class="category-text">Mobile Legends</span>
+                            </a>
                         </div>
                         <div class="category-item">
                             <div class="category-item-wrapper">

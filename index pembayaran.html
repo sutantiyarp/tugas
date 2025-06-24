@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <script src="js/index pembayaran.js" defer></script>
+    <link rel="stylesheet" href="css/index pembayaran.css" />
+    <title>Game E-Shop</title>
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="image/ASW.png" alt="Itemku Logo">
+            </div>
+        </div>
+    </header>
+
+    <!-- <div class="navbar-links">
+        <a href="#" class="navbar-link">
+            <span class="cart"><i class="fas fa-boxes-stacked"></i></span>
+            Kategori
+        </a>
+        <a href="#" class="navbar-link">Top Up ML</a>
+        <a href="#" class="navbar-link">BIGO Live</a>
+        <a href="#" class="navbar-link">Garena Shells</a>
+        <a href="#" class="navbar-link">RBL Universe</a>
+    </div> -->
+
+    <section class="produk-section">
+        <div class="produk-container">
+                <div class="main-content">
+                    <h1 class="page-title">Pembayaran</h1>
+                    
+                    <!-- Product Section -->
+                    <div class="product-section">
+                        <div class="product-info">
+                            <div class="product-icon">
+                                <img src="image/mobilelegend.png" alt="Mobile Legends" class="game-icon">
+                            </div>
+                            <div class="product-details">
+                                <h3>3 Diamonds</h3>
+                                <p class="game-name">Mobile Legends</p>
+                            </div>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">Rp900 x 1</span>
+                            <div class="topup-badge">
+                                <span class="shield-icon">🛡️</span>
+                                <span>ASW Olshop Game</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Details Section -->
+                    <div class="user-details">
+                        <div class="user-field">
+                            <label>User ID</label>
+                            <input type="text" value="15269605" readonly>
+                        </div>
+                        <div class="user-field">
+                            <label>Zone ID</label>
+                            <input type="text" value="2017" readonly>
+                        </div>
+                        <div class="user-field">
+                            <label>Username <span class="info-icon">ℹ️</span></label>
+                            <input type="text" value="martinshantiram" readonly>
+                        </div>
+                        <button class="atur-btn">Atur</button>
+                    </div>
+
+                    <!-- Payment Method Section -->
+                    <div class="payment-methods">
+                        <h2>Metode Pembayaran</h2>
+                        
+                        <div class="payment-option">
+                            <div class="payment-info">
+                                <img src="https://cdn.icon-icons.com/icons2/2508/PNG/512/wallet_money_business_coin_dollar_icon_150710.png" alt="Dompetku" class="payment-icon">
+                                <span>Walletku: <strong>IDR 0</strong></span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="dompetku">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="payment-option">
+                            <div class="payment-info">
+                                <img src="https://cdn-icons-png.flaticon.com/512/7977/7977062.png" alt="Dompetku" class="payment-icon">
+                                <span>GAME Token: <strong>IDR 0</strong></span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="itemku-token">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="bank-option selected">
+                            <div class="bank-info">
+                                <img src="image/bank/bri.png" alt="Bank BRI" class="bank-logo">
+                                <div class="bank-details">
+                                    <strong>BRI</strong>
+                                    <p>Biaya: IDR 4.000</p>
+                                </div>
+                            </div>
+                            <button class="ganti-btn">Ganti</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Coupon Section -->
+                    <div class="coupon-section">
+                        <div class="coupon-icon">💳</div>
+                        <div class="coupon-text">
+                            <strong>Makin hemat pakai Kupon</strong>
+                            <p>Yuk pakai sebelum hangus</p>
+                        </div>
+                        <div class="coupon-arrow">›</div>
+                    </div>
+
+                    <!-- Payment Details -->
+                    <div class="payment-details">
+                        <h3>Detail Pembayaran</h3>
+                        
+                        <div class="detail-row">
+                            <span>Metode Pembayaran</span>
+                            <span>BRI</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span>Total Pesanan</span>
+                            <span>Rp700</span>
+                        </div>
+                        
+                        <!-- <div class="detail-row">
+                            <span>Layanan Pembeli Premium</span>
+                            <span>Rp5.000</span>
+                        </div> -->
+                        
+                        <div class="detail-row">
+                            <span>Biaya Admin <span class="info-icon">ℹ️</span></span>
+                            <span>Rp540</span>
+                        </div>
+                        
+                        <hr class="divider">
+                        
+                        <div class="total-row">
+                            <strong>Total Pembayaran</strong>
+                            <strong>Rp1.440</strong>
+                        </div>
+                        
+                        <button class="bayar-btn">Bayar</button>
+                        
+                        <div class="security-notice">
+                            <span>Pembayaran Aman 100% Dijamin</span>
+                            <span>oleh <strong>Trade Guard</strong> ✓</span>
+                        </div>
+                    </div>
+                </div>
+        </div> <!-- akhir produk-container -->
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="image/ASW.png" alt="Logo" class="footer-logo-img" />
+                <p>
+                    game e-shop adalah tempat top up games yang aman, murah dan terpercaya. Proses cepat
+                    1-3 Detik. Open 24 jam. Payment terlengkap. Jika ada kendala silahkan hubungi cs di
+                    website ini.
+                </p>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h3>Peta Situs</h3>
+                    <ul>
+                        <li><a href="#">Beranda</a></li>
+                        <li><a href="#">Cek Transaksi</a></li>
+                        <li><a href="#">Hubungi Kami</a></li>
+                        <li><a href="#">Ulasan</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Dukungan</h3>
+                    <ul>
+                        <li><a href="#">Whatsapp</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Email</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Legalitas</h3>
+                    <ul>
+                        <li><a href="#">Kebijakan Pribadi</a></li>
+                        <li><a href="#">Syarat & Ketentuan</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-social">
+            <a href="https://instagram.com" class="social-icon"
+                ><img src="image/sosial/Instagram.png" alt="instagram"
+            /></a>
+            <a href="https://tiktok.com" class="social-icon"
+                ><img src="image/sosial/Tiktok.png" alt="tiktok"
+            /></a>
+            <a href="mailto:someone@example.com" class="social-icon"
+                ><img src="image/sosial/Gmail.png" alt="gmail"
+            /></a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 GAME E-SHOP. All rights reserved.</p>
+        </div>
+    </footer>
+
+<div class="bottom-nav-bar">
+  <div class="bottom-nav-container">
+    <a href="index masuk.html" class="bottom-nav-item">
+      <span class="material-icons-outlined">home</span>
+      <span class="bottom-nav-label">Home</span>
+    </a>
+    <a href="index topup.html" class="bottom-nav-item">
+      <span class="material-icons-outlined">shopping_bag</span>
+      <span class="bottom-nav-label">Beli</span>
+    </a>
+    <a href="index keranjang.html" class="bottom-nav-item active">
+      <span class="material-icons-outlined">compare_arrows</span>
+      <span class="bottom-nav-label">Transaksi</span>
+    </a>
+    <a href="index profil.html" class="bottom-nav-item">
+      <span class="material-icons-outlined">person</span>
+      <span class="bottom-nav-label">Akun</span>
+    </a>
+  </div>
+</div>
+</body>
+</html>

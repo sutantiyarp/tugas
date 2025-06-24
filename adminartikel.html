@@ -72,9 +72,9 @@
 
           <h6><i class="fas fa-store"></i> Dagangan</h6>
           <ul class="list-unstyled">
-            <li class="active"><a href="admintambahproduk.html">Buat Dagangan</a></li>
+            <li><a href="admintambahproduk.html">Buat Dagangan</a></li>
             <li><a href="adminproduk.html">Daganganku</a></li>
-            <li><a href="adminartikel.html">Buat Artikel</a></li>
+            <li class="active"><a href="adminartikel.html">Buat Artikel</a></li>
             <li class="deactive"><a href="#">Pengiriman Otomatis(DeAct)</a></li>
           </ul>
 
@@ -149,72 +149,49 @@
 
                     <!-- Product Information Section -->
                     <div class="form-group">
-                        <label for="productName">Nama Produk</label>
-                        <input type="text" class="form-control" id="productName" placeholder="Masukkan nama item yang kamu jual">
+                        <label for="productName">Nama Artikel</label>
+                        <input type="text" class="form-control" id="productName" placeholder="Masukkan nama Artikel">
                     </div>
 
                     <!-- Product Images Section -->
                     <div class="form-group">
-                        <label>Gambar Produk</label>
+                        <label>Banner Artikel</label>
                         <div class="row">
                             <div class="col-md-4 text-center">
                                 <button type="button" class="btn btn-outline-secondary" style="width: 160px; height: 160px;">
                                     <i class="fas fa-upload"></i> Gambar Utama
                                 </button>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <button type="button" class="btn btn-outline-secondary" style="width: 160px; height: 160px;">
-                                    <i class="fas fa-upload"></i> Gambar 2
-                                </button>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <button type="button" class="btn btn-outline-secondary" style="width: 160px; height: 160px;">
-                                    <i class="fas fa-upload"></i> Gambar 3
-                                </button>
-                            </div>
                         </div>
-                        <small class="form-text text-muted">Pastikan ukuran gambar maksimal 2MB dan berformat JPG / PNG / GIF.</small>
+                        <small class="form-text text-muted">Pastikan ukuran gambar maksimal 5MB dan berformat JPG / PNG / GIF.</small>
                     </div>
 
                     <!-- Product Description Section -->
                     <div class="form-group">
-                        <label for="productDesc">Deskripsi Produk</label>
-                        <textarea class="form-control" id="productDesc" rows="3" placeholder="Masukkan deskripsi produk"></textarea>
+                        <label for="productDesc">Deskripsi Artikel</label>
+                        <textarea class="form-control" id="productDesc" rows="3" placeholder="Masukkan deskripsi Artikel"></textarea>
                     </div>
 
                     <!-- Informasi Stok dan Harga Section -->
                     <div class="form-group">
-                        <label for="productPrice">Harga Produk</label>
-                        <input type="number" class="form-control" id="productPrice" placeholder="Harga Produk">
-                        <small class="form-text text-muted">Harga per 1 Diamond</small>
+                        <label for="productPrice">Promo</label>
+                        <input type="number" class="form-control" id="productPrice" placeholder="Promo">
+                        <small class="form-text text-muted">Promo dalam bentuk %</small>
                     </div>
 
                     <div class="form-group">
-                        <label for="bulkPrice">Aktifkan harga grosir</label>
+                        <label for="bulkPrice">Aktifkan Promo</label>
                         <input type="checkbox" id="bulkPrice">
                     </div>
 
                     <div class="form-group">
-                        <label for="stock">Stok</label>
-                        <input type="number" class="form-control" id="stock" placeholder="Jumlah Stok">
-                        <small class="form-text text-muted">x1 Diamond =</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="minOrder">Minimal Pesanan</label>
-                        <input type="number" class="form-control" id="minOrder" placeholder="Minimal Pesanan">
-                        <small class="form-text text-muted">x1 Diamond =</small>
-                    </div>
-
-                    <!-- Aktifkan Garansi Pengiriman Section -->
-                    <div class="form-group">
-                        <label for="shippingGuarantee">Aktifkan Garansi Pengiriman</label>
-                        <input type="checkbox" id="shippingGuarantee">
-                        <small class="form-text text-muted">Selesaikan pesanan dalam waktu 10 menit atau kurang dari pesanan dibayar oleh pembeli.</small>
+                        <label for="minOrder">Link halaman</label>
+                        <input type="number" class="form-control" id="minOrder" placeholder="link">
+                        <small class="form-text text-muted">Bentuk href</small>
                     </div>
 
                     <!-- Submit Button -->
-                     <a href="adminproduk.html">
+                     <a href="adminartikel.html">
                     <button type="submit" class="btn btn-primary">Buat Dagangan</button>
                     </a>
                 </form>

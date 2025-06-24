@@ -14,27 +14,66 @@
     <header class="navbar">
         <div class="navbar-container">
             <div class="logo">
-                <img src="image/ASW.png" alt="Itemku Logo" />
+                <img src="image/ASW.png" alt="Itemku Logo">
             </div>
             <div class="search-bar">
-                <input type="text" placeholder="Coba cari Game" />
+                <input type="text" placeholder="Coba cari Game">
                 <button class="cari-btn">
                     <span class="material-icons">search</span>
                 </button>
             </div>
             <div class="navbar-icons">
-                <button class="cart-btn">
-                    <span class="cart">
-                        <!-- Material Icons Cart Icon -->
-                        <span class="material-icons">shopping_cart</span>
-                    </span>
+
+                <!-- Icon Kotak Masuk (Email) -->
+                <button class="inbox-btn" title="Kotak Masuk">
+                    <span class="material-icons">mail_outline</span>
                 </button>
-                <div class="box-string"></div>
-                <button class="login-btn">
-                    <span class="material-icons">person</span> Masuk
+
+                <!-- Icon Notifikasi dengan badge -->
+                <button class="notification-btn" title="Notifikasi">
+                    <span class="material-icons">notifications_none</span>
+                    <span class="notification-badge">2</span>
                 </button>
+
+                <!-- Icon Keranjang -->
+                <a href="index keranjang.html">
+                    <button class="cart-btn" title="Keranjang">
+                        <span class="cart">
+                            <span class="material-icons">shopping_cart</span>
+                        </span>
+                    </button>
+                </a>
+
+                <div class="box-string">
+                </div>
+
+                <!-- Foto Profil dan Nama Profil -->
+            <div class="profile-info">
+                <a href="admin.html">
+                    <button class="profile-btn" title="Profil Saya">
+                        <img src="image/fotoprofil/asw.png" alt="Foto Profil" class="profile-photo" />
+                        <span class="profile-name">ASW Olshop Game</span>
+                    </button>
+                </a>
+            </div>
+
+            <!-- Div kedua untuk tombol profil lainnya -->
+            <div class="profile-btn-container">
+                <a href="admin profil.html">
+                <button class="profile-btn" title="Profil Saya">
+                    <img src="image/fotoprofil/asw.png" alt="Foto Profil" class="profile-photo" />
+                    <span class="profile-name">Martinshantiram</span>
+                </button>
+                </a>
+            </div>
             </div>
         </div>
+            <div class="search-bar1">
+                <input type="text" placeholder="Coba cari Game">
+                <button class="cari-btn">
+                    <span class="material-icons">search</span>
+                </button>
+            </div>
     </header>
 
     <div class="navbar-links">
@@ -84,8 +123,10 @@
                     <h3 class="subjudul-kategori">Kategori Populer</h3>
                     <div class="kategori-populer">
                         <div class="kategori-item">
-                            <img src="image/mobilelegend.png" alt="Mobile Legends" />
-                            <p>Mobile Legends</p>
+                            <a href="index tampilanproduk.html">
+                                <img src="image/mobilelegend.png" alt="Mobile Legends" />
+                                <p>Mobile Legends</p>
+                            </a>
                         </div>
                         <div class="kategori-item">
                             <img src="image/ff.png" alt="Free Fire" />
@@ -193,5 +234,26 @@
             <p>&copy; 2025 GAME E-SHOP. All rights reserved.</p>
         </div>
     </footer>
+
+<div class="bottom-nav-bar">
+  <div class="bottom-nav-container">
+    <a href="index masuk.html" class="bottom-nav-item">
+      <span class="material-icons-outlined">home</span>
+      <span class="bottom-nav-label">Home</span>
+    </a>
+    <a href="index topup.html" class="bottom-nav-item active">
+      <span class="material-icons-outlined">shopping_bag</span>
+      <span class="bottom-nav-label">Beli</span>
+    </a>
+    <a href="index keranjang.html" class="bottom-nav-item">
+      <span class="material-icons-outlined">compare_arrows</span>
+      <span class="bottom-nav-label">Transaksi</span>
+    </a>
+    <a href="index profil.html" class="bottom-nav-item">
+      <span class="material-icons-outlined">person</span>
+      <span class="bottom-nav-label">Akun</span>
+    </a>
+  </div>
+</div>
 </body>
 </html>

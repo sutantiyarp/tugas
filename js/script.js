@@ -45,6 +45,18 @@ setInterval(() => {
 // Initialize the first banner
 updateBanner();
 
+// Banner click functionality (without changing appearance)
+const bannerImages = document.querySelectorAll('.banner-image');
+
+bannerImages.forEach(image => {
+    image.addEventListener('click', () => {
+        const href = image.getAttribute('data-href'); // Get the link from data-href attribute
+        if (href) {
+            window.location.href = href; // Redirect to the URL specified in data-href
+        }
+    });
+});
+
 // Get elements Terbaru Section
 document.addEventListener("DOMContentLoaded", function() {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -168,4 +180,16 @@ document.addEventListener('DOMContentLoaded', () => {
             content.style.display = parentItem.classList.contains('active') ? 'block' : 'none';
         });
     });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const navItems = document.querySelectorAll('.bottom-nav-item');
+  
+  navItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      // Jangan preventDefault, biarkan link berjalan
+      navItems.forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
 });

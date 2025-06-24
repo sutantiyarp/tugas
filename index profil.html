@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Profil - Tiyar</title>
+    <link rel="stylesheet" href="css/index profil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="js/index profil.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="top-nav">
+                <div class="nav-icons">
+                    <i class="fas fa-envelope"></i>
+                    <i class="fas fa-bell"></i>
+                    <i class="fas fa-shopping-cart"></i>
+                    <i class="fas fa-cog"></i>
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-info">
+                    <div class="avatar">
+                        <img src="image/fotoprofil/asw.png" alt="Avatar" class="avatar-img">
+                    </div>
+                    <div class="user-details">
+                        <h2>Martinshantiram</h2>
+                        <div class="tokens-kupon">
+                            <div class="token-info">
+                                <i class="fas fa-coins"></i>
+                                <span>0 Token</span>
+                            </div>
+                            <div class="kupon-info">
+                                <i class="fas fa-ticket-alt"></i>
+                                <span>0 Kupon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quest-section">
+                    <div class="quest-info">
+                        <span class="quest-label">Quest: Level 1</span>
+                        <div class="exp-info">
+                            <span>0/- EXP</span>
+                            <i class="fas fa-treasure-chest"></i>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallet Cards Section -->
+        <div class="wallet-cards">
+            <div class="wallet-card dana-card">
+                <div class="wallet-icon">
+                    <img src="image/bank/dana.png" alt="" style="width: 25px;">
+                </div>
+                <div class="wallet-info">
+                    <span class="wallet-name">DANA</span>
+                    <span class="wallet-balance">Rp999.999.999</span>
+                </div>
+            </div>
+            
+            <div class="wallet-card ovo-card">
+                <div class="wallet-icon">
+                    <img src="image/bank/ovo.png" alt="" style="width: 25px; margin-bottom: -2px;">
+                </div>
+                <div class="wallet-info">
+                    <span class="wallet-name">OVO</span>
+                    <button class="connect-btn">Hubungkan</button>
+                </div>
+            </div>
+            
+            <div class="wallet-card dompetku-card">
+                <div class="wallet-icon">
+                    <img src="https://cdn.icon-icons.com/icons2/2508/PNG/512/wallet_money_business_coin_dollar_icon_150710.png" alt="Dompetku" class="payment-icon" style="width: 25px; margin-bottom: -2px;">
+                </div>
+                <div class="wallet-info">
+                    <span class="wallet-name">Walletku</span>
+                    <span class="wallet-balance">Rp0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Martinshantiran Section -->
+        <div class="action-section">
+            <div class="action-item" onclick="handleMartinshantiran()">
+                <i class="fas fa-store"></i>
+                <span>ASW Olshop Game</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+
+        <!-- Notification Alert -->
+        <div class="notification-alert">
+            <div class="alert-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="alert-content">
+                <p>Informasi pembaruan mengenai <a href="#" class="link">Aturan Penggunaan</a> dan <a href="#" class="link">Kebijakan Privasi</a> itemku.</p>
+                <div class="alert-buttons">
+                    <button class="btn-remind" onclick="remindLater()">Ingatkan Nanti</button>
+                    <button class="btn-agree" onclick="agreeTerms()">Saya Setuju</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity History Section -->
+        <div class="activity-section">
+            <div class="section-header">
+                <h3>Riwayat Aktivitas</h3>
+                <a href="#" class="view-all" onclick="viewAllActivities()">Lihat Semua <i class="fas fa-chevron-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+<div class="bottom-nav-bar">
+  <div class="bottom-nav-container">
+    <a href="index masuk.html" class="bottom-nav-item">
+      <span class="material-icons-outlined">home</span>
+      <span class="bottom-nav-label">Home</span>
+    </a>
+    <a href="index topup.html" class="bottom-nav-item">
+      <span class="material-icons-outlined">shopping_bag</span>
+      <span class="bottom-nav-label">Beli</span>
+    </a>
+    <a href="index keranjang.html" class="bottom-nav-item">
+      <span class="material-icons-outlined">compare_arrows</span>
+      <span class="bottom-nav-label">Transaksi</span>
+    </a>
+    <a href="index profil.html" class="bottom-nav-item active">
+      <span class="material-icons-outlined">person</span>
+      <span class="bottom-nav-label">Akun</span>
+    </a>
+  </div>
+</div>
+</body>
+</html>

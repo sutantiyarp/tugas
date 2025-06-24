@@ -208,6 +208,10 @@ body {
     text-overflow: ellipsis;
 }
 
+.navbar-icons a {
+    text-decoration: none;  /* Removes the underline from all anchor tags */
+}
+
 .profile-btn:hover {
     background-color: #032d57;
 }
@@ -224,13 +228,26 @@ body {
     margin-top: 0px;
 }
 
+/* Product Section */
 .produk-container {
-    padding: 20px 0px 0px 50px;
-    background-color: #F4F4F4;
+    max-width: 100%;  /* Allow the container to span the entire width */
+    margin: 0 auto;   /* Center the content horizontally */
+    padding: 20px 20px 20px 20px;  /* Add padding for spacing */
+}
+
+/* Product Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));  /* Adjust column widths */
+    gap: 20px;   /* Add spacing between items */
+    width: 100%;  /* Ensure grid takes full width */
+    margin-top: 20px; /* Add some spacing from previous content */
 }
 
 /* Judul di atas layout kategori dan sidebar */
 .judul {
+    margin-top: 0px;
+    margin-left: 30px;
     padding: 0px 0px 0px 0px;
 }
 
@@ -267,156 +284,211 @@ body {
   font-size: 16px;
 }
 
-.kategori-layout {
-    background-color: #F4F4F4;
-    padding: 30px 20px 20px 20px;
+/* Title Section */
+.title-section {
+    background-image: url('image/bg3.png');
+    background-size: cover;
+    background-position: center;
+    padding: 60px 20px;
+    color: rgb(0, 0, 0);
+}
+
+.title-row {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.sidebar-kategori {
-    margin-top: 40px;
-    height: 200px;
-    width: 200px;
-    background-color: #F4F4F4;
+.title-image-container {
+    flex: 1;
 }
 
-.sidebar-menu {
-    border: 2px solid #cfcfcfb2;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.title-image {
+    width: 100px;
+    height: auto;
+    border-radius: 10px;
 }
 
-.sidebar-menu li {
-    background-color: white;
-    font-weight: 600;
-    cursor: pointer;
+.title-text-container {
+    flex: 2;
+    margin-top: -10px;
+    margin-left: -300px;
 }
 
-.sidebar-menu li:active {
-    background-color: #000;
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(90, 90, 90, 0.7);
 }
 
-/* Buat <a> memenuhi seluruh area li */
-.sidebar-menu a {
-    display: block; /* buat a selebar li */
-    padding: 10px 15px; /* padding dalam a */
-    color: #3498db;
-    text-decoration: none;
-    font-weight: 600;
-    width: 100%; /* pastikan a penuh */
-    box-sizing: border-box;
-}
-
-/* Hover efek */
-.sidebar-menu a:hover {
-    color: #1c6bb1;
-    background-color: #dbe9ff; /* contoh highlight hover */
-    text-decoration: none;
-}
-
-.sidebar-menu a.active {
-  color: #ffffff;               /* warna teks aktif */
-  background-color: #003366;   /* warna latar aktif */
-  font-weight: 700;
-}
-
-.kategori-page {
-    padding: 0px 0px 0px 20px;
-    background-color: #F4F4F4;
-}
-
-.kategori-search {
-    margin-bottom: 1rem;
-}
-
-.search-input {
-    width: 100%;
-    padding: 0.5rem;
+.description {
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    color: #000000;
+    margin-top: 20px;
 }
 
-.abjad-filter {
-    margin: 1rem 0;
+/* Navigation Section */
+.btn-group {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    color: #3498db;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn-light {
+    background-color: #003366;
+    color: #e9e9e9;
+    font-weight: bold;
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: 2px solid #032d57;
+    transition: background-color 0.3s;
+}
+
+.btn-light:hover {
+    background-color: #FF7043;
+    color: #000000;
+}
+
+/* Product Section */
+.product-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Product Card */
+.product-card {
+    width: 220px;
+    height: 350px;
+    background-color: #ffffff;
+    border: 2px solid #cfcfcfb2;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Enable column direction for Flexbox */
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 350px;
+}
+
+.card-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-bottom: 2px solid #cfcfcfb2;
+}
+
+/* Card Body */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 5px 0px 8px;
+    position: relative;
+    height: 100%;
+}
+
+.card-title {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 1rem;
+    font-weight: bold;
+    display: -webkit-box;             /* Required for multi-line truncation */
+    -webkit-box-orient: vertical;     /* Required for multi-line truncation */
+    -webkit-line-clamp: 2;           /* Limit to 2 lines */
+    overflow: hidden;                /* Hide text overflow */
+    text-overflow: ellipsis;         /* Show ellipsis (...) when text is truncated */
+}
+
+
+/* Discount and Price Section */
+.discount {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1rem;
+    margin-top: 16px;
+}
+
+.discount-percentage {
+    background-color: #ff4343;
+    color: white;
+    padding: 5px 6px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #808080;
+    font-size: 1rem;
     font-weight: bold;
 }
 
-.subjudul-kategori {
-    margin-top: 1rem;
-    font-size: 1.4rem;
-    font-weight: 600;
+/* Price */
+.card-text {
+    margin-top: 0px;
+    font-size: 1.2rem;
+    color: #f39c12;
+    font-weight: bolder;
+    position: absolute;  /* Use absolute positioning to move it */
+    bottom: 50px;        /* Position it 10px from the bottom */
+    left: 8px;           /* Position it 8px from the left */
 }
 
-.kategori-populer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-top: 1rem;
-    border-width: 0px 0px 2px 0px;
-    border-style: solid;
-    border-color: #000000;
+.card-link {
+    text-decoration: none;
+    color: inherit;
 }
 
-.kategori-item {
-    width: 120px;
-    text-align: center;
+.card:hover {
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
 
-.kategori-item a {
-    display: block; /* Ensure the <a> tag takes up the full area */
-    text-decoration: none; /* Remove underline */
-    color: inherit; /* Inherit the text color */
-}
-
-.kategori-item:hover {
-    cursor: pointer; /* Show a pointer cursor on hover */
-}
-
-.kategori-item img {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.kategori-item p {
-    margin-top: 0.5rem;
-    font-size: 0.95rem;
-    color: #333;
-}
-
-.TopUp-populer {
+/* Delivery Section */
+.delivery {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-top: 1rem;
-    border-width: 0px 0px 0px 0px;
-    border-style: solid;
-    border-color: #000000;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    margin-bottom: 10px; /* Space it from other sections */
 }
 
-.TopUp-item {
-    width: 120px;
-    text-align: center;
-    cursor: pointer;
+.delivery-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: cover;
 }
 
-.TopUp-item img {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.delivery-text {
+    color: #32cd32;
+    font-weight: bold;
 }
 
-.TopUp-item p {
-    margin-top: 0.5rem;
-    font-size: 0.95rem;
-    color: #333;
+/* Sold Text Positioned at Bottom Left */
+.sold-text {
+    font-size: 0.8rem;
+    color: #808080;
+    position: absolute;  /* Use absolute positioning to move it */
+    bottom: 0px;        /* Position it 10px from the bottom */
+    left: 8px;           /* Position it 8px from the left */
 }
 
 /*footer*/
@@ -708,177 +780,239 @@ body {
     margin-top: 0px;
 }
 
+/* Product Section */
 .produk-container {
-    padding: 20px 0px 0px 10px;
-    background-color: #F4F4F4;
+    width: 100%;  /* Allow the container to span the entire width */
+    margin: 0 auto;   /* Center the content horizontally */
+    padding: 20px 20px 20px 10px;  /* Add padding for spacing */
 }
 
+/* Product Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));  /* Adjust column widths */
+    gap: 20px;   /* Add spacing between items */
+    width: 100%;  /* Ensure grid takes full width */
+    margin-top: 20px; /* Add some spacing from previous content */
+}
+
+/* Judul di atas layout kategori dan sidebar */
 .judul {
-    margin-top: 0px;
-    margin-left: 0px;
-    padding: 0px 0px 0px 0px;
-}
-
-.judul p {
     display: none;
     margin-top: -14px;
     margin-left: -24.5px;
     padding: 0px 0px 0px 0px;
 }
 
-.judul-kategori {
-    font-size: 20px;
-    font-weight: 700;
-    color: #000000;
-    margin: 0;
+/* Title Section */
+.title-section {
+    background-image: url('image/bg3.png');
+    background-size: cover;
+    background-position: center;
+    padding: 0px 0px 20px 0px;
+    color: rgb(0, 0, 0);
 }
 
-.kategori-layout {
-    background-color: #F4F4F4;
-    padding: 30px 20px 20px 0px;
+.title-row {
     display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;  /* Menambahkan wrap agar konten bisa berpindah */
+    flex-direction: column; /* Mengubah arah menjadi kolom */
+    align-items: center;    /* Menyelaraskan konten di tengah */
 }
 
-.sidebar-kategori {
-    margin-top: 50px;
-    height: 200px;
-    width: 240px;
-    background-color: #F4F4F4;
+.title-image-container {
+    margin-left: -20px;
+    flex: 1;
 }
 
-.sidebar-menu {
-    border: 2px solid #cfcfcfb2;
-    list-style: none;
-    padding: 0px 0px 0px 0px;
-    margin: 0;
+.title-image {
+    width: 80px;
+    height: auto;
+    border-radius: 10px;
 }
 
-.sidebar-menu li {
-    background-color: white;
+.title-text-container {
+    width: 360px;
+    padding: 10px 10px 10px 10px;
+    order: 2; /* Membuat title-text-container pindah ke bawah */
+    margin-left: -20px; /* Menghapus margin-left saat responsif */
+    text-align: left; /* Menyelaraskan teks ke tengah */
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(90, 90, 90, 0.7);
+}
+
+.description {
     font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+    color: #000000;
+    margin-top: 20px;
 }
 
-.sidebar-menu li:active {
-    background-color: #000;
+/* Navigation Section */
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
 }
 
-/* Buat <a> memenuhi seluruh area li */
-.sidebar-menu a {
-    display: block; /* buat a selebar li */
-    padding: 10px 10px 10px 10px; /* padding dalam a */
-    color: #3498db;
-    text-decoration: none;
-    font-weight: 600;
-    width: 100%; /* pastikan a penuh */
-    box-sizing: border-box;
+.btn-light {
+    background-color: #003366;
+    color: #e9e9e9;
+    font-weight: bold;
+    padding: 12px 18px 12px 18px;
+    border-radius: 30px;
+    border: 2px solid #032d57;
+    transition: background-color 0.3s;
 }
 
-/* Hover efek */
-.sidebar-menu a:hover {
-    color: #1c6bb1;
-    background-color: #dbe9ff; /* contoh highlight hover */
-    text-decoration: none;
+.btn-light:hover {
+    background-color: #FF7043;
+    color: #000000;
 }
 
-.sidebar-menu a.active {
-  color: #ffffff;               /* warna teks aktif */
-  background-color: #003366;   /* warna latar aktif */
-  font-weight: 700;
+/* Product Section */
+.product-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0px 10px 20px 10px;
 }
 
-.kategori-page {
-    padding: 0px 0px 0px 20px;
-    background-color: #F4F4F4;
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(122px, 2fr));
+    gap: 5px;
+    margin-top: 20px;
 }
 
-.kategori-search {
-    margin-left: -96px;
-    margin-bottom: 1rem;
+/* Product Card */
+.product-card {
+    width: 170px;
+    height: 300px;
+    background-color: #ffffff;
+    border: 2px solid #cfcfcfb2;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Enable column direction for Flexbox */
 }
 
-.search-input {
-    width: 350px;
-    padding: 0.5rem;
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 300px;
+}
+
+.card-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-bottom: 2px solid #cfcfcfb2;
+}
+
+/* Card Body */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 5px 0px 8px;
+    position: relative;
+    height: 100%;
+}
+
+.card-title {
+    margin-bottom: 0px;
+    margin-top: 0px;
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    font-weight: bold;
+    display: -webkit-box;             /* Required for multi-line truncation */
+    -webkit-box-orient: vertical;     /* Required for multi-line truncation */
+    -webkit-line-clamp: 2;           /* Limit to 2 lines */
+    overflow: hidden;                /* Hide text overflow */
+    text-overflow: ellipsis;         /* Show ellipsis (...) when text is truncated */
 }
 
-.abjad-filter {
-    margin: 1rem 0;
-    display: none;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    color: #3498db;
+
+/* Discount and Price Section */
+.discount {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1rem;
+    margin-top: 16px;
+}
+
+.discount-percentage {
+    background-color: #ff4343;
+    color: white;
+    padding: 5px 6px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #808080;
+    font-size: 1rem;
     font-weight: bold;
 }
 
-.subjudul-kategori {
-    margin-top: 1rem;
-    font-size: 20px;
-    font-weight: 600;
+/* Price */
+.card-text {
+    margin-top: 0px;
+    font-size: 1.2rem;
+    color: #f39c12;
+    font-weight: bolder;
+    position: absolute;  /* Use absolute positioning to move it */
+    bottom: 50px;        /* Position it 10px from the bottom */
+    left: 8px;           /* Position it 8px from the left */
 }
 
-.kategori-populer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 1rem;
+.card-link {
+    text-decoration: none;
+    color: inherit;
 }
 
-.kategori-item {
-    width: 120px;
-    text-align: center;
+.card:hover {
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
 
-.kategori-item a {
-    display: block; /* Ensure the <a> tag takes up the full area */
-    text-decoration: none; /* Remove underline */
-    color: inherit; /* Inherit the text color */
-}
-
-.kategori-item:hover {
-    cursor: pointer; /* Show a pointer cursor on hover */
-}
-
-.kategori-item img {
-    width: 100px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.kategori-item p {
-    margin-top: 0.5rem;
-    font-size: 14px;
-    color: #333;
-}
-
-.TopUp-populer {
+/* Delivery Section */
+.delivery {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 1rem;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    margin-bottom: 10px; /* Space it from other sections */
 }
 
-.TopUp-item {
-    width: 120px;
-    text-align: center;
-    cursor: pointer;
+.delivery-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: cover;
 }
 
-.TopUp-item img {
-    width: 100px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.delivery-text {
+    color: #32cd32;
+    font-weight: bold;
 }
 
-.TopUp-item p {
-    margin-top: 0.5rem;
-    font-size: 14px;
-    color: #333;
+/* Sold Text Positioned at Bottom Left */
+.sold-text {
+    font-size: 0.8rem;
+    color: #808080;
+    position: absolute;  /* Use absolute positioning to move it */
+    bottom: 0px;        /* Position it 10px from the bottom */
+    left: 8px;           /* Position it 8px from the left */
 }
 
 /*footer*/
