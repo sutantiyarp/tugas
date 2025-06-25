@@ -212,6 +212,10 @@ body {
     background-color: #032d57;
 }
 
+.navbar-icons a, .profile-info a, .profile-btn-container a {
+    text-decoration: none; /* Menghilangkan garis bawah */
+}
+
 /*kategori page*/
 .produk-section {
     position: relative;

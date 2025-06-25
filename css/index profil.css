@@ -11,6 +11,7 @@ body {
     background-color: #F4F4F4;
     min-height: 100vh;
     position: relative;
+        padding-bottom: 40px; /* Ensure the bottom of the container has enough padding */
 }
 
 /* Header Styles */
@@ -360,6 +361,32 @@ body {
 .view-all i {
     font-size: 12px;
 }
+
+/* Logout Button Styles */
+.logout-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 0px;
+    padding-bottom: 20px; /* Ensures it is visible if there’s some space at the bottom */
+}
+
+.logout-btn {
+    background-color: #FF7043;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;  /* Centers the button text */
+    display: inline-block; /* Makes the button behave like a block element */
+}
+
+.logout-btn:hover {
+    background-color: #D95D39;
+}
+
 
 .bottom-nav-bar {
   position: fixed;

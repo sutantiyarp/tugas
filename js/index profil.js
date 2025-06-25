@@ -179,3 +179,9 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+// Logout function
+function logout() {
+    // Redirect to the homepage (index.html)
+    window.location.href = "index.html";
+}
