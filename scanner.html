@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QR Scanner Check-in</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body style="font-family:Arial;padding:16px;">
+  <h3>Scan QR untuk Check-in</h3>
+
+  <label>user_id: <input id="user" value="user-001"></label><br><br>
+  <label>device_id: <input id="device" value="dev-001"></label><br><br>
+
+  <button onclick="start()">Start Camera</button>
+  <button onclick="stop()">Stop</button>
+
+  <div id="reader" style="width:320px;margin-top:12px;"></div>
+  <pre id="out" style="margin-top:12px;white-space:pre-wrap;"></pre>
+
+<script>
+  // GANTI DENGAN URL WEB APP /exec kamu
+  const GAS_API = "PASTE_URL_EXEC_KAMU?action=checkin_api";
+
+  let scanner = null;
+
+  async function start() {
+    document.getElementById("out").textContent = "Starting camera...";
+    scanner = new Html5Qrcode("reader");
+
+    try {
+      // kamera belakang di HP: facingMode environment
+      await scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        async (decodedText) => {
+          // decodedText = token (mis. TKN-xxxxxx) atau URL. Ambil token:
+          const token = extractToken(decodedText);
+
+          document.getElementById("out").textContent = "Scanned: " + decodedText + "\nToken: " + token + "\nSending...";
+
+          const payload = {
+            user_id: document.getElementById("user").value,
+            device_id: document.getElementById("device").value,
+            qr_token: token,
+            ts: new Date().toISOString()
+          };
+
+          const res = await fetch(GAS_API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          const json = await res.json();
+          document.getElementById("out").textContent = JSON.stringify(json, null, 2);
+
+          // biar nggak double-scan terus menerus
+          await stop();
+        }
+      );
+      document.getElementById("out").textContent = "Camera started. Scan QR...";
+    } catch (e) {
+      document.getElementById("out").textContent = "Camera error: " + e;
+    }
+  }
+
+  async function stop() {
+    if (scanner) {
+      try { await scanner.stop(); } catch(e) {}
+      try { await scanner.clear(); } catch(e) {}
+      scanner = null;
+    }
+  }
+
+  function extractToken(text) {
+    // kalau QR berisi token langsung: "TKN-ABC123"
+    if (text.startsWith("TKN-")) return text.trim();
+
+    // kalau QR berisi URL (mis. ...t=TKN-... atau ?t=...)
+    try {
+      const u = new URL(text);
+      const t = u.searchParams.get("t") || u.searchParams.get("qr_token");
+      if (t) return t;
+    } catch(e) {}
+
+    // fallback: cari pattern TKN-xxxxxx
+    const m = text.match(/TKN-[A-Z0-9]{6}/);
+    return m ? m[0] : text.trim();
+  }
+</script>
+</body>
+</html>
