@@ -2,33 +2,39 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>QR Scanner Check-in</title>
+  <title>Scan QR Presensi</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body style="font-family:Arial;padding:16px;">
-  <h2>Scan QR untuk Check-in</h2>
+  <h2>Scan QR Presensi</h2>
 
-  <label>user_id:
-    <input id="user" value="user-001" style="width: 240px;">
-  </label><br><br>
-
-  <label>device_id:
-    <input id="device" value="dev-001" style="width: 240px;">
-  </label><br><br>
+  <div id="who" style="margin-bottom:10px;"></div>
 
   <button onclick="start()">Start Camera</button>
   <button onclick="stop()">Stop</button>
+  <button onclick="resetReg()" style="margin-left:8px;">Ganti Nama/NIM</button>
 
-  <div id="reader" style="width:320px; margin-top:12px;"></div>
-
+  <div id="reader" style="width:320px;margin-top:12px;"></div>
   <pre id="out" style="margin-top:12px;white-space:pre-wrap;"></pre>
 
 <script>
   // ====== CONFIG ======
-  // URL /exec kamu (tanpa parameter)
   const GAS_EXEC = "https://script.google.com/macros/s/AKfycbzUhgKA9sUZiI-xEGQg_0A76xF_4_NaC26okt7qoasZ88uxQ7W8gRfoPNYJvSwvezpY/exec";
 
-  // ====== STATE ======
+  // ====== LOAD IDENTITY ======
+  const nama = (localStorage.getItem("presence_nama") || "").trim();
+  const nim  = (localStorage.getItem("presence_nim") || "").trim();
+
+  if (!nama || !nim) {
+    // belum daftar -> balik
+    window.location.href = "./index.html";
+  } else {
+    document.getElementById("who").innerHTML =
+      "<b>Nama:</b> " + escapeHtml(nama) + "<br>" +
+      "<b>NIM:</b> " + escapeHtml(nim);
+  }
+
+  // ====== SCANNER STATE ======
   let scanner = null;
   let sendingLock = false;
 
@@ -37,63 +43,43 @@
   }
 
   function extractToken(text) {
-    // 1) token langsung
     if (text && text.trim().startsWith("TKN-")) return text.trim();
-
-    // 2) kalau URL, ambil param yang mungkin
     try {
       const u = new URL(text);
       const t = u.searchParams.get("t") || u.searchParams.get("qr_token");
       if (t) return t;
     } catch (e) {}
-
-    // 3) cari pattern TKN-XXXXXX di string mana pun
     const m = String(text).match(/TKN-[A-Z0-9]{6}/);
     return m ? m[0] : String(text).trim();
   }
 
   async function start() {
-    if (scanner) {
-      log("Camera sudah aktif.");
-      return;
-    }
-
+    if (scanner) return log("Camera sudah aktif.");
     log("Starting camera...");
-    scanner = new Html5Qrcode("reader");
 
+    scanner = new Html5Qrcode("reader");
     try {
       await scanner.start(
-        { facingMode: "environment" },       // kamera belakang
+        { facingMode: "environment" },
         { fps: 10, qrbox: 250 },
         async (decodedText) => {
-          if (sendingLock) return;           // anti double scan
+          if (sendingLock) return;
           sendingLock = true;
 
           const token = extractToken(decodedText);
-
-          log(
-            "Scanned:\n" + decodedText +
-            "\n\nToken:\n" + token +
-            "\n\nSending (beacon)..."
-          );
+          log("Scanned:\n" + decodedText + "\n\nToken: " + token + "\n\nSending...");
 
           try {
             await sendBeaconCheckin(token);
-            log(
-              "✅ Sent!\n\nToken: " + token +
-              "\nSilakan cek sheet 'presence'.\n\nKamu bisa scan lagi setelah 2 detik."
-            );
+            log("✅ Presensi terkirim!\nToken: " + token + "\nCek sheet presence.");
           } catch (e) {
-            log("❌ Send failed: " + e);
+            log("❌ Gagal kirim: " + e);
           } finally {
-            // kasih jeda biar user bisa lihat hasilnya, lalu unlock
-            setTimeout(() => { sendingLock = false; }, 2000);
+            setTimeout(() => sendingLock = false, 2000);
           }
         }
       );
-
       log("Camera started. Arahkan ke QR...");
-
     } catch (e) {
       log("Camera error: " + e);
       scanner = null;
@@ -101,50 +87,45 @@
   }
 
   async function stop() {
-    if (!scanner) {
-      log("Camera belum aktif.");
-      return;
-    }
+    if (!scanner) return log("Camera belum aktif.");
     try { await scanner.stop(); } catch (e) {}
     try { await scanner.clear(); } catch (e) {}
     scanner = null;
     log("Camera stopped.");
   }
 
+  function resetReg() {
+    localStorage.removeItem("presence_nama");
+    localStorage.removeItem("presence_nim");
+    window.location.href = "./index.html";
+  }
+
+  // ✅ beacon GET: paling stabil (tanpa CORS)
   async function sendBeaconCheckin(qr_token) {
-    const user_id = document.getElementById("user").value;
-    const device_id = document.getElementById("device").value;
+    if (!qr_token) throw new Error("Token kosong");
 
-    if (!user_id || !device_id) {
-      throw new Error("user_id/device_id kosong");
-    }
-    if (!qr_token) {
-      throw new Error("qr_token kosong");
-    }
-
-    // ✅ GET beacon (tanpa CORS), anti-cache pakai _=timestamp
     const url =
       GAS_EXEC +
       "?action=checkin_beacon" +
-      "&u=" + encodeURIComponent(user_id) +
-      "&d=" + encodeURIComponent(device_id) +
+      "&name=" + encodeURIComponent(nama) +
+      "&nim=" + encodeURIComponent(nim) +
       "&t=" + encodeURIComponent(qr_token) +
       "&_=" + Date.now();
 
-    // kita “ping” dengan Image. Tidak butuh membaca response untuk memastikan request terkirim.
     await new Promise((resolve) => {
       const img = new Image();
       const done = () => resolve();
-
-      // seringkali onerror terjadi walau request sudah terkirim (karena bukan image).
       img.onload = done;
-      img.onerror = done;
-
-      // timeout safety
-      setTimeout(done, 8000);
-
+      img.onerror = done;      // request bisa berhasil walau onerror
+      setTimeout(done, 8000);  // timeout safety
       img.src = url;
     });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) =>
+      ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c])
+    );
   }
 </script>
 </body>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Registrasi Presensi</title>
+</head>
+<body style="font-family:Arial;padding:16px;max-width:520px;">
+  <h2>Registrasi Presensi</h2>
+  <p>Isi Nama dan NIM dulu, setelah itu lanjut scan QR.</p>
+
+  <label>Nama:</label><br>
+  <input id="nama" placeholder="Nama lengkap" style="width:100%;padding:10px;"><br><br>
+
+  <label>NIM:</label><br>
+  <input id="nim" placeholder="contoh: 231234567" style="width:100%;padding:10px;"><br><br>
+
+  <button onclick="submitReg()" style="padding:10px 14px;">Lanjut Scan</button>
+
+  <pre id="out" style="margin-top:12px;white-space:pre-wrap;"></pre>
+
+<script>
+  // auto isi kalau sudah pernah daftar
+  const savedNama = localStorage.getItem("presence_nama") || "";
+  const savedNim  = localStorage.getItem("presence_nim") || "";
+  if (savedNama) document.getElementById("nama").value = savedNama;
+  if (savedNim) document.getElementById("nim").value = savedNim;
+
+  function submitReg() {
+    const nama = document.getElementById("nama").value.trim();
+    const nim  = document.getElementById("nim").value.trim();
+
+    if (!nama) return show("Nama wajib diisi");
+    if (!nim)  return show("NIM wajib diisi");
+
+    // simpan untuk halaman scan
+    localStorage.setItem("presence_nama", nama);
+    localStorage.setItem("presence_nim", nim);
+
+    // pindah ke scan page
+    window.location.href = "./scanner.html";
+  }
+
+  function show(msg) {
+    document.getElementById("out").textContent = msg;
+  }
+</script>
+</body>
+</html>
