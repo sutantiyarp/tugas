@@ -1,132 +1,149 @@
 <!doctype html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Scan QR Presensi</title>
-  <script src="https://unpkg.com/html5-qrcode"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Scan QR Presensi</title>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
 </head>
+
 <body style="font-family:Arial;padding:16px;">
-  <h2>Scan QR Presensi</h2>
 
-  <div id="who" style="margin-bottom:10px;"></div>
+<h2>Scan QR Presensi</h2>
 
-  <button onclick="start()">Start Camera</button>
-  <button onclick="stop()">Stop</button>
-  <!-- <button onclick="resetReg()" style="margin-left:8px;">Ganti Nama/NIM</button> -->
+<div id="who"></div>
 
-  <div id="reader" style="width:320px;margin-top:12px;"></div>
-  <pre id="out" style="margin-top:12px;white-space:pre-wrap;"></pre>
+<button onclick="stop()">Stop Camera</button>
+<!-- <button onclick="resetReg()">Ganti Nama/NIM</button> -->
+
+<div id="reader" style="width:320px;margin-top:12px;"></div>
+
+<pre id="out"></pre>
 
 <script>
-  // ====== CONFIG ======
-  const GAS_EXEC = "https://script.google.com/macros/s/AKfycbzUhgKA9sUZiI-xEGQg_0A76xF_4_NaC26okt7qoasZ88uxQ7W8gRfoPNYJvSwvezpY/exec";
 
-  // ====== LOAD IDENTITY ======
-  const nama = (localStorage.getItem("presence_nama") || "").trim();
-  const nim  = (localStorage.getItem("presence_nim") || "").trim();
+const GAS_EXEC = "https://script.google.com/macros/s/AKfycbzUhgKA9sUZiI-xEGQg_0A76xF_4_NaC26okt7qoasZ88uxQ7W8gRfoPNYJvSwvezpY/exec";
 
-  if (!nama || !nim) {
-    // belum daftar -> balik
-    window.location.href = "./index.html";
-  } else {
-    document.getElementById("who").innerHTML =
-      escapeHtml(nama) + "<br>" +
-      escapeHtml(nim);
-  }
+const nama = localStorage.getItem("presence_nama") || "";
+const nim  = localStorage.getItem("presence_nim") || "";
 
-  // ====== SCANNER STATE ======
-  let scanner = null;
-  let sendingLock = false;
+if(!nama || !nim){
+  window.location.href = "./index.html";
+}
 
-  function log(msg) {
-    document.getElementById("out").textContent = msg;
-  }
+document.getElementById("who").innerHTML =
+nama+"<br>"+nim;
 
-  function extractToken(text) {
-    if (text && text.trim().startsWith("TKN-")) return text.trim();
-    try {
-      const u = new URL(text);
-      const t = u.searchParams.get("t") || u.searchParams.get("qr_token");
-      if (t) return t;
-    } catch (e) {}
-    const m = String(text).match(/TKN-[A-Z0-9]{6}/);
-    return m ? m[0] : String(text).trim();
-  }
+let scanner = null;
+let sendingLock = false;
 
-  async function start() {
-    if (scanner) return log("Camera sudah aktif.");
-    log("Starting camera...");
+function log(msg){
+  document.getElementById("out").textContent = msg;
+}
 
-    scanner = new Html5Qrcode("reader");
-    try {
-      await scanner.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        async (decodedText) => {
-          if (sendingLock) return;
-          sendingLock = true;
+function extractToken(text){
 
-          const token = extractToken(decodedText);
-          log("Scanned:\n" + decodedText + "\n\nToken: " + token + "\n\nSending...");
+  if(text.startsWith("TKN-")) return text;
 
-          try {
-            await sendBeaconCheckin(token);
-            log("✅ Presensi terkirim!\nToken: " + token + "\nCek sheet presence.");
-          } catch (e) {
-            log("❌ Gagal kirim: " + e);
-          } finally {
-            setTimeout(() => sendingLock = false, 2000);
-          }
-        }
-      );
-      log("Camera started. Arahkan ke QR...");
-    } catch (e) {
-      log("Camera error: " + e);
-      scanner = null;
+  try{
+    const url = new URL(text);
+    return url.searchParams.get("t");
+  }catch(e){}
+
+  const match = text.match(/TKN-[A-Z0-9]{6}/);
+  return match ? match[0] : text;
+}
+
+async function start(){
+
+  if(scanner) return;
+
+  log("Starting camera...");
+
+  scanner = new Html5Qrcode("reader");
+
+  await scanner.start(
+    { facingMode: "environment" },
+    {
+      fps: 10,
+      qrbox: 250
+    },
+    async (decodedText)=>{
+
+      if(sendingLock) return;
+
+      sendingLock = true;
+
+      const token = extractToken(decodedText);
+
+      log("Token: "+token+"\nSending...");
+
+      try{
+
+        await sendBeaconCheckin(token);
+
+        log("✅ Presensi terkirim\nToken: "+token);
+
+      }catch(err){
+
+        log("❌ Gagal: "+err);
+
+      }
+
+      setTimeout(()=>sendingLock=false,2000);
     }
-  }
+  );
 
-  async function stop() {
-    if (!scanner) return log("Camera belum aktif.");
-    try { await scanner.stop(); } catch (e) {}
-    try { await scanner.clear(); } catch (e) {}
-    scanner = null;
-    log("Camera stopped.");
-  }
+}
 
-  function resetReg() {
-    localStorage.removeItem("presence_nama");
-    localStorage.removeItem("presence_nim");
-    window.location.href = "./index.html";
-  }
+async function stop(){
 
-  // ✅ beacon GET: paling stabil (tanpa CORS)
-  async function sendBeaconCheckin(qr_token) {
-    if (!qr_token) throw new Error("Token kosong");
+  if(!scanner) return;
 
-    const url =
-      GAS_EXEC +
-      "?action=checkin_beacon" +
-      "&name=" + encodeURIComponent(nama) +
-      "&nim=" + encodeURIComponent(nim) +
-      "&t=" + encodeURIComponent(qr_token) +
-      "&_=" + Date.now();
+  await scanner.stop();
+  await scanner.clear();
 
-    await new Promise((resolve) => {
-      const img = new Image();
-      const done = () => resolve();
-      img.onload = done;
-      img.onerror = done;      // request bisa berhasil walau onerror
-      setTimeout(done, 8000);  // timeout safety
-      img.src = url;
-    });
-  }
+  scanner = null;
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, (c) =>
-      ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c])
-    );
-  }
+}
+
+function resetReg(){
+
+  localStorage.removeItem("presence_nama");
+  localStorage.removeItem("presence_nim");
+
+  window.location.href = "./index.html";
+
+}
+
+async function sendBeaconCheckin(qr_token){
+
+  const url =
+  GAS_EXEC+
+  "?action=checkin_beacon"+
+  "&name="+encodeURIComponent(nama)+
+  "&nim="+encodeURIComponent(nim)+
+  "&t="+encodeURIComponent(qr_token)+
+  "&_="+Date.now();
+
+  await new Promise((resolve)=>{
+
+    const img = new Image();
+
+    img.onload = resolve;
+    img.onerror = resolve;
+
+    img.src = url;
+
+  });
+
+}
+
+// ✅ AUTO START CAMERA
+window.addEventListener("load", ()=>{
+  start();
+});
+
 </script>
 </body>
 </html>
