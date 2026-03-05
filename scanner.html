@@ -30,8 +30,8 @@
     window.location.href = "./index.html";
   } else {
     document.getElementById("who").innerHTML =
-      "<b>Nama:</b> " + escapeHtml(nama) + "<br>" +
-      "<b>NIM:</b> " + escapeHtml(nim);
+      escapeHtml(nama) + "<br>" +
+      escapeHtml(nim);
   }
 
   // ====== SCANNER STATE ======
