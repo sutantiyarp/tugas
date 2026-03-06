@@ -6,7 +6,6 @@
 </head>
 <body style="font-family:Arial;padding:16px;max-width:520px;">
   <h2>Registrasi Presensi</h2>
-  <p>Isi Nama dan NIM dulu, setelah itu lanjut scan QR.</p>
 
   <label>Nama:</label><br>
   <input id="nama" placeholder="Nama lengkap" style="width:100%;padding:10px;"><br><br>
@@ -14,30 +13,44 @@
   <label>NIM:</label><br>
   <input id="nim" placeholder="contoh: 231234567" style="width:100%;padding:10px;"><br><br>
 
-  <button onclick="submitReg()" style="padding:10px 14px;">Lanjut Scan</button>
+  <button onclick="submitReg()">Lanjut Scan</button>
 
   <pre id="out" style="margin-top:12px;white-space:pre-wrap;"></pre>
 
 <script>
-  // auto isi kalau sudah pernah daftar
-  const savedNama = localStorage.getItem("presence_nama") || "";
-  const savedNim  = localStorage.getItem("presence_nim") || "";
-  if (savedNama) document.getElementById("nama").value = savedNama;
-  if (savedNim) document.getElementById("nim").value = savedNim;
+  const GAS_REGISTER = "https://script.google.com/macros/s/AKfycbzUhgKA9sUZiI-xEGQg_0A76xF_4_NaC26okt7qoasZ88uxQ7W8gRfoPNYJvSwvezpY/exec?action=register_user";
 
-  function submitReg() {
+  async function submitReg() {
     const nama = document.getElementById("nama").value.trim();
-    const nim  = document.getElementById("nim").value.trim();
+    const nim = document.getElementById("nim").value.trim();
 
     if (!nama) return show("Nama wajib diisi");
-    if (!nim)  return show("NIM wajib diisi");
+    if (!nim) return show("NIM wajib diisi");
 
-    // simpan untuk halaman scan
-    localStorage.setItem("presence_nama", nama);
-    localStorage.setItem("presence_nim", nim);
+    show("Menyimpan user...");
 
-    // pindah ke scan page
-    window.location.href = "./scanner.html";
+    try {
+      const res = await fetch(GAS_REGISTER, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: nama, nim: nim })
+      });
+
+      const json = await res.json();
+
+      if (!json.ok) {
+        show("Gagal: " + json.error);
+        return;
+      }
+
+      localStorage.setItem("presence_nama", json.data.nama);
+      localStorage.setItem("presence_nim", json.data.nim);
+      localStorage.setItem("presence_user_id", json.data.user_id);
+
+      window.location.href = "./scanner.html";
+    } catch (err) {
+      show("Error: " + err);
+    }
   }
 
   function show(msg) {
