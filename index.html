@@ -23,21 +23,13 @@
       document.getElementById("msg").innerText = msg;
     }
 
-    function lanjutScan() {
+    async function lanjutScan() {
       const nama = document.getElementById("nama").value.trim();
       const nim = document.getElementById("nim").value.trim();
 
-      if (!nama) {
-        show("Nama wajib diisi");
-        return;
-      }
+      if (!nama) return show("Nama wajib diisi");
+      if (!nim) return show("NIM wajib diisi");
 
-      if (!nim) {
-        show("NIM wajib diisi");
-        return;
-      }
-
-      // simpan lokal untuk scanner
       localStorage.setItem("presence_nama", nama);
       localStorage.setItem("presence_nim", nim);
 
@@ -50,20 +42,20 @@
         "&nim=" + encodeURIComponent(nim) +
         "&_ts=" + Date.now();
 
-      const img = new Image();
+      try {
+        await fetch(url, {
+          method: "GET",
+          mode: "no-cors"
+        });
 
-      img.onload = function () {
         show("Data tersimpan. Mengalihkan ke scanner...");
         setTimeout(() => {
           window.location.href = "./scanner.html";
         }, 500);
-      };
-
-      img.onerror = function () {
+      } catch (err) {
         show("Gagal menghubungi server GAS");
-      };
-
-      img.src = url;
+        console.error(err);
+      }
     }
   </script>
 </body>
