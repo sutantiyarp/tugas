@@ -1,61 +1,70 @@
 <!doctype html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Registrasi Presensi</title>
 </head>
-<body style="font-family:Arial;padding:16px;max-width:520px;">
-  <h2>Registrasi Presensi</h2>
+<body>
+  <h1>Registrasi Presensi</h1>
 
   <label>Nama:</label><br>
-  <input id="nama" placeholder="Nama lengkap" style="width:100%;padding:10px;"><br><br>
+  <input type="text" id="nama"><br><br>
 
   <label>NIM:</label><br>
-  <input id="nim" placeholder="contoh: 231234567" style="width:100%;padding:10px;"><br><br>
+  <input type="text" id="nim"><br><br>
 
-  <button onclick="submitReg()">Lanjut Scan</button>
+  <button onclick="lanjutScan()">Lanjut Scan</button>
+  <div id="msg" style="margin-top:12px;"></div>
 
-  <pre id="out" style="margin-top:12px;white-space:pre-wrap;"></pre>
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzUhgKA9sUZiI-xEGQg_0A76xF_4_NaC26okt7qoasZ88uxQ7W8gRfoPNYJvSwvezpY/exec";
 
-<script>
-  const GAS_REGISTER = "https://script.google.com/macros/s/AKfycbzUhgKA9sUZiI-xEGQg_0A76xF_4_NaC26okt7qoasZ88uxQ7W8gRfoPNYJvSwvezpY/exec?action=register_user";
+    function show(msg) {
+      document.getElementById("msg").innerText = msg;
+    }
 
-  async function submitReg() {
-    const nama = document.getElementById("nama").value.trim();
-    const nim = document.getElementById("nim").value.trim();
+    function lanjutScan() {
+      const nama = document.getElementById("nama").value.trim();
+      const nim = document.getElementById("nim").value.trim();
 
-    if (!nama) return show("Nama wajib diisi");
-    if (!nim) return show("NIM wajib diisi");
-
-    show("Menyimpan user...");
-
-    try {
-      const res = await fetch(GAS_REGISTER, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: nama, nim: nim })
-      });
-
-      const json = await res.json();
-
-      if (!json.ok) {
-        show("Gagal: " + json.error);
+      if (!nama) {
+        show("Nama wajib diisi");
         return;
       }
 
-      localStorage.setItem("presence_nama", json.data.nama);
-      localStorage.setItem("presence_nim", json.data.nim);
-      localStorage.setItem("presence_user_id", json.data.user_id);
+      if (!nim) {
+        show("NIM wajib diisi");
+        return;
+      }
 
-      window.location.href = "./scanner.html";
-    } catch (err) {
-      show("Error: " + err);
+      // simpan lokal untuk scanner
+      localStorage.setItem("presence_nama", nama);
+      localStorage.setItem("presence_nim", nim);
+
+      show("Menyimpan data pengguna...");
+
+      const url =
+        GAS_URL +
+        "?action=register_beacon" +
+        "&name=" + encodeURIComponent(nama) +
+        "&nim=" + encodeURIComponent(nim) +
+        "&_ts=" + Date.now();
+
+      const img = new Image();
+
+      img.onload = function () {
+        show("Data tersimpan. Mengalihkan ke scanner...");
+        setTimeout(() => {
+          window.location.href = "./scanner.html";
+        }, 500);
+      };
+
+      img.onerror = function () {
+        show("Gagal menghubungi server GAS");
+      };
+
+      img.src = url;
     }
-  }
-
-  function show(msg) {
-    document.getElementById("out").textContent = msg;
-  }
-</script>
+  </script>
 </body>
 </html>
