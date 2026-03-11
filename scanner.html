@@ -1,149 +1,476 @@
 <!doctype html>
-<html>
+<html lang="id">
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Scan QR Presensi</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scan QR Presensi</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #dbe2ea;
+      --success-bg: #ecfdf5;
+      --success-text: #065f46;
+      --error-bg: #fef2f2;
+      --error-text: #991b1b;
+      --info-bg: #eff6ff;
+      --info-text: #1d4ed8;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
 
-<script src="https://unpkg.com/html5-qrcode"></script>
-</head>
+    * {
+      box-sizing: border-box;
+    }
 
-<body style="font-family:Arial;padding:16px;">
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #dbeafe 0, transparent 30%),
+        radial-gradient(circle at bottom right, #e0e7ff 0, transparent 25%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-<h2>Scan QR Presensi</h2>
+    .container {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
 
-<div id="who"></div>
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 20px;
+      border: 1px solid rgba(219, 226, 234, 0.8);
+    }
 
-<button onclick="stop()">Stop Camera</button>
-<!-- <button onclick="resetReg()">Ganti Nama/NIM</button> -->
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
 
-<div id="reader" style="width:320px;margin-top:12px;"></div>
+    .brand {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
+      flex-shrink: 0;
+    }
 
-<pre id="out"></pre>
+    .title-wrap h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
+      line-height: 1.2;
+    }
 
-<script>
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
 
-const GAS_EXEC = "https://script.google.com/macros/s/AKfycbwm3T5ueVAIdUQ5Sn47LtqSaFFLWmx6lct0xxh4JLC1bcBzZtS_3KFN_002KumzMXmO/exec";
+    .user-box {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
 
-const nama = localStorage.getItem("presence_nama") || "";
-const nim  = localStorage.getItem("presence_nim") || "";
+    .user-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+    }
 
-if(!nama || !nim){
-  window.location.href = "./index.html";
-}
+    .user-label {
+      color: var(--muted);
+    }
 
-document.getElementById("who").innerHTML =
-nama+"<br>"+nim;
+    .user-value {
+      font-weight: bold;
+      color: var(--text);
+      text-align: right;
+      word-break: break-word;
+    }
 
-let scanner = null;
-let sendingLock = false;
+    .scanner-box {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0f172a;
+      min-height: 320px;
+      border: 1px solid #cbd5e1;
+      margin-bottom: 18px;
+    }
 
-function log(msg){
-  document.getElementById("out").textContent = msg;
-}
+    #reader {
+      width: 100%;
+      min-height: 320px;
+      background: #0f172a;
+    }
 
-function extractToken(text){
+    .scanner-overlay {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  if(text.startsWith("TKN-")) return text;
+    .scan-frame {
+      width: 220px;
+      height: 220px;
+      border: 3px solid rgba(255, 255, 255, 0.95);
+      border-radius: 18px;
+      box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.35);
+      position: relative;
+    }
 
-  try{
-    const url = new URL(text);
-    return url.searchParams.get("t");
-  }catch(e){}
+    .scan-frame::before,
+    .scan-frame::after {
+      content: "";
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.9);
+    }
 
-  const match = text.match(/TKN-[A-Z0-9]{6}/);
-  return match ? match[0] : text;
-}
+    .scan-frame::before {
+      top: 24px;
+    }
 
-async function start(){
+    .scan-frame::after {
+      bottom: 24px;
+    }
 
-  if(scanner) return;
+    .hint {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
 
-  log("Starting camera...");
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
 
-  scanner = new Html5Qrcode("reader");
+    .btn {
+      height: 48px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
 
-  await scanner.start(
-    { facingMode: "environment" },
-    {
-      fps: 10,
-      qrbox: 250
-    },
-    async (decodedText)=>{
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 10px 18px rgba(37, 99, 235, 0.2);
+    }
 
-      if(sendingLock) return;
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
 
-      sendingLock = true;
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
 
-      const token = extractToken(decodedText);
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
 
-      log("Token: "+token+"\nSending...");
+    .status {
+      display: none;
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
 
-      try{
+    .status.show {
+      display: block;
+    }
 
-        await sendBeaconCheckin(token);
+    .status.info {
+      background: var(--info-bg);
+      color: var(--info-text);
+      border: 1px solid #bfdbfe;
+    }
 
-        log("✅ Presensi terkirim\nToken: "+token);
+    .status.success {
+      background: var(--success-bg);
+      color: var(--success-text);
+      border: 1px solid #a7f3d0;
+    }
 
-      }catch(err){
+    .status.error {
+      background: var(--error-bg);
+      color: var(--error-text);
+      border: 1px solid #fecaca;
+    }
 
-        log("❌ Gagal: "+err);
+    .footer-note {
+      margin-top: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
 
+    @media (max-width: 480px) {
+      .title-wrap h1 {
+        font-size: 22px;
       }
 
-      setTimeout(()=>sendingLock=false,2000);
+      .scan-frame {
+        width: 200px;
+        height: 200px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
     }
-  );
 
-}
+    /* Supaya elemen bawaan html5-qrcode lebih rapi */
+    #reader__scan_region {
+      background: transparent !important;
+    }
 
-async function stop(){
+    #reader video {
+      border-radius: 0 !important;
+    }
 
-  if(!scanner) return;
+    #reader img {
+      display: none !important;
+    }
 
-  await scanner.stop();
-  await scanner.clear();
+    #reader__dashboard {
+      padding: 10px !important;
+      background: #fff !important;
+    }
 
-  scanner = null;
+    #reader__dashboard_section_swaplink {
+      color: var(--primary) !important;
+      text-decoration: none !important;
+      font-weight: bold !important;
+    }
 
-}
+    #reader button,
+    #reader select {
+      border-radius: 10px !important;
+      border: 1px solid var(--border) !important;
+      padding: 8px 10px !important;
+      font-size: 14px !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="topbar">
+        <div class="brand">📷</div>
+        <div class="title-wrap">
+          <h1>Scan QR Presensi</h1>
+          <p class="subtitle">Arahkan kamera ke QR Code yang diberikan untuk melakukan presensi.</p>
+        </div>
+      </div>
 
-function resetReg(){
+      <div class="user-box">
+        <div class="user-item">
+          <div class="user-label">Nama</div>
+          <div class="user-value" id="userNama">-</div>
+        </div>
+        <div class="user-item">
+          <div class="user-label">NIM</div>
+          <div class="user-value" id="userNim">-</div>
+        </div>
+      </div>
 
-  localStorage.removeItem("presence_nama");
-  localStorage.removeItem("presence_nim");
+      <div class="scanner-box">
+        <div id="reader"></div>
+        <div class="scanner-overlay">
+          <div class="scan-frame"></div>
+        </div>
+      </div>
 
-  window.location.href = "./index.html";
+      <div class="hint">
+        Pastikan QR Code berada di dalam kotak scan dan terlihat jelas oleh kamera.
+      </div>
 
-}
+      <div id="msg" class="status"></div>
 
-async function sendBeaconCheckin(qr_token){
+      <div class="actions">
+        <button class="btn btn-secondary" onclick="kembali()">Kembali</button>
+        <button class="btn btn-primary" onclick="mulaiUlangScanner()">Scan Ulang</button>
+      </div>
 
-  const url =
-  GAS_EXEC+
-  "?action=checkin_beacon"+
-  "&name="+encodeURIComponent(nama)+
-  "&nim="+encodeURIComponent(nim)+
-  "&t="+encodeURIComponent(qr_token)+
-  "&_="+Date.now();
+      <div class="footer-note">
+        Jika kamera belum muncul, izinkan akses kamera pada browser Anda.
+      </div>
+    </div>
+  </div>
 
-  await new Promise((resolve)=>{
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script>
+    const GAS_EXEC = "https://script.google.com/macros/s/AKfycbwm3T5ueVAIdUQ5Sn47LtqSaFFLWmx6lct0xxh4JLC1bcBzZtS_3KFN_002KumzMXmO/exec";
 
-    const img = new Image();
+    const nama = localStorage.getItem("presence_nama") || "";
+    const nim = localStorage.getItem("presence_nim") || "";
 
-    img.onload = resolve;
-    img.onerror = resolve;
+    const msgBox = document.getElementById("msg");
+    const userNama = document.getElementById("userNama");
+    const userNim = document.getElementById("userNim");
 
-    img.src = url;
+    let html5QrCode = null;
+    let isSending = false;
+    let lastScannedToken = "";
 
-  });
+    userNama.textContent = nama || "-";
+    userNim.textContent = nim || "-";
 
-}
+    function showMessage(text, type = "info") {
+      msgBox.textContent = text;
+      msgBox.className = "status show " + type;
+    }
 
-// ✅ AUTO START CAMERA
-window.addEventListener("load", ()=>{
-  start();
-});
+    function kembali() {
+      window.location.href = "./index.html";
+    }
 
-</script>
+    async function stopScanner() {
+      if (html5QrCode && html5QrCode.isScanning) {
+        try {
+          await html5QrCode.stop();
+        } catch (e) {}
+      }
+    }
+
+    async function mulaiScanner() {
+      if (!nama || !nim) {
+        showMessage("Data pengguna tidak ditemukan. Silakan kembali ke halaman registrasi.", "error");
+        return;
+      }
+
+      try {
+        html5QrCode = new Html5Qrcode("reader");
+
+        await html5QrCode.start(
+          { facingMode: "environment" },
+          {
+            fps: 10,
+            qrbox: { width: 220, height: 220 }
+          },
+          onScanSuccess,
+          onScanFailure
+        );
+
+        showMessage("Scanner aktif. Silakan arahkan kamera ke QR Code.", "info");
+      } catch (err) {
+        console.error(err);
+        showMessage("Kamera gagal diakses. Pastikan izin kamera sudah diberikan.", "error");
+      }
+    }
+
+    function onScanFailure() {
+      // sengaja dikosongkan agar tidak spam pesan
+    }
+
+    async function onScanSuccess(decodedText) {
+      if (isSending) return;
+      if (!decodedText) return;
+      if (decodedText === lastScannedToken) return;
+
+      isSending = true;
+      lastScannedToken = decodedText;
+
+      showMessage("QR terdeteksi. Mengirim data presensi...", "info");
+
+      await stopScanner();
+      sendBeaconCheckin(decodedText);
+    }
+
+    function sendBeaconCheckin(token) {
+      const url =
+        GAS_EXEC +
+        "?action=checkin_beacon" +
+        "&name=" + encodeURIComponent(nama) +
+        "&nim=" + encodeURIComponent(nim) +
+        "&t=" + encodeURIComponent(token) +
+        "&_ts=" + Date.now();
+
+      const img = new Image();
+
+      img.onload = function () {
+        showMessage(
+          "Presensi berhasil dikirim.\nToken: " + token,
+          "success"
+        );
+        isSending = false;
+      };
+
+      img.onerror = function () {
+        showMessage(
+          "Permintaan presensi telah dikirim.\nSilakan cek data pada sistem.",
+          "success"
+        );
+        isSending = false;
+      };
+
+      img.src = url;
+    }
+
+    async function mulaiUlangScanner() {
+      showMessage("Menyiapkan scanner...", "info");
+      isSending = false;
+      lastScannedToken = "";
+
+      try {
+        await stopScanner();
+      } catch (e) {}
+
+      const reader = document.getElementById("reader");
+      reader.innerHTML = "";
+
+      await mulaiScanner();
+    }
+
+    mulaiScanner();
+  </script>
 </body>
 </html>
