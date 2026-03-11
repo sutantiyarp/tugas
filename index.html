@@ -23,7 +23,7 @@
       document.getElementById("msg").innerText = msg;
     }
 
-    async function lanjutScan() {
+    function lanjutScan() {
       const nama = document.getElementById("nama").value.trim();
       const nim = document.getElementById("nim").value.trim();
 
@@ -42,19 +42,18 @@
         "&nim=" + encodeURIComponent(nim) +
         "&_ts=" + Date.now();
 
-      try {
-        await fetch(url, {
-          method: "GET",
-          mode: "no-cors"
-        });
+      const img = new Image();
 
-        show("Data tersimpan. Mengalihkan ke scanner...");
+      img.onload = lanjut;
+      img.onerror = lanjut;
+
+      img.src = url;
+
+      function lanjut() {
+        show("Data dikirim. Mengalihkan ke scanner...");
         setTimeout(() => {
           window.location.href = "./scanner.html";
         }, 500);
-      } catch (err) {
-        show("Gagal menghubungi server GAS");
-        console.error(err);
       }
     }
   </script>
