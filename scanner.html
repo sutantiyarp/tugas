@@ -382,7 +382,7 @@
 
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script>
-    const GAS_EXEC = "https://script.google.com/macros/s/AKfycbzpNIg9n4pvHpxyHaQeQps18atbTgJDOddrnuWCiqPJfuJ6jDCIM1iUQ0kx8r-DIjpp/exec";
+    const GAS_EXEC = "https://script.google.com/macros/s/AKfycbxzfd50NgorFAr1bRa7MlH93w4-tTfhl--pSzr5XJiqe0Zg_ERW_zQ36s2jJJoLuH_-/exec";
 
     const nama = localStorage.getItem("presence_nama") || "";
     const nim = localStorage.getItem("presence_nim") || "";
@@ -498,29 +498,20 @@
         "&t=" + encodeURIComponent(token) +
         "&_ts=" + Date.now();
 
-      const img = new Image();
-
-      img.onload = function () {
-        setFrameState("detected");
-        showMessage(
-          "Presensi berhasil dikirim.\nToken: " + token,
-          "success"
-        );
-        isSending = false;
-        resetFrameSoon(1500);
-      };
-
-      img.onerror = function () {
-        setFrameState("detected");
-        showMessage(
-          "Permintaan presensi telah dikirim.\nSilakan cek data pada sistem.",
-          "success"
-        );
-        isSending = false;
-        resetFrameSoon(1500);
-      };
-
-      img.src = url;
+      fetch(url, { method: "GET", mode: "no-cors" })
+        .then(function () {
+          setFrameState("detected");
+          showMessage("Presensi berhasil dikirim.\nToken: " + token, "success");
+          isSending = false;
+          resetFrameSoon(1500);
+        })
+        .catch(function () {
+          // no-cors selalu masuk .then(), ini fallback jika fetch tidak tersedia
+          setFrameState("detected");
+          showMessage("Presensi dikirim.\nSilakan cek data pada sistem.", "success");
+          isSending = false;
+          resetFrameSoon(1500);
+        });
     }
 
     async function mulaiUlangScanner() {
