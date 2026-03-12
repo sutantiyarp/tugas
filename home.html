@@ -113,36 +113,7 @@
       margin-top: 12px;
     }
 
-    .scan-btn {
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      padding: 0;
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .scan-icon-wrap {
-      width: 180px;
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s ease;
-    }
-
-    .scan-btn:hover .scan-icon-wrap,
-    .scan-btn:active .scan-icon-wrap {
-      transform: scale(1.04);
-    }
-
-    .scan-label {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--green);
-    }
+    /* scan-btn removed - replaced by feature-grid */
 
     .helper {
       margin-top: 14px;
@@ -150,6 +121,58 @@
       font-size: 14px;
       text-align: center;
       line-height: 1.5;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .feature-btn {
+      border: none;
+      background: var(--card);
+      cursor: pointer;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 24px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+    }
+
+    .feature-btn:hover,
+    .feature-btn:active {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.14);
+    }
+
+    .feature-btn .feat-icon {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-btn .feat-label {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .feat-label-scan { color: var(--green); }
+    .feat-label-accel { color: var(--primary); }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 16px;
+      text-align: center;
     }
 
     .empty-box {
@@ -222,33 +245,60 @@
     </div>
 
     <div class="scan-section">
-      <button class="scan-btn" onclick="goToScanner()" aria-label="Scan QR sekarang">
-        <div class="scan-icon-wrap">
-          <svg width="150" height="150" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M18 42V18H42" stroke="#1F36A6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M78 18H102V42" stroke="#1F36A6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M102 78V102H78" stroke="#1F36A6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M42 102H18V78" stroke="#1F36A6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <p class="section-title">Pilih Fitur</p>
+      <div class="feature-grid">
+        <!-- SCAN QR -->
+        <button class="feature-btn" onclick="goToScanner()" aria-label="Scan QR sekarang">
+          <div class="feat-icon">
+            <svg width="72" height="72" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 42V18H42" stroke="#1F36A6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M78 18H102V42" stroke="#1F36A6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M102 78V102H78" stroke="#1F36A6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M42 102H18V78" stroke="#1F36A6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="34" y="34" width="14" height="14" fill="#1F36A6"/>
+              <rect x="34" y="54" width="14" height="14" fill="#1F36A6"/>
+              <rect x="54" y="34" width="14" height="14" fill="#1F36A6"/>
+              <rect x="54" y="54" width="14" height="14" fill="#1F36A6"/>
+              <rect x="72" y="52" width="6" height="6" fill="#1F36A6"/>
+              <rect x="80" y="52" width="6" height="6" fill="#1F36A6"/>
+              <rect x="72" y="60" width="6" height="6" fill="#1F36A6"/>
+              <rect x="88" y="60" width="6" height="6" fill="#1F36A6"/>
+              <rect x="72" y="68" width="6" height="6" fill="#1F36A6"/>
+              <rect x="80" y="68" width="6" height="6" fill="#1F36A6"/>
+              <rect x="88" y="68" width="6" height="6" fill="#1F36A6"/>
+            </svg>
+          </div>
+          <div class="feat-label feat-label-scan">Scan QR</div>
+        </button>
 
-            <rect x="34" y="34" width="14" height="14" fill="#1F36A6"/>
-            <rect x="34" y="54" width="14" height="14" fill="#1F36A6"/>
-            <rect x="54" y="34" width="14" height="14" fill="#1F36A6"/>
-            <rect x="54" y="54" width="14" height="14" fill="#1F36A6"/>
-
-            <rect x="72" y="52" width="6" height="6" fill="#1F36A6"/>
-            <rect x="80" y="52" width="6" height="6" fill="#1F36A6"/>
-            <rect x="72" y="60" width="6" height="6" fill="#1F36A6"/>
-            <rect x="88" y="60" width="6" height="6" fill="#1F36A6"/>
-            <rect x="72" y="68" width="6" height="6" fill="#1F36A6"/>
-            <rect x="80" y="68" width="6" height="6" fill="#1F36A6"/>
-            <rect x="88" y="68" width="6" height="6" fill="#1F36A6"/>
-          </svg>
-        </div>
-        <div class="scan-label">Scan Now</div>
-      </button>
+        <!-- ACCELEROMETER -->
+        <button class="feature-btn" onclick="goToAccelerometer()" aria-label="Accelerometer Telemetry">
+          <div class="feat-icon">
+            <svg width="72" height="72" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Outer ring -->
+              <circle cx="60" cy="60" r="36" stroke="#1F36A6" stroke-width="7" fill="none"/>
+              <!-- Center dot -->
+              <circle cx="60" cy="60" r="8" fill="#1F36A6"/>
+              <!-- Axes arrows -->
+              <line x1="60" y1="24" x2="60" y2="44" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
+              <polygon points="60,18 55,28 65,28" fill="#ef4444"/>
+              <line x1="60" y1="76" x2="60" y2="96" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
+              <polygon points="60,102 55,92 65,92" fill="#ef4444"/>
+              <line x1="24" y1="60" x2="44" y2="60" stroke="#22c55e" stroke-width="5" stroke-linecap="round"/>
+              <polygon points="18,60 28,55 28,65" fill="#22c55e"/>
+              <line x1="76" y1="60" x2="96" y2="60" stroke="#22c55e" stroke-width="5" stroke-linecap="round"/>
+              <polygon points="102,60 92,55 92,65" fill="#22c55e"/>
+              <!-- Z diagonal hint -->
+              <line x1="38" y1="38" x2="50" y2="50" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+              <polygon points="34,34 34,44 44,34" fill="#3b82f6"/>
+            </svg>
+          </div>
+          <div class="feat-label feat-label-accel">Accelerometer</div>
+        </button>
+      </div>
 
       <div class="helper">
-        Tekan tombol scan untuk membuka kamera dan melakukan presensi QR.
+        Pilih <strong>Scan QR</strong> untuk presensi, atau <strong>Accelerometer</strong> untuk kirim data sensor.
       </div>
     </div>
 
@@ -294,6 +344,14 @@
 
     function goBack() {
       window.location.href = "./index.html";
+    }
+
+    function goToAccelerometer() {
+      if (!nama || !nim) {
+        emptyState.classList.add("show");
+        return;
+      }
+      window.location.href = "./accelerometer.html";
     }
 
     function goToScanner() {

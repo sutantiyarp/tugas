@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accelerometer Telemetry</title>
+  <style>
+    :root {
+      --primary: #1f36a6;
+      --primary-dark: #172a84;
+      --accent: #6366f1;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 8px 24px rgba(0,0,0,0.10);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      height: 88px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      gap: 14px;
+    }
+
+    .back-btn {
+      border: none;
+      background: transparent;
+      color: white;
+      font-size: 34px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .topbar-title { font-size: 24px; font-weight: 600; }
+    .topbar-sub { font-size: 13px; opacity: 0.75; margin-top: 2px; }
+
+    /* CONTAINER */
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title svg { flex-shrink: 0; }
+
+    /* LIVE METER */
+    .axes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .axis-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+
+    .axis-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .axis-value {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .axis-x .axis-value { color: #ef4444; }
+    .axis-y .axis-value { color: #22c55e; }
+    .axis-z .axis-value { color: #3b82f6; }
+
+    .axis-unit {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* BAR INDICATOR */
+    .bar-wrap {
+      margin-bottom: 6px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .bar-track {
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.15s ease;
+    }
+
+    .bar-fill.x { background: #ef4444; }
+    .bar-fill.y { background: #22c55e; }
+    .bar-fill.z { background: #3b82f6; }
+
+    /* STATUS BADGE */
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .badge-idle   { background: #f1f5f9; color: #64748b; }
+    .badge-active { background: #dcfce7; color: #166534; }
+    .badge-error  { background: #fef2f2; color: #991b1b; }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .dot.pulse {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    /* CONTROLS */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .ctrl-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ctrl-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .ctrl-group select,
+    .ctrl-group input[type="number"] {
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0 12px;
+      font-size: 14px;
+      background: #f8fafc;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .ctrl-group select:focus,
+    .ctrl-group input[type="number"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(31,54,166,0.10);
+    }
+
+    /* BUTTONS */
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .btn {
+      height: 48px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-start {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 6px 14px rgba(31,54,166,0.25);
+    }
+
+    .btn-start:hover { background: var(--primary-dark); }
+    .btn-start:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+    .btn-stop {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .btn-stop:hover { background: #fecaca; }
+    .btn-stop:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-send {
+      background: var(--green);
+      color: white;
+      box-shadow: 0 6px 14px rgba(34,197,94,0.25);
+    }
+
+    .btn-send:hover { filter: brightness(0.93); }
+    .btn-send:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+    .btn-latest {
+      background: #eff6ff;
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+    }
+
+    .btn-latest:hover { background: #dbeafe; }
+    .btn-latest:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* QUEUE INFO */
+    .queue-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+
+    .queue-count {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    /* LOG */
+    .log-box {
+      background: #0f172a;
+      border-radius: 14px;
+      padding: 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #94a3b8;
+      height: 160px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .log-entry { line-height: 1.5; }
+    .log-ok   { color: #4ade80; }
+    .log-warn { color: #fbbf24; }
+    .log-err  { color: #f87171; }
+    .log-info { color: #60a5fa; }
+
+    /* LATEST DATA */
+    .latest-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .latest-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .latest-item .lbl { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+    .latest-item .val { font-size: 20px; font-weight: 800; color: var(--primary); }
+
+    .latest-meta {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ALERT */
+    .alert {
+      display: none;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .alert.show { display: block; }
+    .alert.info    { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .alert.success { background: #dcfce7; color: #166534; border: 1px solid #a7f3d0; }
+    .alert.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .alert.warning { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+
+    @media (max-width: 480px) {
+      .axes-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+      .axis-value { font-size: 20px; }
+      .controls-grid { grid-template-columns: 1fr 1fr; }
+      .btn-row { grid-template-columns: 1fr 1fr; }
+      .latest-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <button class="back-btn" onclick="goBack()" aria-label="Kembali">‹</button>
+    <div>
+      <div class="topbar-title">Accelerometer</div>
+      <div class="topbar-sub">Batch Telemetry — Live Sensor</div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- LIVE READING -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12h4M18 12h4M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+        Live Sensor Reading
+      </div>
+
+      <div class="axes-grid">
+        <div class="axis-box axis-x">
+          <div class="axis-label">X</div>
+          <div class="axis-value" id="valX">0.00</div>
+          <div class="axis-unit">m/s²</div>
+        </div>
+        <div class="axis-box axis-y">
+          <div class="axis-label">Y</div>
+          <div class="axis-value" id="valY">0.00</div>
+          <div class="axis-unit">m/s²</div>
+        </div>
+        <div class="axis-box axis-z">
+          <div class="axis-label">Z</div>
+          <div class="axis-value" id="valZ">0.00</div>
+          <div class="axis-unit">m/s²</div>
+        </div>
+      </div>
+
+      <div class="bar-wrap">
+        <div class="bar-label"><span>X</span><span id="barXlbl">0.00</span></div>
+        <div class="bar-track"><div class="bar-fill x" id="barX" style="width:50%"></div></div>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-label"><span>Y</span><span id="barYlbl">0.00</span></div>
+        <div class="bar-track"><div class="bar-fill y" id="barY" style="width:50%"></div></div>
+      </div>
+      <div class="bar-wrap" style="margin-bottom:0">
+        <div class="bar-label"><span>Z</span><span id="barZlbl">0.00</span></div>
+        <div class="bar-track"><div class="bar-fill z" id="barZ" style="width:50%"></div></div>
+      </div>
+
+      <div class="status-row">
+        <div class="badge badge-idle" id="sensorBadge">
+          <div class="dot" id="sensorDot"></div>
+          <span id="sensorStatus">Sensor Idle</span>
+        </div>
+        <span id="sampleCount" style="font-size:12px;color:var(--muted)">0 samples</span>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+        </svg>
+        Pengaturan Rekam
+      </div>
+
+      <div class="controls-grid">
+        <div class="ctrl-group">
+          <label>Interval Sampel</label>
+          <select id="sampleInterval">
+            <option value="100">100 ms (10 Hz)</option>
+            <option value="200" selected>200 ms (5 Hz)</option>
+            <option value="500">500 ms (2 Hz)</option>
+            <option value="1000">1000 ms (1 Hz)</option>
+          </select>
+        </div>
+        <div class="ctrl-group">
+          <label>Ukuran Batch</label>
+          <select id="batchSize">
+            <option value="5">5 sampel</option>
+            <option value="10" selected>10 sampel</option>
+            <option value="20">20 sampel</option>
+            <option value="50">50 sampel</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-start" id="btnStart" onclick="startRecording()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Mulai Rekam
+        </button>
+        <button class="btn btn-stop" id="btnStop" onclick="stopRecording()" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          Stop
+        </button>
+      </div>
+    </div>
+
+    <!-- QUEUE & SEND -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+        </svg>
+        Kirim Batch ke Server
+      </div>
+
+      <div class="queue-info">
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Data dalam antrian</div>
+          <div class="queue-count" id="queueCount">0</div>
+        </div>
+        <div style="text-align:right;font-size:12px;color:var(--muted)">
+          <div>Auto-send setiap <strong id="batchSizeDisplay">10</strong> sampel</div>
+          <div id="lastSentInfo">Belum ada kiriman</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-send" id="btnSend" onclick="sendBatchNow()" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          Kirim Sekarang
+        </button>
+        <button class="btn btn-latest" onclick="fetchLatest()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/></svg>
+          Ambil Latest
+        </button>
+      </div>
+
+      <div class="alert" id="sendAlert"></div>
+    </div>
+
+    <!-- LATEST DATA -->
+    <div class="card" id="latestCard" style="display:none">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        Data Terbaru dari Server
+      </div>
+      <div class="latest-grid">
+        <div class="latest-item">
+          <div class="lbl">X</div>
+          <div class="val" id="latestX">—</div>
+        </div>
+        <div class="latest-item">
+          <div class="lbl">Y</div>
+          <div class="val" id="latestY">—</div>
+        </div>
+        <div class="latest-item">
+          <div class="lbl">Z</div>
+          <div class="val" id="latestZ">—</div>
+        </div>
+      </div>
+      <div class="latest-meta" id="latestMeta">—</div>
+    </div>
+
+    <!-- LOG -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Log Aktivitas
+      </div>
+      <div class="log-box" id="logBox">
+        <div class="log-entry log-info">[INIT] Halaman accelerometer dimuat.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwm3T5ueVAIdUQ5Sn47LtqSaFFLWmx6lct0xxh4JLC1bcBzZtS_3KFN_002KumzMXmO/exec";
+
+    const nama = localStorage.getItem("presence_nama") || "Unknown";
+    const nim  = localStorage.getItem("presence_nim")  || "0";
+
+    let isRecording   = false;
+    let sensorActive  = false;
+    let sampleBuffer  = [];
+    let totalSamples  = 0;
+    let recordInterval = null;
+    let currentX = 0, currentY = 0, currentZ = 0;
+
+    // ── DOM refs ──
+    const valX = document.getElementById("valX");
+    const valY = document.getElementById("valY");
+    const valZ = document.getElementById("valZ");
+    const barX = document.getElementById("barX");
+    const barY = document.getElementById("barY");
+    const barZ = document.getElementById("barZ");
+    const barXlbl = document.getElementById("barXlbl");
+    const barYlbl = document.getElementById("barYlbl");
+    const barZlbl = document.getElementById("barZlbl");
+    const sensorBadge  = document.getElementById("sensorBadge");
+    const sensorDot    = document.getElementById("sensorDot");
+    const sensorStatus = document.getElementById("sensorStatus");
+    const sampleCount  = document.getElementById("sampleCount");
+    const queueCount   = document.getElementById("queueCount");
+    const batchSizeDisp = document.getElementById("batchSizeDisplay");
+    const lastSentInfo = document.getElementById("lastSentInfo");
+    const btnStart = document.getElementById("btnStart");
+    const btnStop  = document.getElementById("btnStop");
+    const btnSend  = document.getElementById("btnSend");
+    const sendAlert = document.getElementById("sendAlert");
+    const latestCard = document.getElementById("latestCard");
+    const logBox = document.getElementById("logBox");
+
+    // ── UTILS ──
+    function log(msg, type = "info") {
+      const now = new Date();
+      const ts = now.toTimeString().slice(0,8);
+      const div = document.createElement("div");
+      div.className = "log-entry log-" + type;
+      div.textContent = `[${ts}] ${msg}`;
+      logBox.appendChild(div);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function showAlert(msg, type = "info") {
+      sendAlert.textContent = msg;
+      sendAlert.className = "alert show " + type;
+    }
+
+    function pct(v, range = 20) {
+      return Math.min(100, Math.max(0, ((v + range) / (range * 2)) * 100));
+    }
+
+    function updateDisplay(x, y, z) {
+      valX.textContent = x.toFixed(2);
+      valY.textContent = y.toFixed(2);
+      valZ.textContent = z.toFixed(2);
+      barXlbl.textContent = x.toFixed(2);
+      barYlbl.textContent = y.toFixed(2);
+      barZlbl.textContent = z.toFixed(2);
+      barX.style.width = pct(x) + "%";
+      barY.style.width = pct(y) + "%";
+      barZ.style.width = pct(z) + "%";
+    }
+
+    // ── SENSOR ──
+    function startSensor() {
+      if (typeof DeviceMotionEvent === "undefined") {
+        log("DeviceMotionEvent tidak didukung. Menggunakan data simulasi.", "warn");
+        startSimulation();
+        return;
+      }
+
+      // iOS 13+ permission
+      if (typeof DeviceMotionEvent.requestPermission === "function") {
+        DeviceMotionEvent.requestPermission()
+          .then(state => {
+            if (state === "granted") {
+              attachMotionListener();
+            } else {
+              log("Izin sensor ditolak. Menggunakan simulasi.", "warn");
+              startSimulation();
+            }
+          })
+          .catch(() => {
+            log("Gagal minta izin sensor. Simulasi aktif.", "warn");
+            startSimulation();
+          });
+      } else {
+        attachMotionListener();
+      }
+    }
+
+    function attachMotionListener() {
+      window.addEventListener("devicemotion", onMotion);
+      sensorActive = true;
+      setBadge("active");
+      log("Sensor akselerometer aktif (hardware).", "ok");
+    }
+
+    function onMotion(e) {
+      const acc = e.accelerationIncludingGravity || e.acceleration;
+      if (!acc) return;
+      currentX = acc.x || 0;
+      currentY = acc.y || 0;
+      currentZ = acc.z || 0;
+      updateDisplay(currentX, currentY, currentZ);
+    }
+
+    let simTimer = null;
+    function startSimulation() {
+      sensorActive = true;
+      setBadge("active");
+      log("Mode simulasi aktif (no hardware sensor).", "warn");
+
+      let t = 0;
+      simTimer = setInterval(() => {
+        t += 0.1;
+        currentX = parseFloat((Math.sin(t * 1.3) * 3 + (Math.random() - 0.5)).toFixed(3));
+        currentY = parseFloat((Math.cos(t * 0.9) * 4 + (Math.random() - 0.5)).toFixed(3));
+        currentZ = parseFloat((9.81 + Math.sin(t * 0.5) * 0.5 + (Math.random() - 0.5) * 0.3).toFixed(3));
+        updateDisplay(currentX, currentY, currentZ);
+      }, 50);
+    }
+
+    function stopSensor() {
+      window.removeEventListener("devicemotion", onMotion);
+      if (simTimer) { clearInterval(simTimer); simTimer = null; }
+      sensorActive = false;
+      setBadge("idle");
+    }
+
+    function setBadge(state) {
+      sensorBadge.className = "badge";
+      sensorDot.className = "dot";
+      if (state === "active") {
+        sensorBadge.classList.add("badge-active");
+        sensorDot.classList.add("pulse");
+        sensorStatus.textContent = "Sensor Aktif";
+      } else if (state === "error") {
+        sensorBadge.classList.add("badge-error");
+        sensorStatus.textContent = "Sensor Error";
+      } else {
+        sensorBadge.classList.add("badge-idle");
+        sensorStatus.textContent = "Sensor Idle";
+      }
+    }
+
+    // ── RECORDING ──
+    function startRecording() {
+      const interval = parseInt(document.getElementById("sampleInterval").value);
+      const batchSz  = parseInt(document.getElementById("batchSize").value);
+      batchSizeDisp.textContent = batchSz;
+
+      if (!sensorActive) startSensor();
+
+      isRecording   = true;
+      sampleBuffer  = [];
+      totalSamples  = 0;
+
+      btnStart.disabled = true;
+      btnStop.disabled  = false;
+      btnSend.disabled  = false;
+
+      log(`Rekam dimulai — interval ${interval}ms, batch size ${batchSz}`, "ok");
+
+      recordInterval = setInterval(() => {
+        const sample = {
+          ts: Date.now(),
+          x: currentX,
+          y: currentY,
+          z: currentZ
+        };
+        sampleBuffer.push(sample);
+        totalSamples++;
+        sampleCount.textContent = totalSamples + " samples";
+        queueCount.textContent = sampleBuffer.length;
+
+        if (sampleBuffer.length >= batchSz) {
+          log(`Batch penuh (${batchSz} sampel). Auto-kirim...`, "info");
+          sendBatch(sampleBuffer.splice(0, batchSz));
+          queueCount.textContent = sampleBuffer.length;
+        }
+      }, interval);
+    }
+
+    function stopRecording() {
+      isRecording = false;
+      clearInterval(recordInterval);
+      recordInterval = null;
+
+      btnStart.disabled = false;
+      btnStop.disabled  = true;
+
+      stopSensor();
+      log(`Rekam dihentikan. Total ${totalSamples} sampel dikumpulkan.`, "warn");
+    }
+
+    // ── SEND BATCH ──
+    function sendBatchNow() {
+      if (sampleBuffer.length === 0) {
+        showAlert("Antrian kosong. Mulai rekam terlebih dahulu.", "warning");
+        return;
+      }
+      const toSend = sampleBuffer.splice(0);
+      queueCount.textContent = sampleBuffer.length;
+      sendBatch(toSend);
+    }
+
+    function sendBatch(batch) {
+      const payload = JSON.stringify({
+        action: "accel_batch",
+        name: nama,
+        nim: nim,
+        data: batch,
+        ts: Date.now()
+      });
+
+      const encodedPayload = encodeURIComponent(payload);
+      const url = GAS_URL + "?action=accel_batch&payload=" + encodedPayload + "&_ts=" + Date.now();
+
+      log(`Mengirim ${batch.length} sampel ke server...`, "info");
+      showAlert(`Mengirim ${batch.length} sampel...`, "info");
+
+      const img = new Image();
+      img.onload = function () {
+        const now = new Date().toLocaleTimeString("id-ID");
+        lastSentInfo.textContent = "Terakhir: " + now;
+        log(`Batch ${batch.length} sampel berhasil dikirim.`, "ok");
+        showAlert(`✓ ${batch.length} sampel berhasil dikirim ke server.`, "success");
+      };
+      img.onerror = function () {
+        const now = new Date().toLocaleTimeString("id-ID");
+        lastSentInfo.textContent = "Terakhir: " + now;
+        log(`Batch ${batch.length} sampel dikirim (response via beacon).`, "ok");
+        showAlert(`✓ ${batch.length} sampel dikirim (cek spreadsheet).`, "success");
+      };
+      img.src = url;
+    }
+
+    // ── FETCH LATEST ──
+    function fetchLatest() {
+      const url = GAS_URL +
+        "?action=accel_latest" +
+        "&nim=" + encodeURIComponent(nim) +
+        "&_ts=" + Date.now();
+
+      log("Mengambil data terbaru dari server...", "info");
+      showAlert("Mengambil data terbaru...", "info");
+
+      fetch(url)
+        .then(r => r.json())
+        .then(d => {
+          if (d && d.x !== undefined) {
+            document.getElementById("latestX").textContent = parseFloat(d.x).toFixed(3);
+            document.getElementById("latestY").textContent = parseFloat(d.y).toFixed(3);
+            document.getElementById("latestZ").textContent = parseFloat(d.z).toFixed(3);
+            document.getElementById("latestMeta").textContent =
+              `NIM: ${d.nim || nim}  |  Waktu: ${d.timestamp || "—"}`;
+            latestCard.style.display = "block";
+            log(`Latest data: X=${d.x}, Y=${d.y}, Z=${d.z}`, "ok");
+            showAlert("✓ Data terbaru berhasil diambil.", "success");
+          } else {
+            log("Tidak ada data terbaru di server.", "warn");
+            showAlert("Belum ada data tersimpan untuk NIM ini.", "warning");
+          }
+        })
+        .catch(err => {
+          log("Gagal fetch latest: " + err.message, "err");
+          showAlert("Gagal mengambil data. Cek koneksi atau GAS URL.", "error");
+        });
+    }
+
+    // ── NAV ──
+    function goBack() {
+      window.location.href = "./home.html";
+    }
+
+    // ── INIT ──
+    log(`User: ${nama} / NIM: ${nim}`, "info");
+    document.getElementById("batchSize").addEventListener("change", function () {
+      batchSizeDisp.textContent = this.value;
+    });
+  </script>
+</body>
+</html>
