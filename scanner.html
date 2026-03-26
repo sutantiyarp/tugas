@@ -371,7 +371,7 @@
 
       <div class="actions">
         <button class="btn btn-secondary" onclick="kembali()">Kembali</button>
-        <button class="btn btn-primary" onclick="mulaiUlangScanner()">Scan Ulang</button>
+        <button class="btn btn-primary" onclick="scanUlang()">Scan Ulang</button>
       </div>
 
       <div class="footer-note">
@@ -396,6 +396,7 @@
     let isSending = false;
     let lastScannedToken = "";
     let scanCooldown = false;
+    let scanLocked = false;
 
     userNama.textContent = nama || "-";
     userNim.textContent = nim || "-";
@@ -488,6 +489,9 @@
     }
 
     async function sendBeaconCheckin(token) {
+      if (isSending || scanLocked) return;
+
+      isSending = true;
       setFrameState("sending");
 
       const url =
@@ -503,19 +507,38 @@
         const res = await jsonpRequest(url);
 
         if (res && res.ok) {
+          scanLocked = true; // stop scan otomatis
           setFrameState("detected");
-          showMessage("Presensi berhasil.\nID: " + res.presence_id, "success");
-        } else {
-          setFrameState("normal");
-          showMessage("Presensi gagal: " + (res && res.error ? res.error : "Unknown error"), "error");
+          showMessage("Presensi berhasil dikirim.", "success");
+          return;
         }
+
+        const msg = res && res.error ? res.error : "Unknown error";
+
+        // kalau user sudah presensi di sesi ini, lock juga
+        if (msg.toLowerCase().includes("sudah presensi")) {
+          scanLocked = true;
+          setFrameState("detected");
+          showMessage("Presensi sudah pernah dilakukan untuk sesi ini.", "success");
+          return;
+        }
+
+        setFrameState("normal");
+        showMessage("Presensi gagal: " + msg, "error");
+
       } catch (err) {
         setFrameState("normal");
         showMessage("Gagal menghubungi server: " + err.message, "error");
       } finally {
         isSending = false;
-        resetFrameSoon(1500);
       }
+    }
+
+    function scanUlang() {
+      scanLocked = false;
+      isSending = false;
+      setFrameState("normal");
+      showMessage("Silakan scan QR lagi.", "info");
     }
 
     function jsonpRequest(url) {
