@@ -471,16 +471,16 @@
       if (!token) return;
       if (isSending) return;
       if (scanCooldown) return;
+      if (scanLocked) return;
       if (token === lastScannedToken) return;
 
-      isSending = true;
       scanCooldown = true;
       lastScannedToken = token;
 
       setFrameState("detected");
       showMessage("QR valid terdeteksi. Mengirim data presensi...", "success");
 
-      sendBeaconCheckin(token);
+      await sendBeaconCheckin(token);
 
       setTimeout(() => {
         scanCooldown = false;
@@ -507,7 +507,7 @@
         const res = await jsonpRequest(url);
 
         if (res && res.ok) {
-          scanLocked = true; // stop scan otomatis
+          scanLocked = true;
           setFrameState("detected");
           showMessage("Presensi berhasil dikirim.", "success");
           return;
@@ -515,7 +515,6 @@
 
         const msg = res && res.error ? res.error : "Unknown error";
 
-        // kalau user sudah presensi di sesi ini, lock juga
         if (msg.toLowerCase().includes("sudah presensi")) {
           scanLocked = true;
           setFrameState("detected");
@@ -525,7 +524,6 @@
 
         setFrameState("normal");
         showMessage("Presensi gagal: " + msg, "error");
-
       } catch (err) {
         setFrameState("normal");
         showMessage("Gagal menghubungi server: " + err.message, "error");
