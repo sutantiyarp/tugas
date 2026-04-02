@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maps & Jejak Lokasi</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    :root {
+      --primary: #1f36a6;
+      --primary-dark: #172a84;
+      --primary-light: #e8ecfb;
+      --green: #16a34a;
+      --red: #dc2626;
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      --radius: 20px;
+      --trail-color: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      height: 80px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      flex-shrink: 0;
+      z-index: 1000;
+    }
+
+    .back-btn {
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      font-size: 22px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.25); }
+
+    .topbar-info { flex: 1; min-width: 0; }
+    .topbar-title { font-size: 20px; font-weight: 700; }
+    .topbar-sub { font-size: 12px; opacity: 0.75; margin-top: 2px; }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6b7280;
+      transition: background 0.3s;
+    }
+    .status-dot.active { background: #4ade80; animation: pulse 1.5s infinite; }
+    .status-dot.paused { background: #fbbf24; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ── MAP ── */
+    #map {
+      flex: 1;
+      z-index: 1;
+      position: relative;
+    }
+
+    /* ── BOTTOM PANEL ── */
+    .bottom-panel {
+      background: var(--card);
+      border-radius: var(--radius) var(--radius) 0 0;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+      padding: 16px 16px 20px;
+      flex-shrink: 0;
+      z-index: 1000;
+    }
+
+    .panel-handle {
+      width: 36px;
+      height: 4px;
+      background: #d1d5db;
+      border-radius: 2px;
+      margin: 0 auto 14px;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat-card {
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Controls */
+    .controls-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-start {
+      flex: 1;
+      background: var(--green);
+      color: white;
+    }
+    .btn-stop {
+      flex: 1;
+      background: var(--red);
+      color: white;
+    }
+    .btn-center {
+      background: var(--primary-light);
+      color: var(--primary);
+      width: 50px;
+      flex-shrink: 0;
+    }
+    .btn-history {
+      background: var(--primary-light);
+      color: var(--primary);
+      width: 50px;
+      flex-shrink: 0;
+    }
+
+    /* ── HISTORY MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: none;
+      align-items: flex-end;
+    }
+    .modal-overlay.show { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: var(--radius) var(--radius) 0 0;
+      width: 100%;
+      max-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .modal-title { font-size: 18px; font-weight: 700; }
+    .modal-close {
+      border: none;
+      background: var(--bg);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .history-list {
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .history-empty {
+      text-align: center;
+      padding: 32px 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .history-item {
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: 2px solid transparent;
+    }
+    .history-item:hover { background: var(--primary-light); border-color: var(--primary); }
+    .history-item.active { border-color: var(--primary); background: var(--primary-light); }
+
+    .history-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .history-date { font-size: 13px; font-weight: 700; color: var(--text); }
+    .history-duration {
+      font-size: 12px;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      padding: 2px 8px;
+    }
+    .history-meta {
+      display: flex;
+      gap: 14px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .history-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .history-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .btn-sm {
+      border: none;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .btn-show { background: var(--primary); color: white; }
+    .btn-delete { background: #fee2e2; color: var(--red); }
+
+    /* Leaflet custom marker override */
+    .leaflet-div-icon { background: none; border: none; }
+
+    .my-marker {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 3px solid white;
+      box-shadow: 0 2px 8px rgba(31,54,166,0.5);
+    }
+
+    .gps-info {
+      position: absolute;
+      bottom: calc(220px + 10px);
+      left: 10px;
+      z-index: 500;
+      background: rgba(255,255,255,0.92);
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+      pointer-events: none;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <button class="back-btn" onclick="goBack()">‹</button>
+  <div class="topbar-info">
+    <div class="topbar-title">Maps & Jejak</div>
+    <div class="topbar-sub" id="userName">—</div>
+  </div>
+  <div class="status-badge">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">Idle</span>
+  </div>
+</div>
+
+<!-- MAP -->
+<div id="map"></div>
+
+<!-- GPS info overlay -->
+<div class="gps-info" id="gpsInfo" style="display:none">
+  📍 <span id="coordText">—</span>
+</div>
+
+<!-- BOTTOM PANEL -->
+<div class="bottom-panel">
+  <div class="panel-handle"></div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value" id="statDist">0.00</div>
+      <div class="stat-label">Jarak (m)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statPoints">0</div>
+      <div class="stat-label">Titik</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statTime">00:00</div>
+      <div class="stat-label">Durasi</div>
+    </div>
+  </div>
+
+  <div class="controls-row">
+    <button class="btn btn-start" id="btnStart" onclick="startTracking()">
+      ▶ Mulai Rekam
+    </button>
+    <button class="btn btn-stop" id="btnStop" onclick="stopTracking()" disabled>
+      ■ Stop
+    </button>
+    <button class="btn btn-center" onclick="centerMap()" title="Ke posisi saya">
+      ◎
+    </button>
+    <button class="btn btn-history" onclick="openHistory()" title="Riwayat jejak">
+      🗂
+    </button>
+  </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="modal-overlay" id="historyModal" onclick="closeHistoryOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🗂 Riwayat Jejak</div>
+      <button class="modal-close" onclick="closeHistory()">✕</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">Belum ada riwayat jejak.<br>Mulai rekam perjalananmu!</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let map, myMarker, currentPolyline, watchId;
+let isTracking = false;
+let currentTrail = [];   // [{lat, lng, ts}]
+let startTime = null;
+let timerInterval = null;
+let totalDistance = 0;
+let displayedHistoryPolylines = [];
+
+// Storage key
+const STORAGE_KEY = 'maps_trails_v1';
+
+// ── INIT MAP ──
+function initMap() {
+  map = L.map('map', { zoomControl: true }).setView([-7.257, 112.752], 14);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap',
+    maxZoom: 19
+  }).addTo(map);
+
+  // Try to get initial location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      map.setView([lat, lng], 16);
+      setMyMarker(lat, lng);
+      showGpsInfo(lat, lng);
+    }, () => {});
+  }
+}
+
+// ── MARKER ──
+function setMyMarker(lat, lng) {
+  const icon = L.divIcon({
+    html: '<div class="my-marker"></div>',
+    iconSize: [18, 18],
+    iconAnchor: [9, 9]
+  });
+
+  if (myMarker) {
+    myMarker.setLatLng([lat, lng]);
+  } else {
+    myMarker = L.marker([lat, lng], { icon }).addTo(map);
+  }
+}
+
+function showGpsInfo(lat, lng) {
+  const el = document.getElementById('gpsInfo');
+  const coord = document.getElementById('coordText');
+  el.style.display = 'block';
+  coord.textContent = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+}
+
+// ── TRACKING ──
+function startTracking() {
+  if (!navigator.geolocation) {
+    alert('Geolocation tidak didukung di browser ini.');
+    return;
+  }
+
+  isTracking = true;
+  currentTrail = [];
+  totalDistance = 0;
+  startTime = Date.now();
+
+  // Clear old displayed history lines
+  clearDisplayedHistory();
+
+  // Init new polyline for current trail (red)
+  currentPolyline = L.polyline([], {
+    color: '#ef4444',
+    weight: 4,
+    opacity: 0.85,
+    lineJoin: 'round'
+  }).addTo(map);
+
+  // UI updates
+  document.getElementById('btnStart').disabled = true;
+  document.getElementById('btnStop').disabled = false;
+  setStatus('active', 'Merekam...');
+
+  // Timer
+  timerInterval = setInterval(updateTimer, 1000);
+
+  // Start watching position
+  watchId = navigator.geolocation.watchPosition(
+    onPosition,
+    onGpsError,
+    { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 }
+  );
+}
+
+function onPosition(pos) {
+  const { latitude: lat, longitude: lng, accuracy } = pos.coords;
+  const ts = Date.now();
+
+  setMyMarker(lat, lng);
+  showGpsInfo(lat, lng);
+
+  if (isTracking) {
+    // Add point
+    if (currentTrail.length > 0) {
+      const last = currentTrail[currentTrail.length - 1];
+      const d = haversine(last.lat, last.lng, lat, lng);
+      totalDistance += d;
+    }
+
+    currentTrail.push({ lat, lng, ts });
+    currentPolyline.addLatLng([lat, lng]);
+
+    // Update stats
+    document.getElementById('statDist').textContent = totalDistance.toFixed(1);
+    document.getElementById('statPoints').textContent = currentTrail.length;
+
+    // Auto pan
+    map.panTo([lat, lng], { animate: true, duration: 0.5 });
+  }
+}
+
+function onGpsError(err) {
+  console.warn('GPS error:', err.message);
+}
+
+function stopTracking() {
+  isTracking = false;
+
+  if (watchId !== null) {
+    navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+  }
+
+  clearInterval(timerInterval);
+
+  // UI
+  document.getElementById('btnStart').disabled = false;
+  document.getElementById('btnStop').disabled = true;
+  setStatus('paused', 'Selesai');
+
+  // Save trail
+  if (currentTrail.length >= 2) {
+    saveTrail();
+    alert(`✅ Jejak disimpan!\n📍 ${currentTrail.length} titik\n📏 ${totalDistance.toFixed(1)} meter`);
+  } else {
+    alert('Rekaman terlalu pendek (butuh minimal 2 titik GPS).');
+  }
+}
+
+// ── TIMER ──
+function updateTimer() {
+  if (!startTime) return;
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const s = String(elapsed % 60).padStart(2, '0');
+  document.getElementById('statTime').textContent = `${m}:${s}`;
+}
+
+// ── STATUS ──
+function setStatus(state, text) {
+  const dot = document.getElementById('statusDot');
+  const label = document.getElementById('statusText');
+  dot.className = 'status-dot ' + state;
+  label.textContent = text;
+}
+
+// ── CENTER MAP ──
+function centerMap() {
+  if (myMarker) {
+    map.flyTo(myMarker.getLatLng(), 17, { duration: 1 });
+  } else {
+    navigator.geolocation.getCurrentPosition(pos => {
+      map.flyTo([pos.coords.latitude, pos.coords.longitude], 17, { duration: 1 });
+    });
+  }
+}
+
+// ── HAVERSINE ──
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 +
+            Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// ── STORAGE ──
+function loadTrails() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch { return []; }
+}
+
+function saveTrail() {
+  const trails = loadTrails();
+  const endTime = Date.now();
+  const durationSec = Math.floor((endTime - startTime) / 1000);
+
+  trails.unshift({
+    id: endTime,
+    date: new Date(startTime).toLocaleString('id-ID'),
+    duration: durationSec,
+    distance: totalDistance,
+    points: currentTrail.length,
+    trail: currentTrail
+  });
+
+  // Keep max 20 trails
+  if (trails.length > 20) trails.splice(20);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(trails));
+}
+
+// ── HISTORY MODAL ──
+function openHistory() {
+  const trails = loadTrails();
+  const list = document.getElementById('historyList');
+
+  if (trails.length === 0) {
+    list.innerHTML = '<div class="history-empty">Belum ada riwayat jejak.<br>Mulai rekam perjalananmu!</div>';
+  } else {
+    list.innerHTML = trails.map((t, i) => `
+      <div class="history-item" id="hi-${t.id}">
+        <div class="history-item-top">
+          <div class="history-date">📅 ${t.date}</div>
+          <div class="history-duration">${formatDuration(t.duration)}</div>
+        </div>
+        <div class="history-meta">
+          <span>📏 ${t.distance.toFixed(1)} m</span>
+          <span>📍 ${t.points} titik</span>
+        </div>
+        <div class="history-actions">
+          <button class="btn-sm btn-show" onclick="showHistoryTrail(${i})">🗺 Tampilkan</button>
+          <button class="btn-sm btn-delete" onclick="deleteTrail(${i})">🗑 Hapus</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('historyModal').classList.add('show');
+}
+
+function closeHistory() {
+  document.getElementById('historyModal').classList.remove('show');
+}
+
+function closeHistoryOutside(e) {
+  if (e.target === document.getElementById('historyModal')) closeHistory();
+}
+
+function formatDuration(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// ── SHOW HISTORY TRAIL ON MAP ──
+function showHistoryTrail(index) {
+  const trails = loadTrails();
+  const t = trails[index];
+  if (!t || !t.trail || t.trail.length < 2) return;
+
+  clearDisplayedHistory();
+
+  const latlngs = t.trail.map(p => [p.lat, p.lng]);
+
+  // Draw trail line (blue for history)
+  const poly = L.polyline(latlngs, {
+    color: '#1f36a6',
+    weight: 4,
+    opacity: 0.8,
+    dashArray: '6 4',
+    lineJoin: 'round'
+  }).addTo(map);
+
+  // Start marker (green)
+  const startIcon = L.divIcon({
+    html: '<div style="width:14px;height:14px;border-radius:50%;background:#16a34a;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4)"></div>',
+    iconSize: [14,14], iconAnchor: [7,7]
+  });
+  const endIcon = L.divIcon({
+    html: '<div style="width:14px;height:14px;border-radius:50%;background:#dc2626;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4)"></div>',
+    iconSize: [14,14], iconAnchor: [7,7]
+  });
+
+  const mStart = L.marker(latlngs[0], { icon: startIcon })
+    .bindPopup(`<b>Start</b><br>${t.date}`)
+    .addTo(map);
+  const mEnd = L.marker(latlngs[latlngs.length - 1], { icon: endIcon })
+    .bindPopup(`<b>Finish</b><br>📏 ${t.distance.toFixed(1)} m`)
+    .addTo(map);
+
+  displayedHistoryPolylines.push(poly, mStart, mEnd);
+
+  // Fit map to trail
+  map.fitBounds(poly.getBounds(), { padding: [40, 40] });
+
+  closeHistory();
+}
+
+function clearDisplayedHistory() {
+  displayedHistoryPolylines.forEach(l => map.removeLayer(l));
+  displayedHistoryPolylines = [];
+}
+
+function deleteTrail(index) {
+  if (!confirm('Hapus jejak ini?')) return;
+  const trails = loadTrails();
+  trails.splice(index, 1);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(trails));
+  openHistory(); // refresh modal
+}
+
+// ── NAV ──
+function goBack() {
+  window.location.href = './home.html';
+}
+
+// ── USER NAME ──
+function loadUser() {
+  const nama = localStorage.getItem('presence_nama') || '';
+  const nim = localStorage.getItem('presence_nim') || '';
+  const el = document.getElementById('userName');
+  el.textContent = nama ? `${nama} · ${nim}` : 'Maps & Jejak Lokasi';
+}
+
+// ── BOOT ──
+loadUser();
+initMap();
+</script>
+</body>
+</html>
