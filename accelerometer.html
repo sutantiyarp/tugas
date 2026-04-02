@@ -6,39 +6,108 @@
   <title>Accelerometer</title>
 
   <style>
+    :root {
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --primary: #1f36a6;
+      --danger: #ef4444;
+      --border: #e5e7eb;
+      --shadow: 0 10px 28px rgba(0,0,0,0.10);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f3f4f6;
-      text-align: center;
-      padding: 20px;
+      background: var(--bg);
+      color: var(--text);
+      padding: 22px 16px 40px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
     }
 
     h1 {
-      margin-bottom: 10px;
+      margin: 10px 0 22px;
+      text-align: center;
+      font-size: 34px;
+      font-weight: 800;
     }
 
     .card {
-      background: white;
-      border-radius: 16px;
+      background: var(--card);
+      border-radius: var(--radius);
       padding: 20px;
-      margin: 20px auto;
-      max-width: 400px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 18px;
     }
 
-    .value {
-      font-size: 20px;
-      margin: 8px 0;
-      font-weight: bold;
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
     }
 
-    button {
-      margin-top: 12px;
-      padding: 12px 16px;
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .metric-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 10px;
+      text-align: center;
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-dir {
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 700;
+      min-height: 18px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      height: 48px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 16px;
+      font-weight: 700;
       cursor: pointer;
     }
 
@@ -53,128 +122,375 @@
     }
 
     .status {
-      margin-top: 12px;
+      margin-top: 14px;
+      text-align: center;
       font-size: 14px;
-      color: #555;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 320px;
+    }
+
+    .legend-note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .info-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .info-value {
+      font-size: 15px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-wrap {
+        height: 280px;
+      }
     }
   </style>
 </head>
-
 <body>
+  <div class="container">
+    <h1>Accelerometer</h1>
 
-  <h1>Accelerometer</h1>
+    <div class="card">
+      <h2 class="section-title">Live Sensor</h2>
 
-  <div class="card">
-    <div class="value">X: <span id="x">0</span></div>
-    <div class="value">Y: <span id="y">0</span></div>
-    <div class="value">Z: <span id="z">0</span></div>
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-label">X</div>
+          <div class="metric-value" id="x">0.000</div>
+          <div class="metric-dir" id="dirX">diam</div>
+        </div>
 
-    <button class="btn-start" onclick="startAccel()">Start</button>
-    <button class="btn-stop" onclick="stopAccel()">Stop</button>
+        <div class="metric-box">
+          <div class="metric-label">Y</div>
+          <div class="metric-value" id="y">0.000</div>
+          <div class="metric-dir" id="dirY">diam</div>
+        </div>
 
-    <div class="status" id="status">Belum aktif</div>
+        <div class="metric-box">
+          <div class="metric-label">Z</div>
+          <div class="metric-value" id="z">0.000</div>
+          <div class="metric-dir" id="dirZ">diam</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-start" onclick="startAccel()">Start</button>
+        <button class="btn btn-stop" onclick="stopAccel()">Stop</button>
+      </div>
+
+      <div class="status" id="status">Belum aktif</div>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="info-label">Device ID</div>
+          <div class="info-value" id="deviceIdText">-</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Kirim ke Sheet</div>
+          <div class="info-value" id="sendInfo">Menunggu start</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Grafik Realtime X / Y / Z</h2>
+
+      <div class="chart-wrap">
+        <canvas id="accelChart"></canvas>
+      </div>
+
+      <div class="legend-note">
+        Arah pembacaan:
+        <br>X → depan / belakang
+        <br>Y → kanan / kiri
+        <br>Z → atas / bawah
+      </div>
+    </div>
   </div>
 
-<script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzwEOB4ji8PBSv7tIX4xz1Dhbn6xK93P-fY2Hw6QusCcN3QgA51HOuRx9umvuXQFl42/exec";
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzwEOB4ji8PBSv7tIX4xz1Dhbn6xK93P-fY2Hw6QusCcN3QgA51HOuRx9umvuXQFl42/exec";
 
-let running = false;
-let lastSent = 0;
+    let running = false;
+    let lastSent = 0;
+    let chart = null;
 
-// ambil device_id dari localStorage
-function getDeviceId() {
-  return localStorage.getItem("presence_device_id") || "";
-}
+    const MAX_POINTS = 30;
+    const THRESHOLD = 0.8;
 
-function updateUI(x, y, z) {
-  document.getElementById("x").innerText = x.toFixed(3);
-  document.getElementById("y").innerText = y.toFixed(3);
-  document.getElementById("z").innerText = z.toFixed(3);
-}
+    function getDeviceId() {
+      return localStorage.getItem("presence_device_id") || "";
+    }
 
-function setStatus(text) {
-  document.getElementById("status").innerText = text;
-}
+    function setStatus(text) {
+      document.getElementById("status").innerText = text;
+    }
 
-// JSONP helper
-function sendData(params) {
-  const url = GAS_URL + "?" + new URLSearchParams(params).toString();
+    function setSendInfo(text) {
+      document.getElementById("sendInfo").innerText = text;
+    }
 
-  const script = document.createElement("script");
-  script.src = url;
-  document.body.appendChild(script);
+    function updateUI(x, y, z) {
+      document.getElementById("x").innerText = x.toFixed(3);
+      document.getElementById("y").innerText = y.toFixed(3);
+      document.getElementById("z").innerText = z.toFixed(3);
 
-  setTimeout(() => {
-    script.remove();
-  }, 2000);
-}
+      document.getElementById("dirX").innerText = getDirectionX(x);
+      document.getElementById("dirY").innerText = getDirectionY(y);
+      document.getElementById("dirZ").innerText = getDirectionZ(z);
+    }
 
-// START
-async function startAccel() {
-  const deviceId = getDeviceId();
+    function getDirectionX(x) {
+      if (x > THRESHOLD) return "depan";
+      if (x < -THRESHOLD) return "belakang";
+      return "diam";
+    }
 
-  if (!deviceId) {
-    alert("Device ID tidak ditemukan. Kembali ke registrasi.");
-    return;
-  }
+    function getDirectionY(y) {
+      if (y > THRESHOLD) return "kanan";
+      if (y < -THRESHOLD) return "kiri";
+      return "diam";
+    }
 
-  // iOS permission
-  if (typeof DeviceMotionEvent.requestPermission === "function") {
-    try {
-      const res = await DeviceMotionEvent.requestPermission();
-      if (res !== "granted") {
-        alert("Permission ditolak");
+    function getDirectionZ(z) {
+      if (z > 10.2) return "atas";
+      if (z < 9.0) return "bawah";
+      return "diam";
+    }
+
+    function initChart() {
+      const ctx = document.getElementById("accelChart").getContext("2d");
+
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: "X",
+              data: [],
+              borderColor: "#2563eb",
+              backgroundColor: "rgba(37,99,235,0.15)",
+              tension: 0.25,
+              pointRadius: 2,
+              borderWidth: 2
+            },
+            {
+              label: "Y",
+              data: [],
+              borderColor: "#16a34a",
+              backgroundColor: "rgba(22,163,74,0.15)",
+              tension: 0.25,
+              pointRadius: 2,
+              borderWidth: 2
+            },
+            {
+              label: "Z",
+              data: [],
+              borderColor: "#ef4444",
+              backgroundColor: "rgba(239,68,68,0.15)",
+              tension: 0.25,
+              pointRadius: 2,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          scales: {
+            y: {
+              suggestedMin: -12,
+              suggestedMax: 12,
+              title: {
+                display: true,
+                text: "Nilai percepatan"
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Waktu"
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true
+            }
+          }
+        }
+      });
+    }
+
+    function addChartPoint(x, y, z) {
+      if (!chart) return;
+
+      const now = new Date();
+      const label = now.toLocaleTimeString("id-ID", {
+        minute: "2-digit",
+        second: "2-digit"
+      });
+
+      chart.data.labels.push(label);
+      chart.data.datasets[0].data.push(Number(x.toFixed(3)));
+      chart.data.datasets[1].data.push(Number(y.toFixed(3)));
+      chart.data.datasets[2].data.push(Number(z.toFixed(3)));
+
+      if (chart.data.labels.length > MAX_POINTS) {
+        chart.data.labels.shift();
+        chart.data.datasets.forEach(ds => ds.data.shift());
+      }
+
+      chart.update("none");
+    }
+
+    function sendData(params) {
+      const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+      const script = document.createElement("script");
+
+      window[callbackName] = function () {
+        cleanup();
+      };
+
+      function cleanup() {
+        try { delete window[callbackName]; } catch (e) {}
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      const query = new URLSearchParams({
+        ...params,
+        callback: callbackName
+      }).toString();
+
+      script.src = GAS_URL + "?" + query;
+      script.onerror = cleanup;
+      document.body.appendChild(script);
+
+      setTimeout(cleanup, 3000);
+    }
+
+    async function startAccel() {
+      const deviceId = getDeviceId();
+
+      if (!deviceId) {
+        alert("Device ID tidak ditemukan. Silakan kembali ke registrasi.");
         return;
       }
-    } catch (err) {
-      alert("Gagal request permission");
-      return;
+
+      document.getElementById("deviceIdText").innerText = deviceId;
+
+      if (typeof DeviceMotionEvent === "undefined") {
+        alert("Sensor accelerometer tidak didukung browser ini.");
+        return;
+      }
+
+      if (typeof DeviceMotionEvent.requestPermission === "function") {
+        try {
+          const permission = await DeviceMotionEvent.requestPermission();
+          if (permission !== "granted") {
+            alert("Izin sensor ditolak.");
+            return;
+          }
+        } catch (err) {
+          alert("Gagal meminta izin sensor.");
+          return;
+        }
+      }
+
+      if (running) return;
+
+      running = true;
+      setStatus("Aktif membaca sensor...");
+      setSendInfo("Pengiriman aktif");
+
+      window.addEventListener("devicemotion", handleMotion);
     }
-  }
 
-  running = true;
-  setStatus("Aktif...");
+    function stopAccel() {
+      running = false;
+      window.removeEventListener("devicemotion", handleMotion);
+      setStatus("Berhenti");
+      setSendInfo("Pengiriman dihentikan");
+    }
 
-  window.addEventListener("devicemotion", handleMotion);
-}
+    function handleMotion(event) {
+      if (!running) return;
 
-// STOP
-function stopAccel() {
-  running = false;
-  setStatus("Berhenti");
-  window.removeEventListener("devicemotion", handleMotion);
-}
+      const acc = event.accelerationIncludingGravity || event.acceleration;
+      if (!acc) return;
 
-// HANDLE DATA
-function handleMotion(event) {
-  if (!running) return;
+      const x = acc.x || 0;
+      const y = acc.y || 0;
+      const z = acc.z || 0;
 
-  const acc = event.accelerationIncludingGravity;
-  if (!acc) return;
+      updateUI(x, y, z);
+      addChartPoint(x, y, z);
 
-  const x = acc.x || 0;
-  const y = acc.y || 0;
-  const z = acc.z || 0;
+      const now = Date.now();
 
-  updateUI(x, y, z);
+      if (now - lastSent > 1000) {
+        lastSent = now;
 
-  const now = Date.now();
+        sendData({
+          action: "accel",
+          device_id: getDeviceId(),
+          ts: new Date(now).toISOString(),
+          x: x.toFixed(4),
+          y: y.toFixed(4),
+          z: z.toFixed(4)
+        });
 
-  // kirim tiap 1 detik
-  if (now - lastSent > 1000) {
-    lastSent = now;
+        setSendInfo("Terkirim: " + new Date(now).toLocaleTimeString("id-ID"));
+      }
+    }
 
-    sendData({
-      action: "accel",
-      device_id: getDeviceId(),
-      ts: now,
-      x: x,
-      y: y,
-      z: z
-    });
-  }
-}
-</script>
-
+    initChart();
+    document.getElementById("deviceIdText").innerText = getDeviceId() || "-";
+  </script>
 </body>
 </html>
