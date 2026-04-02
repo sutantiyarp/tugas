@@ -2,677 +2,179 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Accelerometer</title>
+
   <style>
-    :root {
-      --primary: #243caa;
-      --bg: #f3f4f6;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --shadow: 0 8px 24px rgba(0,0,0,0.08);
-      --radius: 20px;
-      --success-bg: #dcfce7;
-      --success-text: #166534;
-      --warn-bg: #fef3c7;
-      --warn-text: #92400e;
-      --error-bg: #fee2e2;
-      --error-text: #991b1b;
-      --info-bg: #dbeafe;
-      --info-text: #1d4ed8;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .topbar {
-      background: var(--primary);
-      color: white;
-      padding: 18px 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .back-btn {
-      border: none;
-      background: transparent;
-      color: white;
-      font-size: 38px;
-      line-height: 1;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .topbar-title {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 0;
-    }
-
-    .topbar-sub {
-      margin-top: 4px;
-      font-size: 14px;
-      opacity: 0.9;
-    }
-
-    .container {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 18px;
-      display: grid;
-      gap: 18px;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-    }
-
-    .card h3 {
-      margin: 0 0 16px;
-      font-size: 18px;
-      color: var(--primary);
-    }
-
-    .user-grid,
-    .sensor-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .box {
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      background: #fafafa;
-    }
-
-    .label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .value {
-      font-size: 26px;
-      font-weight: bold;
-      word-break: break-word;
-    }
-
-    .direction-box {
+      background: #f3f4f6;
       text-align: center;
-      border: 1px solid #cfe0f7;
-      background: #f1f6ff;
-      border-radius: 20px;
-      padding: 18px;
+      padding: 20px;
     }
 
-    .direction-title {
-      font-size: 15px;
+    h1 {
       margin-bottom: 10px;
     }
 
-    .direction-main {
-      font-size: 34px;
-      font-weight: bold;
-      color: var(--primary);
-      margin-bottom: 8px;
-    }
-
-    .direction-sub {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .canvas-wrap {
-      border: 1px solid var(--border);
-      border-radius: 20px;
+    .card {
       background: white;
-      padding: 10px;
-      overflow: hidden;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 400px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
 
-    canvas {
-      width: 100%;
-      height: 300px;
-      display: block;
-    }
-
-    .small {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 10px;
-      line-height: 1.5;
-    }
-
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-    }
-
-    .btn {
-      height: 50px;
-      border: none;
-      border-radius: 14px;
-      font-size: 15px;
+    .value {
+      font-size: 20px;
+      margin: 8px 0;
       font-weight: bold;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
       cursor: pointer;
     }
 
-    .btn-primary {
-      background: var(--primary);
+    .btn-start {
+      background: #1f36a6;
       color: white;
     }
 
-    .btn-secondary {
-      background: #d1d5db;
-      color: #111827;
-    }
-
-    .btn-danger {
-      background: #fee2e2;
-      color: #991b1b;
+    .btn-stop {
+      background: #ef4444;
+      color: white;
     }
 
     .status {
-      display: none;
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: 14px;
+      margin-top: 12px;
       font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .status.show { display: block; }
-    .status.success { background: var(--success-bg); color: var(--success-text); }
-    .status.warning { background: var(--warn-bg); color: var(--warn-text); }
-    .status.error { background: var(--error-bg); color: var(--error-text); }
-    .status.info { background: var(--info-bg); color: var(--info-text); }
-
-    .footer-note {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 10px;
-    }
-
-    @media (max-width: 640px) {
-      .user-grid,
-      .sensor-grid,
-      .controls {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .controls .btn:last-child {
-        grid-column: 1 / -1;
-      }
-
-      .value {
-        font-size: 22px;
-      }
-
-      .direction-main {
-        font-size: 30px;
-      }
+      color: #555;
     }
   </style>
 </head>
+
 <body>
-  <div class="topbar">
-    <button class="back-btn" onclick="goBack()">‹</button>
-    <div>
-      <div class="topbar-title">Accelerometer</div>
-      <div class="topbar-sub">Grafik gerak X dan Y dari Google Sheets</div>
-    </div>
+
+  <h1>Accelerometer</h1>
+
+  <div class="card">
+    <div class="value">X: <span id="x">0</span></div>
+    <div class="value">Y: <span id="y">0</span></div>
+    <div class="value">Z: <span id="z">0</span></div>
+
+    <button class="btn-start" onclick="startAccel()">Start</button>
+    <button class="btn-stop" onclick="stopAccel()">Stop</button>
+
+    <div class="status" id="status">Belum aktif</div>
   </div>
 
-  <div class="container">
-    <div class="card">
-      <h3>Data Pengguna</h3>
-      <div class="user-grid">
-        <div class="box">
-          <div class="label">Nama</div>
-          <div class="value" id="userNama">-</div>
-        </div>
-        <div class="box">
-          <div class="label">NIM</div>
-          <div class="value" id="userNim">-</div>
-        </div>
-      </div>
-    </div>
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzwEOB4ji8PBSv7tIX4xz1Dhbn6xK93P-fY2Hw6QusCcN3QgA51HOuRx9umvuXQFl42/exec";
 
-    <div class="card">
-      <h3>Nilai Sensor Saat Ini</h3>
-      <div class="sensor-grid">
-        <div class="box">
-          <div class="label">X</div>
-          <div class="value" id="valX">0.00</div>
-        </div>
-        <div class="box">
-          <div class="label">Y</div>
-          <div class="value" id="valY">0.00</div>
-        </div>
-        <div class="box">
-          <div class="label">Z</div>
-          <div class="value" id="valZ">0.00</div>
-        </div>
-        <div class="box">
-          <div class="label">Magnitude</div>
-          <div class="value" id="valM">0.00</div>
-        </div>
-      </div>
-    </div>
+let running = false;
+let lastSent = 0;
 
-    <div class="card">
-      <h3>Arah Gerakan Dominan</h3>
-      <div class="direction-box">
-        <div class="direction-title">Status Gerak</div>
-        <div class="direction-main" id="directionText">Diam</div>
-        <div class="direction-sub" id="directionMeta">Belum ada gerakan signifikan.</div>
-      </div>
-    </div>
+// ambil device_id dari localStorage
+function getDeviceId() {
+  return localStorage.getItem("presence_device_id") || "";
+}
 
-    <div class="card">
-      <h3>Grafik Gerak X dan Y</h3>
-      <div class="canvas-wrap">
-        <canvas id="chartXY" width="700" height="300"></canvas>
-      </div>
-      <div class="small">
-        Garis merah = X (kanan/kiri), garis hijau = Y (atas/bawah)
-      </div>
-      <div class="small">
-        X positif = kanan, X negatif = kiri, Y positif = atas, Y negatif = bawah
-      </div>
-    </div>
+function updateUI(x, y, z) {
+  document.getElementById("x").innerText = x.toFixed(3);
+  document.getElementById("y").innerText = y.toFixed(3);
+  document.getElementById("z").innerText = z.toFixed(3);
+}
 
-    <div class="card">
-      <h3>Kontrol</h3>
-      <div class="controls">
-        <button class="btn btn-primary" id="btnStart" onclick="startTracking()">Mulai Rekam</button>
-        <button class="btn btn-danger" id="btnStop" onclick="stopTracking()" disabled>Stop</button>
-        <button class="btn btn-secondary" onclick="fetchHistory()">Refresh Grafik</button>
-      </div>
-      <div id="msg" class="status"></div>
-      <div class="footer-note" id="lastInfo">Belum ada kiriman data.</div>
-    </div>
-  </div>
+function setStatus(text) {
+  document.getElementById("status").innerText = text;
+}
 
-  <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzwEOB4ji8PBSv7tIX4xz1Dhbn6xK93P-fY2Hw6QusCcN3QgA51HOuRx9umvuXQFl42/exec";
+// JSONP helper
+function sendData(params) {
+  const url = GAS_URL + "?" + new URLSearchParams(params).toString();
 
-    const nama = localStorage.getItem("presence_nama") || "";
-    const nim  = localStorage.getItem("presence_nim") || "";
+  const script = document.createElement("script");
+  script.src = url;
+  document.body.appendChild(script);
 
-    const userNama = document.getElementById("userNama");
-    const userNim  = document.getElementById("userNim");
+  setTimeout(() => {
+    script.remove();
+  }, 2000);
+}
 
-    const valX = document.getElementById("valX");
-    const valY = document.getElementById("valY");
-    const valZ = document.getElementById("valZ");
-    const valM = document.getElementById("valM");
+// START
+async function startAccel() {
+  const deviceId = getDeviceId();
 
-    const directionText = document.getElementById("directionText");
-    const directionMeta = document.getElementById("directionMeta");
+  if (!deviceId) {
+    alert("Device ID tidak ditemukan. Kembali ke registrasi.");
+    return;
+  }
 
-    const msgBox = document.getElementById("msg");
-    const lastInfo = document.getElementById("lastInfo");
-
-    const btnStart = document.getElementById("btnStart");
-    const btnStop = document.getElementById("btnStop");
-
-    const chartXY = document.getElementById("chartXY");
-
-    let sensorStarted = false;
-    let pollTimer = null;
-    let simTimer = null;
-    let currentX = 0;
-    let currentY = 0;
-    let currentZ = 0;
-    let lastSentAt = 0;
-    let lastDirection = "diam";
-
-    const SEND_THRESHOLD = 2.2;
-    const SEND_GAP_MS = 700;
-    const HISTORY_LIMIT = 40;
-
-    userNama.textContent = nama || "-";
-    userNim.textContent = nim || "-";
-
-    function goBack() {
-      window.location.href = "./home.html";
-    }
-
-    function showMessage(text, type = "info") {
-      msgBox.textContent = text;
-      msgBox.className = "status show " + type;
-    }
-
-    function jsonpRequest(url) {
-      return new Promise((resolve, reject) => {
-        const cbName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
-        const script = document.createElement("script");
-        const sep = url.includes("?") ? "&" : "?";
-
-        window[cbName] = function(data) {
-          cleanup();
-          resolve(data);
-        };
-
-        function cleanup() {
-          delete window[cbName];
-          if (script.parentNode) script.parentNode.removeChild(script);
-        }
-
-        script.src = url + sep + "callback=" + cbName;
-        script.onerror = function() {
-          cleanup();
-          reject(new Error("Gagal menghubungi server"));
-        };
-
-        document.body.appendChild(script);
-      });
-    }
-
-    function updateLiveDisplay(x, y, z) {
-      valX.textContent = Number(x).toFixed(2);
-      valY.textContent = Number(y).toFixed(2);
-      valZ.textContent = Number(z).toFixed(2);
-      valM.textContent = Math.max(Math.abs(x), Math.abs(y), Math.abs(z)).toFixed(2);
-    }
-
-    function detectDirection(x, y, z) {
-      const absX = Math.abs(x);
-      const absY = Math.abs(y);
-      const absZ = Math.abs(z);
-
-      if (absX < SEND_THRESHOLD && absY < SEND_THRESHOLD) {
-        return {
-          axis: "NONE",
-          direction: "diam",
-          magnitude: Math.max(absX, absY, absZ)
-        };
-      }
-
-      if (absX >= absY && absX >= absZ) {
-        return {
-          axis: "X",
-          direction: x >= 0 ? "kanan" : "kiri",
-          magnitude: absX
-        };
-      }
-
-      if (absY >= absX && absY >= absZ) {
-        return {
-          axis: "Y",
-          direction: y >= 0 ? "atas" : "bawah",
-          magnitude: absY
-        };
-      }
-
-      return {
-        axis: "Z",
-        direction: z >= 0 ? "depan" : "belakang",
-        magnitude: absZ
-      };
-    }
-
-    function updateDirectionUI(result) {
-      const label = result.direction.charAt(0).toUpperCase() + result.direction.slice(1);
-      directionText.textContent = label;
-      directionMeta.textContent = `Axis: ${result.axis} | Magnitude: ${result.magnitude.toFixed(2)}`;
-    }
-
-    async function sendAccelSample(x, y, z) {
-      const now = Date.now();
-      const result = detectDirection(x, y, z);
-
-      updateDirectionUI(result);
-
-      if (result.direction === "diam") return;
-      if (now - lastSentAt < SEND_GAP_MS && result.direction === lastDirection) return;
-
-      const url =
-        GAS_URL +
-        "?action=accel_batch" +
-        "&name=" + encodeURIComponent(nama) +
-        "&nim=" + encodeURIComponent(nim) +
-        "&x=" + encodeURIComponent(Number(x).toFixed(4)) +
-        "&y=" + encodeURIComponent(Number(y).toFixed(4)) +
-        "&z=" + encodeURIComponent(Number(z).toFixed(4)) +
-        "&ts=" + encodeURIComponent(now) +
-        "&_ts=" + now;
-
-      try {
-        const res = await jsonpRequest(url);
-
-        if (res && res.ok) {
-          lastSentAt = now;
-          lastDirection = result.direction;
-          lastInfo.textContent = "Terakhir kirim: " + new Date().toLocaleTimeString("id-ID");
-          showMessage("Data accelerometer berhasil dikirim.", "success");
-        } else {
-          showMessage("Gagal mengirim data accelerometer.", "error");
-        }
-      } catch (err) {
-        showMessage("Gagal menghubungi server: " + err.message, "error");
-      }
-    }
-
-    function onMotion(e) {
-      const acc = e.accelerationIncludingGravity || e.acceleration;
-      if (!acc) return;
-
-      currentX = Number(acc.x || 0);
-      currentY = Number(acc.y || 0);
-      currentZ = Number(acc.z || 0);
-
-      updateLiveDisplay(currentX, currentY, currentZ);
-      sendAccelSample(currentX, currentY, currentZ);
-    }
-
-    function startSimulation() {
-      showMessage("Sensor tidak tersedia. Mode simulasi aktif.", "warning");
-
-      let t = 0;
-      simTimer = setInterval(() => {
-        t += 0.18;
-        currentX = Math.sin(t) * 4.8;
-        currentY = Math.cos(t * 1.3) * 4.8;
-        currentZ = 9.8;
-
-        updateLiveDisplay(currentX, currentY, currentZ);
-        sendAccelSample(currentX, currentY, currentZ);
-      }, 500);
-    }
-
-    async function startTracking() {
-      if (!nama || !nim) {
-        showMessage("Nama/NIM tidak ditemukan. Silakan kembali ke halaman awal.", "error");
+  // iOS permission
+  if (typeof DeviceMotionEvent.requestPermission === "function") {
+    try {
+      const res = await DeviceMotionEvent.requestPermission();
+      if (res !== "granted") {
+        alert("Permission ditolak");
         return;
       }
-
-      btnStart.disabled = true;
-      btnStop.disabled = false;
-
-      if (sensorStarted) return;
-
-      try {
-        if (typeof DeviceMotionEvent === "undefined") {
-          startSimulation();
-        } else if (typeof DeviceMotionEvent.requestPermission === "function") {
-          const permission = await DeviceMotionEvent.requestPermission();
-          if (permission === "granted") {
-            window.addEventListener("devicemotion", onMotion);
-            showMessage("Sensor accelerometer aktif.", "success");
-          } else {
-            startSimulation();
-          }
-        } else {
-          window.addEventListener("devicemotion", onMotion);
-          showMessage("Sensor accelerometer aktif.", "success");
-        }
-
-        sensorStarted = true;
-
-        fetchHistory();
-        if (pollTimer) clearInterval(pollTimer);
-        pollTimer = setInterval(fetchHistory, 2000);
-      } catch (err) {
-        startSimulation();
-        sensorStarted = true;
-
-        fetchHistory();
-        if (pollTimer) clearInterval(pollTimer);
-        pollTimer = setInterval(fetchHistory, 2000);
-      }
+    } catch (err) {
+      alert("Gagal request permission");
+      return;
     }
+  }
 
-    function stopTracking() {
-      btnStart.disabled = false;
-      btnStop.disabled = true;
+  running = true;
+  setStatus("Aktif...");
 
-      window.removeEventListener("devicemotion", onMotion);
+  window.addEventListener("devicemotion", handleMotion);
+}
 
-      if (pollTimer) {
-        clearInterval(pollTimer);
-        pollTimer = null;
-      }
+// STOP
+function stopAccel() {
+  running = false;
+  setStatus("Berhenti");
+  window.removeEventListener("devicemotion", handleMotion);
+}
 
-      if (simTimer) {
-        clearInterval(simTimer);
-        simTimer = null;
-      }
+// HANDLE DATA
+function handleMotion(event) {
+  if (!running) return;
 
-      sensorStarted = false;
-      showMessage("Tracking accelerometer dihentikan.", "warning");
-    }
+  const acc = event.accelerationIncludingGravity;
+  if (!acc) return;
 
-    async function fetchHistory() {
-      if (!nim) return;
+  const x = acc.x || 0;
+  const y = acc.y || 0;
+  const z = acc.z || 0;
 
-      const url =
-        GAS_URL +
-        "?action=accel_latest" +
-        "&nim=" + encodeURIComponent(nim) +
-        "&limit=" + HISTORY_LIMIT +
-        "&_ts=" + Date.now();
+  updateUI(x, y, z);
 
-      try {
-        const res = await jsonpRequest(url);
+  const now = Date.now();
 
-        if (!res || !res.ok || !Array.isArray(res.data)) {
-          showMessage("Gagal mengambil data grafik.", "error");
-          return;
-        }
+  // kirim tiap 1 detik
+  if (now - lastSent > 1000) {
+    lastSent = now;
 
-        const xValues = res.data.map(item => Number(item.x));
-        const yValues = res.data.map(item => Number(item.y));
+    sendData({
+      action: "accel",
+      device_id: getDeviceId(),
+      ts: now,
+      x: x,
+      y: y,
+      z: z
+    });
+  }
+}
+</script>
 
-        drawCombinedChart(chartXY, xValues, yValues);
-      } catch (err) {
-        showMessage("Gagal mengambil history: " + err.message, "error");
-      }
-    }
-
-    function drawCombinedChart(canvas, xValues, yValues) {
-      const ctx = canvas.getContext("2d");
-      const w = canvas.width;
-      const h = canvas.height;
-
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, w, h);
-
-      const padding = 40;
-      const graphW = w - padding * 2;
-      const graphH = h - padding * 2;
-      const midY = h / 2;
-
-      ctx.strokeStyle = "#dbe2ea";
-      ctx.lineWidth = 1;
-
-      for (let i = 0; i < 5; i++) {
-        const y = padding + (graphH / 4) * i;
-        ctx.beginPath();
-        ctx.moveTo(padding, y);
-        ctx.lineTo(w - padding, y);
-        ctx.stroke();
-      }
-
-      ctx.beginPath();
-      ctx.moveTo(padding, midY);
-      ctx.lineTo(w - padding, midY);
-      ctx.strokeStyle = "#94a3b8";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.fillStyle = "#6b7280";
-      ctx.font = "12px Arial";
-      ctx.fillText("Positif", 8, padding + 6);
-      ctx.fillText("0", 16, midY + 4);
-      ctx.fillText("Negatif", 8, h - padding + 2);
-
-      ctx.fillStyle = "#ef4444";
-      ctx.fillRect(w - 185, 14, 16, 4);
-      ctx.fillStyle = "#111827";
-      ctx.fillText("X (kanan/kiri)", w - 160, 20);
-
-      ctx.fillStyle = "#22c55e";
-      ctx.fillRect(w - 185, 34, 16, 4);
-      ctx.fillStyle = "#111827";
-      ctx.fillText("Y (atas/bawah)", w - 160, 40);
-
-      if (!xValues.length && !yValues.length) return;
-
-      const merged = [...xValues, ...yValues];
-      const maxAbs = Math.max(5, ...merged.map(v => Math.abs(v)));
-      const len = Math.max(xValues.length, yValues.length);
-      const stepX = len > 1 ? graphW / (len - 1) : graphW;
-
-      if (xValues.length) {
-        ctx.beginPath();
-        xValues.forEach((v, i) => {
-          const x = padding + i * stepX;
-          const y = midY - (v / maxAbs) * (graphH / 2);
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        });
-        ctx.strokeStyle = "#ef4444";
-        ctx.lineWidth = 3;
-        ctx.stroke();
-      }
-
-      if (yValues.length) {
-        ctx.beginPath();
-        yValues.forEach((v, i) => {
-          const x = padding + i * stepX;
-          const y = midY - (v / maxAbs) * (graphH / 2);
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        });
-        ctx.strokeStyle = "#22c55e";
-        ctx.lineWidth = 3;
-        ctx.stroke();
-      }
-    }
-
-    showMessage("Tekan 'Mulai Rekam' untuk memulai sensor dan grafik.", "info");
-    fetchHistory();
-  </script>
 </body>
 </html>
