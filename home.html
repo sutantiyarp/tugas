@@ -430,6 +430,20 @@
           </div>
           <div class="feat-label feat-label-accel">Accelerometer</div>
         </button>
+        <button class="feature-btn" onclick="goToMaps()" aria-label="Maps dan Jejak Lokasi">
+          <div class="feat-icon">
+            <svg width="72" height="72" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="60" cy="46" r="18" stroke="#1F36A6" stroke-width="7" fill="#e8ecfb"/>
+              <circle cx="60" cy="46" r="7" fill="#1F36A6"/>
+              <path d="M60 64 Q60 90 60 96" stroke="#1F36A6" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="30" cy="88" r="5" fill="#ef4444"/>
+              <circle cx="45" cy="78" r="4" fill="#ef4444" opacity="0.6"/>
+              <circle cx="60" cy="96" r="5" fill="#ef4444"/>
+              <path d="M30 88 Q45 75 60 96" stroke="#ef4444" stroke-width="3" fill="none" stroke-dasharray="4 3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="feat-label" style="color:#ef4444;">Maps & Jejak</div>
+        </button>
       </div>
 
       <div class="helper">
@@ -530,6 +544,15 @@
         return;
       }
       window.location.href = "./accelerometer.html";
+    }
+
+    function goToMaps() {
+      const data = getStorageData();
+      if (!isComplete(data)) {
+        emptyState.classList.add("show");
+        return;
+      }
+      window.location.href = "./maps.html";
     }
 
     function resetData() {
