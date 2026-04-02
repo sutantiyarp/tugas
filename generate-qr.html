@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generate QR Presensi</title>
+  <style>
+    :root {
+      --primary: #1f36a6;
+      --primary-dark: #172a84;
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --success: #16a34a;
+      --error: #dc2626;
+      --warning: #d97706;
+      --shadow: 0 10px 30px rgba(0,0,0,0.10);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .topbar {
+      height: 86px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.16);
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      margin: 0 0 18px;
+      font-size: 20px;
+      color: var(--primary);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .field input {
+      height: 46px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0 14px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .field input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(31,54,166,0.10);
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      height: 48px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 8px 18px rgba(31,54,166,0.20);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #eef2ff;
+      color: var(--primary);
+      border: 1px solid #c7d2fe;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e7ff;
+    }
+
+    .status {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .status.show { display: block; }
+    .status.info {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+    .status.success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .status.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .status.warning {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .qr-wrap {
+      display: none;
+      text-align: center;
+    }
+
+    .qr-wrap.show {
+      display: block;
+    }
+
+    .session-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: left;
+      margin-bottom: 18px;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .session-box b {
+      color: var(--primary);
+    }
+
+    .qr-box {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      display: inline-block;
+      background: white;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.07);
+    }
+
+    .qr-box img {
+      width: 280px;
+      height: 280px;
+      display: block;
+    }
+
+    .token-box {
+      margin-top: 16px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .token-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .token-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 1px;
+      word-break: break-word;
+    }
+
+    .countdown {
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .countdown.ok { color: var(--success); }
+    .countdown.warn { color: var(--warning); }
+    .countdown.expired { color: var(--error); }
+
+    .helper {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .grid,
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .qr-box img {
+        width: 240px;
+        height: 240px;
+      }
+
+      .topbar h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>Generate QR Presensi</h1>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <h2>Form Sesi</h2>
+
+      <div class="grid">
+        <div class="field">
+          <label for="courseId">Course ID</label>
+          <input id="courseId" type="text" value="cloud-101" placeholder="Contoh: cloud-101" />
+        </div>
+
+        <div class="field">
+          <label for="sessionId">Session ID</label>
+          <input id="sessionId" type="text" value="sesi-02" placeholder="Contoh: sesi-02" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="btnGenerate" onclick="generateQr()">
+          Generate QR
+        </button>
+        <button class="btn btn-secondary" onclick="generateManualRefresh()">
+          Generate Ulang
+        </button>
+      </div>
+
+      <div id="msg" class="status"></div>
+    </div>
+
+    <div class="card qr-wrap" id="qrWrap">
+      <h2>QR Aktif</h2>
+
+      <div class="session-box">
+        <div><b>Course ID:</b> <span id="viewCourseId">-</span></div>
+        <div><b>Session ID:</b> <span id="viewSessionId">-</span></div>
+        <div><b>Expired At:</b> <span id="viewExpiresAt">-</span></div>
+      </div>
+
+      <div class="qr-box">
+        <img id="qrImage" alt="QR Code Presensi" />
+      </div>
+
+      <div class="token-box">
+        <div class="token-label">QR Token</div>
+        <div class="token-value" id="tokenValue">-</div>
+        <div class="countdown ok" id="countdownText">-</div>
+      </div>
+
+      <div class="helper">
+        QR akan otomatis diperbarui setiap 2 menit. Mahasiswa cukup scan dari halaman scanner GitHub Pages.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzwEOB4ji8PBSv7tIX4xz1Dhbn6xK93P-fY2Hw6QusCcN3QgA51HOuRx9umvuXQFl42/exec";
+
+    let autoRefreshTimer = null;
+    let countdownTimer = null;
+    let activeToken = "";
+    let activeExpiresAt = "";
+
+    const msgBox = document.getElementById("msg");
+    const qrWrap = document.getElementById("qrWrap");
+    const qrImage = document.getElementById("qrImage");
+    const tokenValue = document.getElementById("tokenValue");
+    const countdownText = document.getElementById("countdownText");
+
+    const viewCourseId = document.getElementById("viewCourseId");
+    const viewSessionId = document.getElementById("viewSessionId");
+    const viewExpiresAt = document.getElementById("viewExpiresAt");
+
+    function showMessage(text, type = "info") {
+      msgBox.textContent = text;
+      msgBox.className = "status show " + type;
+    }
+
+    function normalize(value) {
+      return String(value || "").trim();
+    }
+
+    function jsonpRequest(url) {
+      return new Promise((resolve, reject) => {
+        const cbName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+        const script = document.createElement("script");
+        const sep = url.includes("?") ? "&" : "?";
+
+        window[cbName] = function (data) {
+          cleanup();
+          resolve(data);
+        };
+
+        function cleanup() {
+          try { delete window[cbName]; } catch (_) {}
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        script.src = url + sep + "callback=" + cbName;
+        script.onerror = function () {
+          cleanup();
+          reject(new Error("Gagal menghubungi server GAS"));
+        };
+
+        document.body.appendChild(script);
+      });
+    }
+
+    function buildQrUrl(text) {
+      return "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" + encodeURIComponent(text);
+    }
+
+    async function generateQr() {
+      const courseId = normalize(document.getElementById("courseId").value);
+      const sessionId = normalize(document.getElementById("sessionId").value);
+
+      if (!courseId) {
+        showMessage("course_id wajib diisi.", "error");
+        return;
+      }
+
+      if (!sessionId) {
+        showMessage("session_id wajib diisi.", "error");
+        return;
+      }
+
+      showMessage("Membuat QR token...", "info");
+
+      const url =
+        GAS_URL +
+        "?action=generate_qr" +
+        "&course_id=" + encodeURIComponent(courseId) +
+        "&session_id=" + encodeURIComponent(sessionId) +
+        "&ts=" + encodeURIComponent(new Date().toISOString()) +
+        "&_ts=" + Date.now();
+
+      try {
+        const res = await jsonpRequest(url);
+
+        if (!res || !res.ok) {
+          showMessage("Gagal generate QR: " + ((res && res.error) || "unknown_error"), "error");
+          return;
+        }
+
+        const data = res.data || {};
+        activeToken = data.qr_token || "";
+        activeExpiresAt = data.expires_at || "";
+
+        if (!activeToken) {
+          showMessage("QR token tidak diterima dari server.", "error");
+          return;
+        }
+
+        viewCourseId.textContent = data.course_id || courseId;
+        viewSessionId.textContent = data.session_id || sessionId;
+        viewExpiresAt.textContent = activeExpiresAt || "-";
+
+        tokenValue.textContent = activeToken;
+        qrImage.src = buildQrUrl(activeToken);
+
+        qrWrap.classList.add("show");
+        showMessage("QR berhasil dibuat.", "success");
+
+        startCountdown();
+        startAutoRefresh();
+      } catch (err) {
+        showMessage("Gagal generate QR: " + err.message, "error");
+      }
+    }
+
+    function generateManualRefresh() {
+      generateQr();
+    }
+
+    function startAutoRefresh() {
+      if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+      autoRefreshTimer = setInterval(() => {
+        generateQr();
+      }, 2 * 60 * 1000);
+    }
+
+    function startCountdown() {
+      if (countdownTimer) clearInterval(countdownTimer);
+
+      function tick() {
+        if (!activeExpiresAt) {
+          countdownText.textContent = "-";
+          countdownText.className = "countdown ok";
+          return;
+        }
+
+        const now = new Date().getTime();
+        const exp = new Date(activeExpiresAt).getTime();
+        const diff = exp - now;
+
+        if (diff <= 0) {
+          countdownText.textContent = "Token sudah expired";
+          countdownText.className = "countdown expired";
+          return;
+        }
+
+        const totalSec = Math.floor(diff / 1000);
+        const min = Math.floor(totalSec / 60);
+        const sec = totalSec % 60;
+
+        countdownText.textContent = `Sisa waktu: ${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+        countdownText.className = "countdown " + (totalSec <= 30 ? "warn" : "ok");
+      }
+
+      tick();
+      countdownTimer = setInterval(tick, 1000);
+    }
+
+    // opsional: auto-generate pertama saat halaman dibuka
+    generateQr();
+  </script>
+</body>
+</html>
