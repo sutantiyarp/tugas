@@ -43,7 +43,7 @@
 
     .container {
       width: 100%;
-      max-width: 520px;
+      max-width: 560px;
       margin: 0 auto;
     }
 
@@ -109,6 +109,7 @@
 
     .user-label {
       color: var(--muted);
+      min-width: 100px;
     }
 
     .user-value {
@@ -341,7 +342,7 @@
         <div class="brand">📷</div>
         <div class="title-wrap">
           <h1>Scan QR Presensi</h1>
-          <p class="subtitle">Arahkan kamera ke QR Code yang diberikan untuk melakukan presensi.</p>
+          <p class="subtitle">Arahkan kamera ke QR Code untuk melakukan presensi.</p>
         </div>
       </div>
 
@@ -353,6 +354,14 @@
         <div class="user-item">
           <div class="user-label">NIM</div>
           <div class="user-value" id="userNim">-</div>
+        </div>
+        <div class="user-item">
+          <div class="user-label">User ID</div>
+          <div class="user-value" id="userIdView">-</div>
+        </div>
+        <div class="user-item">
+          <div class="user-label">Device ID</div>
+          <div class="user-value" id="deviceIdView">-</div>
         </div>
       </div>
 
@@ -386,10 +395,14 @@
 
     const nama = localStorage.getItem("presence_nama") || "";
     const nim = localStorage.getItem("presence_nim") || "";
+    const userId = localStorage.getItem("presence_user_id") || "";
+    let deviceId = localStorage.getItem("presence_device_id") || "";
 
     const msgBox = document.getElementById("msg");
     const userNama = document.getElementById("userNama");
     const userNim = document.getElementById("userNim");
+    const userIdView = document.getElementById("userIdView");
+    const deviceIdView = document.getElementById("deviceIdView");
     const scanFrame = document.querySelector(".scan-frame");
 
     let html5QrCode = null;
@@ -398,12 +411,32 @@
     let scanCooldown = false;
     let scanLocked = false;
 
-    userNama.textContent = nama || "-";
-    userNim.textContent = nim || "-";
-
     function showMessage(text, type = "info") {
       msgBox.textContent = text;
       msgBox.className = "status show " + type;
+    }
+
+    function normalize(value) {
+      return String(value || "").trim();
+    }
+
+    function makeDeviceId() {
+      return "DEV-" + Math.random().toString(16).slice(2, 10).toUpperCase();
+    }
+
+    function ensureDeviceId() {
+      if (!deviceId) {
+        deviceId = makeDeviceId();
+        localStorage.setItem("presence_device_id", deviceId);
+      }
+      return deviceId;
+    }
+
+    function renderUserInfo() {
+      userNama.textContent = nama || "-";
+      userNim.textContent = nim || "-";
+      userIdView.textContent = userId || "-";
+      deviceIdView.textContent = ensureDeviceId() || "-";
     }
 
     function setFrameState(state = "normal") {
@@ -416,14 +449,8 @@
       }
     }
 
-    function resetFrameSoon(delay = 1200) {
-      setTimeout(() => {
-        setFrameState("normal");
-      }, delay);
-    }
-
     function kembali() {
-      window.location.href = "./index.html";
+      window.location.href = "./home.html";
     }
 
     async function stopScanner() {
@@ -434,11 +461,39 @@
       }
     }
 
+    function jsonpRequest(url) {
+      return new Promise((resolve, reject) => {
+        const cbName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+        const script = document.createElement("script");
+        const sep = url.includes("?") ? "&" : "?";
+
+        window[cbName] = function (data) {
+          cleanup();
+          resolve(data);
+        };
+
+        function cleanup() {
+          try { delete window[cbName]; } catch (_) {}
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        script.src = url + sep + "callback=" + cbName;
+        script.onerror = function () {
+          cleanup();
+          reject(new Error("Gagal menghubungi server"));
+        };
+
+        document.body.appendChild(script);
+      });
+    }
+
     async function mulaiScanner() {
-      if (!nama || !nim) {
-        showMessage("Data pengguna tidak ditemukan. Silakan kembali ke halaman registrasi.", "error");
+      if (!nama || !nim || !userId) {
+        showMessage("Data pengguna belum lengkap. Silakan kembali ke halaman registrasi.", "error");
         return;
       }
+
+      ensureDeviceId();
 
       try {
         html5QrCode = new Html5Qrcode("reader");
@@ -462,25 +517,25 @@
     }
 
     function onScanFailure() {
-      // sengaja kosong agar tidak spam pesan
+      // sengaja kosong agar tidak spam
     }
 
     async function onScanSuccess(decodedText) {
-      const token = (decodedText || "").trim();
+      const qrToken = normalize(decodedText);
 
-      if (!token) return;
+      if (!qrToken) return;
       if (isSending) return;
       if (scanCooldown) return;
       if (scanLocked) return;
-      if (token === lastScannedToken) return;
+      if (qrToken === lastScannedToken) return;
 
       scanCooldown = true;
-      lastScannedToken = token;
+      lastScannedToken = qrToken;
 
       setFrameState("detected");
-      showMessage("QR valid terdeteksi. Mengirim data presensi...", "success");
+      showMessage("QR terdeteksi. Mengirim presensi...", "success");
 
-      await sendBeaconCheckin(token);
+      await kirimCheckin(qrToken);
 
       setTimeout(() => {
         scanCooldown = false;
@@ -488,7 +543,7 @@
       }, 2500);
     }
 
-    async function sendBeaconCheckin(token) {
+    async function kirimCheckin(qrToken) {
       if (isSending || scanLocked) return;
 
       isSending = true;
@@ -497,10 +552,10 @@
       const url =
         GAS_EXEC +
         "?action=checkin_beacon" +
-        "&name=" + encodeURIComponent(nama) +
-        "&nim=" + encodeURIComponent(nim) +
-        "&t=" + encodeURIComponent(token) +
-        "&ts_client=" + encodeURIComponent(new Date().toISOString()) +
+        "&user_id=" + encodeURIComponent(userId) +
+        "&device_id=" + encodeURIComponent(deviceId) +
+        "&qr_token=" + encodeURIComponent(qrToken) +
+        "&ts=" + encodeURIComponent(new Date().toISOString()) +
         "&_ts=" + Date.now();
 
       try {
@@ -509,21 +564,50 @@
         if (res && res.ok) {
           scanLocked = true;
           setFrameState("detected");
-          showMessage("Presensi berhasil dikirim.", "success");
+
+          const data = res.data || {};
+          const presenceId = data.presence_id || "-";
+          const status = data.status || "checked_in";
+
+          showMessage(
+            "Presensi berhasil.\n" +
+            "Presence ID: " + presenceId + "\n" +
+            "Status: " + status,
+            "success"
+          );
           return;
         }
 
-        const msg = res && res.error ? res.error : "Unknown error";
+        const errMsg = res && res.error ? res.error : "unknown_error";
 
-        if (msg.toLowerCase().includes("sudah presensi")) {
+        if (errMsg === "already_checked_in") {
           scanLocked = true;
           setFrameState("detected");
           showMessage("Anda sudah presensi pada sesi ini.", "success");
           return;
         }
 
+        if (errMsg === "token_expired") {
+          setFrameState("normal");
+          showMessage("Token QR sudah kadaluarsa. Minta dosen generate ulang.", "warning");
+          return;
+        }
+
+        if (errMsg === "token_invalid") {
+          setFrameState("normal");
+          showMessage("Token QR tidak valid.", "error");
+          return;
+        }
+
+        if (errMsg === "user_not_found") {
+          setFrameState("normal");
+          showMessage("User tidak ditemukan. Silakan registrasi ulang.", "error");
+          return;
+        }
+
         setFrameState("normal");
-        showMessage("Presensi gagal: " + msg, "error");
+        showMessage("Presensi gagal: " + errMsg, "error");
+
       } catch (err) {
         setFrameState("normal");
         showMessage("Gagal menghubungi server: " + err.message, "error");
@@ -535,53 +619,13 @@
     function scanUlang() {
       scanLocked = false;
       isSending = false;
+      lastScannedToken = "";
+      scanCooldown = false;
       setFrameState("normal");
       showMessage("Silakan scan QR lagi.", "info");
     }
 
-    function jsonpRequest(url) {
-      return new Promise((resolve, reject) => {
-        const cbName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
-        const script = document.createElement("script");
-        const sep = url.includes("?") ? "&" : "?";
-
-        window[cbName] = function (data) {
-          cleanup();
-          resolve(data);
-        };
-
-        function cleanup() {
-          delete window[cbName];
-          if (script.parentNode) script.parentNode.removeChild(script);
-        }
-
-        script.src = url + sep + "callback=" + cbName;
-        script.onerror = function () {
-          cleanup();
-          reject(new Error("Gagal menghubungi server"));
-        };
-
-        document.body.appendChild(script);
-      });
-    }
-
-    async function mulaiUlangScanner() {
-      showMessage("Menyiapkan scanner...", "info");
-      isSending = false;
-      lastScannedToken = "";
-      scanCooldown = false;
-      setFrameState("normal");
-
-      try {
-        await stopScanner();
-      } catch (e) {}
-
-      const reader = document.getElementById("reader");
-      reader.innerHTML = "";
-
-      await mulaiScanner();
-    }
-
+    renderUserInfo();
     mulaiScanner();
   </script>
 </body>

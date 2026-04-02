@@ -17,6 +17,8 @@
       --success-text: #065f46;
       --error-bg: #fef2f2;
       --error-text: #991b1b;
+      --info-bg: #eff6ff;
+      --info-text: #1d4ed8;
       --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
       --radius: 18px;
     }
@@ -154,6 +156,7 @@
       border-radius: 12px;
       font-size: 14px;
       line-height: 1.5;
+      white-space: pre-line;
     }
 
     .status.show {
@@ -161,8 +164,8 @@
     }
 
     .status.info {
-      background: #eff6ff;
-      color: #1d4ed8;
+      background: var(--info-bg);
+      color: var(--info-text);
       border: 1px solid #bfdbfe;
     }
 
@@ -238,7 +241,7 @@
         </div>
 
         <button type="submit" class="btn" id="submitBtn">
-          Lanjut ke Scan QR
+          Lanjut
         </button>
       </form>
 
@@ -266,21 +269,64 @@
 
     function setLoading(isLoading) {
       submitBtn.disabled = isLoading;
-      submitBtn.textContent = isLoading ? "Memproses..." : "Lanjut ke Scan QR";
+      submitBtn.textContent = isLoading ? "Memproses..." : "Lanjut";
     }
 
     function sanitizeNim(value) {
       return value.replace(/\s+/g, "");
     }
 
+    function normalize(value) {
+      return String(value || "").trim();
+    }
+
+    function makeDeviceId() {
+      return "DEV-" + Math.random().toString(16).slice(2, 10).toUpperCase();
+    }
+
+    function ensureDeviceId() {
+      let deviceId = localStorage.getItem("presence_device_id") || "";
+      if (!deviceId) {
+        deviceId = makeDeviceId();
+        localStorage.setItem("presence_device_id", deviceId);
+      }
+      return deviceId;
+    }
+
+    function jsonpRequest(url) {
+      return new Promise((resolve, reject) => {
+        const cbName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+        const script = document.createElement("script");
+        const sep = url.includes("?") ? "&" : "?";
+
+        window[cbName] = function (data) {
+          cleanup();
+          resolve(data);
+        };
+
+        function cleanup() {
+          try { delete window[cbName]; } catch (_) {}
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        script.src = url + sep + "callback=" + cbName;
+        script.onerror = function () {
+          cleanup();
+          reject(new Error("Gagal menghubungi server GAS"));
+        };
+
+        document.body.appendChild(script);
+      });
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      lanjutScan();
+      lanjutRegistrasi();
     });
 
-    async function lanjutScan() {
-      const nama = namaInput.value.trim();
-      const nim = sanitizeNim(nimInput.value.trim());
+    async function lanjutRegistrasi() {
+      const nama = normalize(namaInput.value);
+      const nim = sanitizeNim(normalize(nimInput.value));
 
       if (!nama) {
         showMessage("Nama wajib diisi.", "error");
@@ -294,9 +340,6 @@
         return;
       }
 
-      localStorage.setItem("presence_nama", nama);
-      localStorage.setItem("presence_nim", nim);
-
       setLoading(true);
       showMessage("Menyimpan data pengguna...", "info");
 
@@ -307,17 +350,47 @@
         "&nim=" + encodeURIComponent(nim) +
         "&_ts=" + Date.now();
 
-      const img = new Image();
-      img.onload = redirectToScanner;
-      img.onerror = redirectToScanner;
-      img.src = url;
-    }
+      try {
+        const res = await jsonpRequest(url);
 
-    function redirectToScanner() {
-      showMessage("Data berhasil dikirim. Mengalihkan ke halaman scan...", "success");
-      setTimeout(() => {
-        window.location.href = "./home.html";
-      }, 700);
+        if (!res || !res.ok) {
+          showMessage(
+            "Registrasi gagal: " + ((res && res.error) || "unknown_error"),
+            "error"
+          );
+          setLoading(false);
+          return;
+        }
+
+        const data = res.data || res;
+        const userId = normalize(data.user_id);
+
+        if (!userId) {
+          showMessage("Registrasi gagal: user_id tidak diterima dari server.", "error");
+          setLoading(false);
+          return;
+        }
+
+        localStorage.setItem("presence_nama", nama);
+        localStorage.setItem("presence_nim", nim);
+        localStorage.setItem("presence_user_id", userId);
+        ensureDeviceId();
+
+        showMessage(
+          "Registrasi berhasil.\n" +
+          "User ID: " + userId + "\n" +
+          "Mengalihkan ke halaman utama...",
+          "success"
+        );
+
+        setTimeout(() => {
+          window.location.href = "./home.html";
+        }, 900);
+
+      } catch (err) {
+        showMessage("Gagal menghubungi server: " + err.message, "error");
+        setLoading(false);
+      }
     }
   </script>
 </body>

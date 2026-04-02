@@ -15,6 +15,8 @@
       --muted: #6b7280;
       --shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
       --radius: 22px;
+      --border: #e5e7eb;
+      --soft: #f8fafc;
     }
 
     * {
@@ -64,9 +66,9 @@
       background: #f4eff5;
       border-radius: 28px;
       box-shadow: var(--shadow);
-      padding: 34px 24px 40px;
+      padding: 34px 24px 30px;
       text-align: center;
-      margin-bottom: 48px;
+      margin-bottom: 28px;
     }
 
     .avatar-wrap {
@@ -108,12 +110,63 @@
       word-break: break-word;
     }
 
+    .subline {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .identity-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 20px 18px;
+      margin-bottom: 28px;
+    }
+
+    .identity-title {
+      margin: 0 0 14px;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .identity-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .identity-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14px;
+      align-items: flex-start;
+    }
+
+    .identity-label {
+      color: var(--muted);
+      min-width: 92px;
+    }
+
+    .identity-value {
+      font-weight: 700;
+      text-align: right;
+      word-break: break-word;
+      color: var(--text);
+    }
+
     .scan-section {
       text-align: center;
       margin-top: 12px;
     }
-
-    /* scan-btn removed - replaced by feature-grid */
 
     .helper {
       margin-top: 14px;
@@ -176,7 +229,7 @@
     }
 
     .empty-box {
-      max-width: 420px;
+      max-width: 520px;
       margin: 40px auto 0;
       background: #fff4f4;
       color: #991b1b;
@@ -185,10 +238,45 @@
       border-radius: 14px;
       text-align: center;
       display: none;
+      line-height: 1.6;
     }
 
     .empty-box.show {
       display: block;
+    }
+
+    .utility-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .utility-btn {
+      height: 46px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-reset {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .btn-reset:hover {
+      background: #fecaca;
+    }
+
+    .btn-refresh {
+      background: #e0e7ff;
+      color: #1d4ed8;
+    }
+
+    .btn-refresh:hover {
+      background: #c7d2fe;
     }
 
     @media (max-width: 480px) {
@@ -201,7 +289,7 @@
       }
 
       .profile-card {
-        padding: 28px 18px 32px;
+        padding: 28px 18px 26px;
         border-radius: 24px;
       }
 
@@ -215,13 +303,18 @@
         font-size: 22px;
       }
 
-      .scan-icon-wrap {
-        width: 150px;
-        height: 150px;
+      .feature-grid,
+      .utility-row {
+        grid-template-columns: 1fr;
       }
 
-      .scan-label {
-        font-size: 20px;
+      .identity-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .identity-value {
+        text-align: left;
       }
     }
   </style>
@@ -242,12 +335,36 @@
       </div>
 
       <h1 class="name" id="userName">USER NAME</h1>
+      <div class="subline">Identitas pengguna aktif untuk presensi QR</div>
+    </div>
+
+    <div class="identity-card">
+      <h2 class="identity-title">Informasi Akun</h2>
+
+      <div class="identity-grid">
+        <div class="identity-row">
+          <div class="identity-label">Nama</div>
+          <div class="identity-value" id="viewNama">-</div>
+        </div>
+        <div class="identity-row">
+          <div class="identity-label">NIM</div>
+          <div class="identity-value" id="viewNim">-</div>
+        </div>
+        <div class="identity-row">
+          <div class="identity-label">User ID</div>
+          <div class="identity-value" id="viewUserId">-</div>
+        </div>
+        <div class="identity-row">
+          <div class="identity-label">Device ID</div>
+          <div class="identity-value" id="viewDeviceId">-</div>
+        </div>
+      </div>
     </div>
 
     <div class="scan-section">
       <p class="section-title">Pilih Fitur</p>
+
       <div class="feature-grid">
-        <!-- SCAN QR -->
         <button class="feature-btn" onclick="goToScanner()" aria-label="Scan QR sekarang">
           <div class="feat-icon">
             <svg width="72" height="72" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -271,15 +388,11 @@
           <div class="feat-label feat-label-scan">Scan QR</div>
         </button>
 
-        <!-- ACCELEROMETER -->
         <button class="feature-btn" onclick="goToAccelerometer()" aria-label="Accelerometer Telemetry">
           <div class="feat-icon">
             <svg width="72" height="72" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Outer ring -->
               <circle cx="60" cy="60" r="36" stroke="#1F36A6" stroke-width="7" fill="none"/>
-              <!-- Center dot -->
               <circle cx="60" cy="60" r="8" fill="#1F36A6"/>
-              <!-- Axes arrows -->
               <line x1="60" y1="24" x2="60" y2="44" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
               <polygon points="60,18 55,28 65,28" fill="#ef4444"/>
               <line x1="60" y1="76" x2="60" y2="96" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
@@ -288,7 +401,6 @@
               <polygon points="18,60 28,55 28,65" fill="#22c55e"/>
               <line x1="76" y1="60" x2="96" y2="60" stroke="#22c55e" stroke-width="5" stroke-linecap="round"/>
               <polygon points="102,60 92,55 92,65" fill="#22c55e"/>
-              <!-- Z diagonal hint -->
               <line x1="38" y1="38" x2="50" y2="50" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
               <polygon points="34,34 34,44 44,34" fill="#3b82f6"/>
             </svg>
@@ -300,45 +412,78 @@
       <div class="helper">
         Pilih <strong>Scan QR</strong> untuk presensi, atau <strong>Accelerometer</strong> untuk kirim data sensor.
       </div>
+
+      <div class="utility-row">
+        <button class="utility-btn btn-refresh" onclick="renderUser()">Refresh Data</button>
+        <button class="utility-btn btn-reset" onclick="resetData()">Reset Data</button>
+      </div>
     </div>
 
     <div class="empty-box" id="emptyState">
-      Data pengguna tidak ditemukan. Silakan kembali ke halaman registrasi.
+      Data pengguna belum lengkap. Silakan kembali ke halaman registrasi dan lakukan registrasi ulang.
     </div>
   </div>
 
   <script>
-    const nama = localStorage.getItem("presence_nama") || "";
-    const nim = localStorage.getItem("presence_nim") || "";
-    const foto = localStorage.getItem("presence_photo") || "";
-
-    const userName = document.getElementById("userName");
     const avatarInitial = document.getElementById("avatarInitial");
     const avatarImage = document.getElementById("avatarImage");
+    const userName = document.getElementById("userName");
     const emptyState = document.getElementById("emptyState");
 
+    const viewNama = document.getElementById("viewNama");
+    const viewNim = document.getElementById("viewNim");
+    const viewUserId = document.getElementById("viewUserId");
+    const viewDeviceId = document.getElementById("viewDeviceId");
+
+    function getStorageData() {
+      return {
+        nama: localStorage.getItem("presence_nama") || "",
+        nim: localStorage.getItem("presence_nim") || "",
+        userId: localStorage.getItem("presence_user_id") || "",
+        deviceId: localStorage.getItem("presence_device_id") || "",
+        foto: localStorage.getItem("presence_photo") || ""
+      };
+    }
+
     function getInitials(name) {
-      const parts = name.trim().split(/\s+/).filter(Boolean);
+      const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
       if (parts.length === 0) return "U";
       if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
       return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
     }
 
+    function isComplete(data) {
+      return !!(data.nama && data.nim && data.userId && data.deviceId);
+    }
+
     function renderUser() {
-      if (!nama || !nim) {
+      const data = getStorageData();
+
+      viewNama.textContent = data.nama || "-";
+      viewNim.textContent = data.nim || "-";
+      viewUserId.textContent = data.userId || "-";
+      viewDeviceId.textContent = data.deviceId || "-";
+
+      if (!isComplete(data)) {
         emptyState.classList.add("show");
         userName.textContent = "USER NAME";
         avatarInitial.textContent = "U";
+        avatarInitial.style.display = "inline";
+        avatarImage.style.display = "none";
         return;
       }
 
-      userName.textContent = nama;
-      avatarInitial.textContent = getInitials(nama);
+      emptyState.classList.remove("show");
+      userName.textContent = data.nama;
+      avatarInitial.textContent = getInitials(data.nama);
 
-      if (foto) {
-        avatarImage.src = foto;
+      if (data.foto) {
+        avatarImage.src = data.foto;
         avatarImage.style.display = "block";
         avatarInitial.style.display = "none";
+      } else {
+        avatarImage.style.display = "none";
+        avatarInitial.style.display = "inline";
       }
     }
 
@@ -346,20 +491,31 @@
       window.location.href = "./index.html";
     }
 
+    function goToScanner() {
+      const data = getStorageData();
+      if (!isComplete(data)) {
+        emptyState.classList.add("show");
+        return;
+      }
+      window.location.href = "./scanner.html";
+    }
+
     function goToAccelerometer() {
-      if (!nama || !nim) {
+      const data = getStorageData();
+      if (!isComplete(data)) {
         emptyState.classList.add("show");
         return;
       }
       window.location.href = "./accelerometer.html";
     }
 
-    function goToScanner() {
-      if (!nama || !nim) {
-        emptyState.classList.add("show");
-        return;
-      }
-      window.location.href = "./scanner.html";
+    function resetData() {
+      localStorage.removeItem("presence_nama");
+      localStorage.removeItem("presence_nim");
+      localStorage.removeItem("presence_user_id");
+      localStorage.removeItem("presence_device_id");
+      localStorage.removeItem("presence_photo");
+      window.location.href = "./index.html";
     }
 
     renderUser();
