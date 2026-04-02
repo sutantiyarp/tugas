@@ -418,6 +418,27 @@ let displayedHistoryPolylines = [];
 // Storage key
 const STORAGE_KEY = 'maps_trails_v1';
 
+// Ganti YOUR_GAS_URL dengan URL deploy GAS kamu
+const GAS_EXEC = "https://script.google.com/macros/s/AKfycbzwEOB4ji8PBSv7tIX4xz1Dhbn6xK93P-fY2Hw6QusCcN3QgA51HOuRx9umvuXQFl42/exec";
+
+function sendGpsToServer(lat, lng, accuracy) {
+  const data = getStorageData ? getStorageData() : {
+    deviceId: localStorage.getItem('presence_device_id') || ''
+  };
+  if (!data.deviceId) return;
+
+  const params = new URLSearchParams({
+    action: 'gps',
+    device_id: data.deviceId,
+    lat: lat,
+    lng: lng,
+    accuracy_m: accuracy || 0,
+    ts: new Date().toISOString()
+  });
+
+  fetch(`${GAS_EXEC}?${params}`).catch(() => {});
+}
+
 // ── INIT MAP ──
 function initMap() {
   map = L.map('map', { zoomControl: true }).setView([-7.257, 112.752], 14);
