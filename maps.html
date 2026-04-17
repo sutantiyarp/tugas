@@ -421,22 +421,117 @@ const STORAGE_KEY = 'maps_trails_v1';
 // Ganti YOUR_GAS_URL dengan URL deploy GAS kamu
 const GAS_EXEC = "https://script.google.com/macros/s/AKfycbzwEOB4ji8PBSv7tIX4xz1Dhbn6xK93P-fY2Hw6QusCcN3QgA51HOuRx9umvuXQFl42/exec";
 
-function sendGpsToServer(lat, lng, accuracy) {
-  const data = getStorageData ? getStorageData() : {
-    deviceId: localStorage.getItem('presence_device_id') || ''
-  };
-  if (!data.deviceId) return;
+
+function getDeviceIdForGps() {
+  return localStorage.getItem('presence_device_id') || 'dev-001';
+}
+
+async function sendGpsToServer(lat, lng, accuracy) {
+  const deviceId = getDeviceIdForGps();
+  if (!deviceId) return;
 
   const params = new URLSearchParams({
     action: 'gps',
-    device_id: data.deviceId,
-    lat: lat,
-    lng: lng,
-    accuracy_m: accuracy || 0,
+    device_id: deviceId,
+    lat: String(lat),
+    lng: String(lng),
+    accuracy_m: String(accuracy || 0),
     ts: new Date().toISOString()
   });
 
-  fetch(`${GAS_EXEC}?${params}`).catch(() => {});
+  try {
+    const res = await fetch(`${GAS_EXEC}?${params.toString()}`, {
+      method: 'GET'
+    });
+    const json = await res.json();
+    console.log('GPS saved:', json);
+  } catch (err) {
+    console.error('Gagal kirim GPS ke GAS:', err);
+  }
+}
+
+async function fetchGpsHistory(limit = 500) {
+  const deviceId = getDeviceIdForGps();
+  if (!deviceId) return [];
+
+  const params = new URLSearchParams({
+    action: 'gps_history',
+    device_id: deviceId,
+    limit: String(limit)
+  });
+
+  try {
+    const res = await fetch(`${GAS_EXEC}?${params.toString()}`);
+    const json = await res.json();
+
+    if (!json.ok) {
+      console.error('History GPS gagal:', json);
+      return [];
+    }
+
+    return json.data.items || [];
+  } catch (err) {
+    console.error('Fetch history error:', err);
+    return [];
+  }
+}
+
+async function fetchGpsLatest() {
+  const deviceId = getDeviceIdForGps();
+  if (!deviceId) return null;
+
+  const params = new URLSearchParams({
+    action: 'gps_latest',
+    device_id: deviceId
+  });
+
+  try {
+    const res = await fetch(`${GAS_EXEC}?${params.toString()}`);
+    const json = await res.json();
+    if (!json.ok) return null;
+    return json.data;
+  } catch (err) {
+    console.error('Fetch latest error:', err);
+    return null;
+  }
+}
+
+async function drawTrailFromSpreadsheet() {
+  const items = await fetchGpsHistory(1000);
+  if (!items || items.length < 2) return;
+
+  clearDisplayedHistory();
+
+  const latlngs = items
+    .filter(p => p.lat !== null && p.lng !== null)
+    .map(p => [Number(p.lat), Number(p.lng)]);
+
+  if (latlngs.length < 2) return;
+
+  const poly = L.polyline(latlngs, {
+    color: '#1f36a6',
+    weight: 4,
+    opacity: 0.85,
+    lineJoin: 'round'
+  }).addTo(map);
+
+  const startIcon = L.divIcon({
+    html: '<div style="width:14px;height:14px;border-radius:50%;background:#16a34a;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4)"></div>',
+    iconSize: [14,14],
+    iconAnchor: [7,7]
+  });
+
+  const endIcon = L.divIcon({
+    html: '<div style="width:14px;height:14px;border-radius:50%;background:#dc2626;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4)"></div>',
+    iconSize: [14,14],
+    iconAnchor: [7,7]
+  });
+
+  const startMarker = L.marker(latlngs[0], { icon: startIcon }).addTo(map);
+  const endMarker = L.marker(latlngs[latlngs.length - 1], { icon: endIcon }).addTo(map);
+
+  displayedHistoryPolylines.push(poly, startMarker, endMarker);
+  map.fitBounds(poly.getBounds(), { padding: [40, 40] });
 }
 
 // ── INIT MAP ──
@@ -528,7 +623,6 @@ function onPosition(pos) {
   showGpsInfo(lat, lng);
 
   if (isTracking) {
-    // Add point
     if (currentTrail.length > 0) {
       const last = currentTrail[currentTrail.length - 1];
       const d = haversine(last.lat, last.lng, lat, lng);
@@ -538,12 +632,13 @@ function onPosition(pos) {
     currentTrail.push({ lat, lng, ts });
     currentPolyline.addLatLng([lat, lng]);
 
-    // Update stats
     document.getElementById('statDist').textContent = totalDistance.toFixed(1);
     document.getElementById('statPoints').textContent = currentTrail.length;
 
-    // Auto pan
     map.panTo([lat, lng], { animate: true, duration: 0.5 });
+
+    // WAJIB: kirim ke spreadsheet
+    sendGpsToServer(lat, lng, accuracy);
   }
 }
 
@@ -613,59 +708,10 @@ function haversine(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// ── STORAGE ──
-function loadTrails() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  } catch { return []; }
-}
-
-function saveTrail() {
-  const trails = loadTrails();
-  const endTime = Date.now();
-  const durationSec = Math.floor((endTime - startTime) / 1000);
-
-  trails.unshift({
-    id: endTime,
-    date: new Date(startTime).toLocaleString('id-ID'),
-    duration: durationSec,
-    distance: totalDistance,
-    points: currentTrail.length,
-    trail: currentTrail
-  });
-
-  // Keep max 20 trails
-  if (trails.length > 20) trails.splice(20);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(trails));
-}
-
 // ── HISTORY MODAL ──
-function openHistory() {
-  const trails = loadTrails();
-  const list = document.getElementById('historyList');
-
-  if (trails.length === 0) {
-    list.innerHTML = '<div class="history-empty">Belum ada riwayat jejak.<br>Mulai rekam perjalananmu!</div>';
-  } else {
-    list.innerHTML = trails.map((t, i) => `
-      <div class="history-item" id="hi-${t.id}">
-        <div class="history-item-top">
-          <div class="history-date">📅 ${t.date}</div>
-          <div class="history-duration">${formatDuration(t.duration)}</div>
-        </div>
-        <div class="history-meta">
-          <span>📏 ${t.distance.toFixed(1)} m</span>
-          <span>📍 ${t.points} titik</span>
-        </div>
-        <div class="history-actions">
-          <button class="btn-sm btn-show" onclick="showHistoryTrail(${i})">🗺 Tampilkan</button>
-          <button class="btn-sm btn-delete" onclick="deleteTrail(${i})">🗑 Hapus</button>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  document.getElementById('historyModal').classList.add('show');
+async function openHistory() {
+  await drawTrailFromSpreadsheet();
+  alert('Jejak dari Spreadsheet sudah ditampilkan di peta.');
 }
 
 function closeHistory() {
@@ -680,50 +726,6 @@ function formatDuration(sec) {
   const m = Math.floor(sec / 60);
   const s = sec % 60;
   return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-}
-
-// ── SHOW HISTORY TRAIL ON MAP ──
-function showHistoryTrail(index) {
-  const trails = loadTrails();
-  const t = trails[index];
-  if (!t || !t.trail || t.trail.length < 2) return;
-
-  clearDisplayedHistory();
-
-  const latlngs = t.trail.map(p => [p.lat, p.lng]);
-
-  // Draw trail line (blue for history)
-  const poly = L.polyline(latlngs, {
-    color: '#1f36a6',
-    weight: 4,
-    opacity: 0.8,
-    dashArray: '6 4',
-    lineJoin: 'round'
-  }).addTo(map);
-
-  // Start marker (green)
-  const startIcon = L.divIcon({
-    html: '<div style="width:14px;height:14px;border-radius:50%;background:#16a34a;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4)"></div>',
-    iconSize: [14,14], iconAnchor: [7,7]
-  });
-  const endIcon = L.divIcon({
-    html: '<div style="width:14px;height:14px;border-radius:50%;background:#dc2626;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4)"></div>',
-    iconSize: [14,14], iconAnchor: [7,7]
-  });
-
-  const mStart = L.marker(latlngs[0], { icon: startIcon })
-    .bindPopup(`<b>Start</b><br>${t.date}`)
-    .addTo(map);
-  const mEnd = L.marker(latlngs[latlngs.length - 1], { icon: endIcon })
-    .bindPopup(`<b>Finish</b><br>📏 ${t.distance.toFixed(1)} m`)
-    .addTo(map);
-
-  displayedHistoryPolylines.push(poly, mStart, mEnd);
-
-  // Fit map to trail
-  map.fitBounds(poly.getBounds(), { padding: [40, 40] });
-
-  closeHistory();
 }
 
 function clearDisplayedHistory() {
