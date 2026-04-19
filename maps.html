@@ -342,6 +342,44 @@ function updateTimer() {
   document.getElementById("statTime").textContent = `${m}:${s}`;
 }
 
+// JSONP helper
+function jsonpRequest(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+    const script = document.createElement("script");
+    const sep = url.includes("?") ? "&" : "?";
+    const fullUrl = `${url}${sep}callback=${callbackName}`;
+
+    let finished = false;
+
+    window[callbackName] = function(data) {
+      finished = true;
+      cleanup();
+      resolve(data);
+    };
+
+    function cleanup() {
+      try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    script.onerror = function() {
+      if (finished) return;
+      cleanup();
+      reject(new Error("JSONP request gagal"));
+    };
+
+    setTimeout(() => {
+      if (finished) return;
+      cleanup();
+      reject(new Error("JSONP timeout"));
+    }, 15000);
+
+    script.src = fullUrl;
+    document.body.appendChild(script);
+  });
+}
+
 async function sendGpsToServer(lat, lng, accuracy) {
   const deviceId = getDeviceIdForGps();
 
@@ -360,11 +398,7 @@ async function sendGpsToServer(lat, lng, accuracy) {
   });
 
   try {
-    const res = await fetch(`${GAS_EXEC}?${params.toString()}`, {
-      method: "GET"
-    });
-
-    const result = await res.json();
+    const result = await jsonpRequest(`${GAS_EXEC}?${params.toString()}`);
 
     if (!result.ok) {
       alert("Gagal simpan GPS: " + (result.error || "unknown_error"));
@@ -373,7 +407,7 @@ async function sendGpsToServer(lat, lng, accuracy) {
 
     return true;
   } catch (err) {
-    alert("Fetch GPS gagal: " + err.message);
+    alert("Koneksi ke GAS gagal: " + err.message);
     return false;
   }
 }
@@ -388,9 +422,7 @@ async function fetchGpsHistory(limit = 1000) {
   });
 
   try {
-    const res = await fetch(`${GAS_EXEC}?${params.toString()}`);
-    const result = await res.json();
-
+    const result = await jsonpRequest(`${GAS_EXEC}?${params.toString()}`);
     if (!result.ok) return [];
     return result.data.items || [];
   } catch (err) {
@@ -525,7 +557,7 @@ async function onPosition(pos) {
 }
 
 function onGpsError(err) {
-  console.warn("GPS error:", err.message);
+  alert("GPS error: " + err.message);
 }
 
 function stopTracking() {
