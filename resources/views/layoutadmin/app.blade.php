@@ -115,7 +115,7 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="main-header">
-            <h4>ASW</h4>
+            <img src="{{ asset('assets/img/logo.png') }}" alt="JejakDesa Logo" style="max-height: 60px; width: auto; background-color: #ffffff; padding: 6px 14px; border-radius: 8px;">
         </div>
         <ul class="nav flex-column">
             <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">

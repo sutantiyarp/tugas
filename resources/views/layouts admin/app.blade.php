@@ -42,7 +42,7 @@
         }
 
         .sidebar.collapsed .main-header img {
-            display: inline-block;
+            display: none;
         }
 
         .sidebar.collapsed .main-header h4 {
@@ -78,10 +78,18 @@
         }
 
         .main-header {
-            padding: 20px;
+            padding: 15px 20px;
             background-color: #4CAF50;
             color: white;
             text-align: center;
+        }
+
+        .main-header img {
+            max-height: 60px;
+            width: auto;
+            background-color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 8px;
         }
 
         .sidebar .nav-item {
@@ -158,7 +166,7 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="main-header">
-            <h4>ASW</h4>
+            <img src="{{ asset('assets/img/logo.png') }}" alt="JejakDesa Logo">
         </div>
         <ul class="nav flex-column">
             <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">

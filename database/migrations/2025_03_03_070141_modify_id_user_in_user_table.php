@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('user', function (Blueprint $table) {
-            // Mengubah kolom 'id_user' menjadi auto-increment
-            $table->increments('id_user')->change();
-        });
+        if (Schema::getConnection()->getDriverName() !== 'sqlite') {
+            Schema::table('user', function (Blueprint $table) {
+                // Mengubah kolom 'id_user' menjadi auto-increment
+                $table->increments('id_user')->change();
+            });
+        }
     }
     
     public function down()
